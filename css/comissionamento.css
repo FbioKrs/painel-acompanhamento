@@ -1,0 +1,194 @@
+/* ================================================================
+   COMISSIONAMENTO DE OBRAS — COM-V1
+   Corpo específico da visão. O shell permanece no PG-V2.
+   ================================================================ */
+
+.visao-comissionamento {
+    --com-cor-coms: #42a85f;
+    --com-cor-pend: #f2aa3f;
+    --com-cor-conc: #6f91b9;
+    --com-cor-faturado: #17345f;
+    --com-gap: 16px;
+}
+
+.visao-comissionamento .comissionamento-conteudo {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.visao-comissionamento .comissionamento-legenda {
+    height: 48px;
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+
+    padding: 0 16px;
+    margin-bottom: 12px;
+
+    background: rgba(255, 255, 255, 0.78);
+    border: 1px solid rgba(111, 145, 185, 0.13);
+    border-radius: 14px;
+    box-shadow: 0 4px 16px rgba(24, 38, 52, 0.045);
+}
+
+.visao-comissionamento .legenda-status {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.visao-comissionamento .legenda-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+
+    white-space: nowrap;
+    font-size: 14px;
+    color: #68747e;
+}
+
+.visao-comissionamento .legenda-item strong {
+    margin-right: 4px;
+    color: #2f3b45;
+    font-size: 14px;
+}
+
+.visao-comissionamento .legenda-amostra {
+    display: inline-block;
+    width: 28px;
+    height: 12px;
+    border-radius: 4px;
+}
+
+.visao-comissionamento .legenda-coms {
+    background: var(--com-cor-coms);
+}
+
+.visao-comissionamento .legenda-pend {
+    background: var(--com-cor-pend);
+}
+
+.visao-comissionamento .legenda-conc {
+    background: var(--com-cor-conc);
+}
+
+.visao-comissionamento .legenda-linha {
+    position: relative;
+    display: inline-block;
+    width: 34px;
+    height: 12px;
+}
+
+.visao-comissionamento .legenda-linha::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 5px;
+    height: 3px;
+    border-radius: 3px;
+    background: var(--com-cor-faturado);
+}
+
+.visao-comissionamento .legenda-linha::after {
+    content: "";
+    position: absolute;
+    left: 13px;
+    top: 1px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--com-cor-faturado);
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 0 1px rgba(23, 52, 95, 0.18);
+}
+
+.visao-comissionamento .periodo-dados {
+    flex-shrink: 0;
+    font-size: 14px;
+    font-weight: 700;
+    color: #53616d;
+    font-variant-numeric: tabular-nums;
+}
+
+.visao-comissionamento .comissionamento-layout {
+    flex: 1;
+    min-height: 0;
+
+    display: grid;
+    grid-template-columns: 690px minmax(0, 1fr);
+    gap: var(--com-gap);
+}
+
+.visao-comissionamento .comissionamento-coluna-esquerda,
+.visao-comissionamento .comissionamento-coluna-direita {
+    min-width: 0;
+    min-height: 0;
+    display: grid;
+    gap: var(--com-gap);
+}
+
+.visao-comissionamento .comissionamento-coluna-esquerda {
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+}
+
+.visao-comissionamento .comissionamento-coluna-direita {
+    grid-template-rows: repeat(3, minmax(0, 1fr));
+}
+
+.visao-comissionamento .comissionamento-card {
+    overflow: hidden;
+    padding: 14px 16px 12px;
+    border: 1px solid rgba(68, 91, 111, 0.08);
+}
+
+.visao-comissionamento .comissionamento-card-cabecalho {
+    min-height: 44px;
+    margin-bottom: 4px;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.visao-comissionamento .painel-titulo {
+    font-size: 19px;
+    line-height: 1.12;
+    color: #26333f;
+}
+
+.visao-comissionamento .painel-subtitulo {
+    margin-top: 4px;
+    font-size: 12px;
+    line-height: 1.2;
+    color: #84909a;
+}
+
+.visao-comissionamento .comissionamento-grafico {
+    width: 100%;
+    min-height: 0;
+}
+
+.visao-comissionamento .comissionamento-grafico canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.visao-comissionamento .card-resumo .painel-titulo,
+.visao-comissionamento .card-parceiras .painel-titulo {
+    font-size: 20px;
+}
+
+.visao-comissionamento .rodape {
+    padding-top: 4px;
+}
+
+.visao-comissionamento #erro {
+    top: 116px;
+}

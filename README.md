@@ -51,6 +51,7 @@ Não utilizar `iframe` para a circulação das visões do PG-V2.
 | **DC-V1** | Dia C | Em produção | `visoes/dia-c.html` |
 | **ME_EXEC-V1** | Metas da Executiva | Em produção | `visoes/metas-executiva.html` |
 | **ME_GER-V1** | Metas da Gerência | Em produção | `visoes/metas-gerencia.html` |
+| **COM-V1** | Comissionamento de Obras | Em produção | `visoes/comissionamento.html` |
 | **OA-V1** | Obras Ágeis | Convenção reservada | Pode não existir ainda |
 | **IND-V1** | Indicadores | Convenção reservada | Pode não existir ainda |
 | **PROD-V1** | Produtividade | Convenção reservada | Pode não existir ainda |
@@ -71,13 +72,15 @@ painel-acompanhamento/
 ├── visoes/
 │   ├── dia-c.html
 │   ├── metas-executiva.html
-│   └── metas-gerencia.html
+│   ├── metas-gerencia.html
+│   └── comissionamento.html
 │
 ├── css/
 │   ├── painel-base.css
 │   ├── dia-c.css
 │   ├── metas-executiva.css
-│   └── metas-gerencia.css
+│   ├── metas-gerencia.css
+│   └── comissionamento.css
 │
 ├── js/
 │   ├── painel-config.js
@@ -87,11 +90,13 @@ painel-acompanhamento/
 │   ├── chartjs-plugin-datalabels.min.js
 │   ├── dia-c.js
 │   ├── metas-executiva.js
-│   └── metas-gerencia.js
+│   ├── metas-gerencia.js
+│   └── comissionamento.js
 │
 ├── dados/
 │   ├── metas-executiva.json
-│   └── metas-gerencia.json
+│   ├── metas-gerencia.json
+│   └── base_comissionamento.json
 │
 ├── dados.json
 │
@@ -559,7 +564,67 @@ O formato de `dados/metas-gerencia.json` segue os mesmos campos e a mesma ordena
 
 ---
 
-## 11. Como criar uma nova visão no PG-V2
+## 11. COM-V1 — Comissionamento de Obras
+
+### Arquivos
+
+```text
+visoes/comissionamento.html
+css/comissionamento.css
+js/comissionamento.js
+dados/base_comissionamento.json
+```
+
+A **COM-V1** acompanha o volume financeiro das obras sinalizadas para comissionamento, o resultado da análise e o faturamento associado às obras já comissionadas.
+
+### Status financeiros
+
+```text
+CONC  → obras ainda não analisadas
+PEND  → obras com pendências
+COMS  → obras comissionadas
+Faturado Comissionamento → parcela das obras comissionadas já faturada
+```
+
+### Composição da tela
+
+A visão possui cinco gráficos combinados de barras verticais empilhadas + linha:
+
+1. `Resumo geral — últimos 2 meses`: consolidado mensal de todas as parceiras;
+2. `Últimos 2 meses por parceira`: mês + parceira no eixo X;
+3. evolução mensal da primeira parceira disponível;
+4. evolução mensal da segunda parceira disponível;
+5. evolução mensal da terceira parceira disponível.
+
+Nos gráficos:
+
+- barras empilhadas: `COMS`, `PEND` e `CONC`;
+- linha: `Faturado Comissionamento`;
+- os dois gráficos da coluna esquerda mostram os dois últimos meses existentes no JSON;
+- os três gráficos da coluna direita mostram todos os meses existentes no JSON;
+- meses são ordenados por `MES_ORDEM`;
+- parceiras são obtidas dinamicamente do JSON e não ficam hardcoded no módulo.
+
+A COM-V1 é uma visão única, sem Subvisões internas, e permanece **15 segundos** antes de devolver o controle ao player.
+
+### Dados
+
+O formato canônico de `dados/base_comissionamento.json` é uma lista direta de registros na raiz. Campos utilizados:
+
+- `QTD_NOTAS`;
+- `MES_ORDEM`;
+- `MES`;
+- `PARCEIRA`;
+- `CONC`;
+- `PEND`;
+- `COMS`;
+- `Faturado Comissionamento`.
+
+O JSON é carregado uma única vez na entrada da COM-V1, usando `no-store` e cache-buster. Não há temporizador próprio de atualização durante os 15 segundos da visão. Uma nova leitura ocorre naturalmente quando a COM-V1 for carregada novamente em um novo ciclo do painel. Falhas de gráfico são tratadas localmente e não devem interromper o player.
+
+---
+
+## 12. Como criar uma nova visão no PG-V2
 
 1. Criar fragmento em `visoes/`.
 2. Criar CSS específico em `css/`.
@@ -572,7 +637,7 @@ O formato de `dados/metas-gerencia.json` segue os mesmos campos e a mesma ordena
 
 ---
 
-## 11.1. Habilitar e desabilitar visões
+## 12.1. Habilitar e desabilitar visões
 
 A exibição de uma visão deve ser controlada exclusivamente pelo registro em `js/painel-config.js`; não apagar arquivos, comentar blocos inteiros nem alterar `painel-player.js` para suspender temporariamente uma visão.
 
@@ -601,7 +666,7 @@ A ordem dos objetos ativos em `PAINEL_CONFIG.visoes` continua determinando a ord
 
 ---
 
-## 12. Alteração global x específica
+## 13. Alteração global x específica
 
 ### Global — PG-V2
 
@@ -648,12 +713,23 @@ js/metas-gerencia.js
 dados/metas-gerencia.json
 ```
 
+### COM-V1
+
+Preferir:
+
+```text
+visoes/comissionamento.html
+css/comissionamento.css
+js/comissionamento.js
+dados/base_comissionamento.json
+```
+
 Não alterar PG-V2 para resolver um problema exclusivo de uma visão.
 
 ---
 
 
-## 12.1. Regra de integridade do shell e consentimento para exceções
+## 13.1. Regra de integridade do shell e consentimento para exceções
 
 A separação entre **shell global** e **corpo das visões** é uma regra estrutural obrigatória do PG-V2.
 
@@ -683,7 +759,7 @@ Essa exigência vale também para alterações solicitadas em conversas futuras,
 
 ---
 
-## 13. Procedimento obrigatório ao receber um ZIP
+## 14. Procedimento obrigatório ao receber um ZIP
 
 ```text
 1. Extrair o ZIP
@@ -702,7 +778,7 @@ Nunca reconstruir arquivos vigentes com base apenas em versões históricas do c
 
 ---
 
-## 14. Histórico de arquitetura
+## 15. Histórico de arquitetura
 
 ### PG-V1 — legado
 
@@ -724,8 +800,8 @@ Nunca reconstruir arquivos vigentes com base apenas em versões históricas do c
 ---
 
 **Padrão vigente: PG-V2**  
-**Visões cadastradas: DC-V1, ME_EXEC-V1 e ME_GER-V1**  
-**Estado atual em `painel-config.js`: DC-V1 desativada; ME_EXEC-V1 e ME_GER-V1 ativas**
+**Visões cadastradas: DC-V1, ME_EXEC-V1, ME_GER-V1 e COM-V1**  
+**Estado atual em `painel-config.js`: DC-V1 desativada; ME_EXEC-V1, ME_GER-V1 e COM-V1 ativas**
 
 
 ### Inicialização visual do PG-V2
