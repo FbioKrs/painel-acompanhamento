@@ -28,6 +28,22 @@ let segundosRestantes = TEMPO_VISAO;
 let cicloAtivo = false;
 let pausado = false;
 
+let pluginDataLabelsDisponivel = false;
+
+
+/* ================================================================
+   REGISTRO DE PLUGINS CHART.JS
+   ================================================================ */
+
+if (typeof Chart !== "undefined" && typeof ChartDataLabels !== "undefined") {
+    try {
+        Chart.register(ChartDataLabels);
+        pluginDataLabelsDisponivel = true;
+    } catch (erro) {
+        console.warn("Falha ao registrar ChartDataLabels em COM-V1:", erro);
+    }
+}
+
 
 /* ================================================================
    NORMALIZAÇÃO E AGREGAÇÕES
@@ -244,13 +260,13 @@ function criarDatasets(valores, pontoRaio = 4) {
             borderSkipped: false,
             order: 1,
             datalabels: {
-                display: true,
-                color: "#ffffff",
-                anchor: "center",
-                align: "center",
-                offset: 0,
+                display: pluginDataLabelsDisponivel,
+                color: CORES.coms,
+                anchor: "end",
+                align: "end",
+                offset: 4,
                 clamp: true,
-                clip: true,
+                clip: false,
                 formatter: formatarValorSomenteSePositivo,
                 font: {
                     size: FONTE_LABEL_GRAFICO,
@@ -274,7 +290,7 @@ function criarDatasets(valores, pontoRaio = 4) {
             fill: false,
             order: 0,
             datalabels: {
-                display: true,
+                display: pluginDataLabelsDisponivel,
                 color: CORES.faturado,
                 anchor: "end",
                 align: "top",
@@ -308,8 +324,8 @@ function opcoesGrafico({
         },
         layout: {
             padding: {
-                top: 8,
-                right: 8,
+                top: 20,
+                right: 12,
                 bottom: paddingBottom,
                 left: 0
             }
@@ -322,7 +338,7 @@ function opcoesGrafico({
                 enabled: false
             },
             datalabels: {
-                display: false
+                display: pluginDataLabelsDisponivel
             },
             rotuloMesAgrupado: grupoMeses
                 ? {
@@ -359,7 +375,7 @@ function opcoesGrafico({
             },
             y: {
                 beginAtZero: true,
-                grace: "10%",
+                grace: "18%",
                 display: false,
                 grid: {
                     display: false
