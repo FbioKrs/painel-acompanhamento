@@ -17,8 +17,10 @@ const CORES = {
 
 const ULTIMOS_MESES_RESUMO = 2;
 const ULTIMOS_MESES_PARCEIRAS = 6;
-const FONTE_PADRAO_GRAFICO = 11;
-const FONTE_LABEL_GRAFICO = 11;
+const FATOR_ESCALA_FONTES_GRAFICO = 1.5;
+const FONTE_BASE_GRAFICO = 11;
+const FONTE_PADRAO_GRAFICO = FONTE_BASE_GRAFICO * FATOR_ESCALA_FONTES_GRAFICO;
+const FONTE_LABEL_GRAFICO = FONTE_BASE_GRAFICO * FATOR_ESCALA_FONTES_GRAFICO;
 
 let dadosGlobais = [];
 let graficos = [];
@@ -261,12 +263,12 @@ function criarDatasets(valores, pontoRaio = 4) {
             order: 1,
             datalabels: {
                 display: pluginDataLabelsDisponivel,
-                color: CORES.coms,
-                anchor: "end",
-                align: "end",
-                offset: 4,
+                color: "#ffffff",
+                anchor: "center",
+                align: "center",
+                offset: 0,
                 clamp: true,
-                clip: false,
+                clip: true,
                 formatter: formatarValorSomenteSePositivo,
                 font: {
                     size: FONTE_LABEL_GRAFICO,
@@ -294,7 +296,7 @@ function criarDatasets(valores, pontoRaio = 4) {
                 color: CORES.faturado,
                 anchor: "end",
                 align: "top",
-                offset: 4,
+                offset: 7,
                 clamp: true,
                 formatter: formatarValorSomenteSePositivo,
                 font: {
@@ -324,8 +326,8 @@ function opcoesGrafico({
         },
         layout: {
             padding: {
-                top: 20,
-                right: 12,
+                top: 30,
+                right: 16,
                 bottom: paddingBottom,
                 left: 0
             }
@@ -344,7 +346,7 @@ function opcoesGrafico({
                 ? {
                     display: true,
                     grupos: grupoMeses,
-                    offsetY: 18,
+                    offsetY: 25,
                     color: CORES.texto,
                     fontSize: FONTE_PADRAO_GRAFICO,
                     fontWeight: "700"
@@ -375,7 +377,7 @@ function opcoesGrafico({
             },
             y: {
                 beginAtZero: true,
-                grace: "18%",
+                grace: "24%",
                 display: false,
                 grid: {
                     display: false
@@ -457,7 +459,7 @@ function renderizarGraficos() {
             tamanhoX: FONTE_PADRAO_GRAFICO,
             pontoRaio: 4,
             grupoMeses: gruposMesesParceiras,
-            paddingBottom: 18
+            paddingBottom: 30
         }
     );
 
