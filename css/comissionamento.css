@@ -4,7 +4,8 @@
    ================================================================ */
 
 .visao-comissionamento {
-    --com-cor-coms: #42a85f;
+    --com-cor-coms: #1959b5;
+    --com-cor-coms-clara: #4d84d8;
     --com-cor-pend: #f2aa3f;
     --com-cor-conc: #6f91b9;
     --com-cor-faturado: #17345f;
@@ -66,7 +67,7 @@
 }
 
 .visao-comissionamento .legenda-coms {
-    background: var(--com-cor-coms);
+    background: linear-gradient(180deg, var(--com-cor-coms-clara) 0%, var(--com-cor-coms) 100%);
 }
 
 .visao-comissionamento .legenda-pend {

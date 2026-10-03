@@ -6,7 +6,8 @@
 const URL_DADOS = "./dados/base_comissionamento.json";
 const TEMPO_VISAO = 15;
 const CORES = {
-    coms: "#42a85f",
+    coms: "#1959b5",
+    comsClara: "#4d84d8",
     pend: "#f2aa3f",
     conc: "#6f91b9",
     faturado: "#17345f",
@@ -16,6 +17,8 @@ const CORES = {
 
 const ULTIMOS_MESES_RESUMO = 2;
 const ULTIMOS_MESES_PARCEIRAS = 6;
+const FONTE_PADRAO_GRAFICO = 11;
+const FONTE_LABEL_GRAFICO = 11;
 
 let dadosGlobais = [];
 let graficos = [];
@@ -152,6 +155,10 @@ function formatarValorFinanceiro(valor) {
     })}`;
 }
 
+function formatarValorSomenteSePositivo(valor) {
+    return numero(valor) > 0 ? formatarValorFinanceiro(valor) : "";
+}
+
 
 /* ================================================================
    CHART.JS
@@ -172,7 +179,7 @@ const pluginRotuloMesAgrupado = {
         const y = escalaX.bottom + (opcoes.offsetY ?? 18);
         const cor = opcoes.color || CORES.texto;
         const peso = opcoes.fontWeight || "700";
-        const tamanho = opcoes.fontSize || 11;
+        const tamanho = opcoes.fontSize || FONTE_PADRAO_GRAFICO;
         const familia = opcoes.fontFamily || '"Segoe UI", Arial, Helvetica, sans-serif';
 
         ctx.save();
@@ -210,21 +217,45 @@ function destruirGraficos() {
     graficos = [];
 }
 
+function criarGradienteBarra(contexto) {
+    const chart = contexto.chart;
+    const { ctx, chartArea } = chart;
+
+    if (!chartArea) {
+        return CORES.coms;
+    }
+
+    const gradiente = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
+    gradiente.addColorStop(0, CORES.coms);
+    gradiente.addColorStop(1, CORES.comsClara);
+    return gradiente;
+}
+
 function criarDatasets(valores, pontoRaio = 4) {
     return [
         {
             type: "bar",
             label: "COMS",
             data: valores.map(item => item.coms),
-            backgroundColor: CORES.coms,
+            backgroundColor: criarGradienteBarra,
             borderColor: CORES.coms,
             borderWidth: 0,
-            borderRadius: 3,
+            borderRadius: 4,
             borderSkipped: false,
-            stack: "status",
             order: 1,
             datalabels: {
-                display: false
+                display: true,
+                color: "#ffffff",
+                anchor: "center",
+                align: "center",
+                offset: 0,
+                clamp: true,
+                clip: true,
+                formatter: formatarValorSomenteSePositivo,
+                font: {
+                    size: FONTE_LABEL_GRAFICO,
+                    weight: "700"
+                }
             }
         },
         {
@@ -249,9 +280,9 @@ function criarDatasets(valores, pontoRaio = 4) {
                 align: "top",
                 offset: 4,
                 clamp: true,
-                formatter: formatarValorFinanceiro,
+                formatter: formatarValorSomenteSePositivo,
                 font: {
-                    size: 11,
+                    size: FONTE_LABEL_GRAFICO,
                     weight: "700"
                 }
             }
@@ -260,7 +291,7 @@ function criarDatasets(valores, pontoRaio = 4) {
 }
 
 function opcoesGrafico({
-    tamanhoX = 14,
+    tamanhoX = FONTE_PADRAO_GRAFICO,
     rotacaoX = 0,
     paddingBottom = 0,
     grupoMeses = null
@@ -299,7 +330,7 @@ function opcoesGrafico({
                     grupos: grupoMeses,
                     offsetY: 18,
                     color: CORES.texto,
-                    fontSize: 11,
+                    fontSize: FONTE_PADRAO_GRAFICO,
                     fontWeight: "700"
                 }
                 : {
@@ -308,7 +339,6 @@ function opcoesGrafico({
         },
         scales: {
             x: {
-                stacked: true,
                 grid: {
                     display: false
                 },
@@ -328,9 +358,8 @@ function opcoesGrafico({
                 }
             },
             y: {
-                stacked: true,
                 beginAtZero: true,
-                grace: "8%",
+                grace: "10%",
                 display: false,
                 grid: {
                     display: false
@@ -382,14 +411,14 @@ function renderizarGraficos() {
         "graficoResumo",
         ultimosMeses.map(item => formatarMes(item.mes)),
         valoresResumo,
-        { tamanhoX: 16, pontoRaio: 5 }
+        { tamanhoX: FONTE_PADRAO_GRAFICO, pontoRaio: 5 }
     );
 
     const labelsParceiras = [];
     const valoresParceiras = [];
     const gruposMesesParceiras = [];
 
-    ultimosMeses.forEach((mes, indiceMes) => {
+    ultimosMeses.forEach((mes) => {
         const indiceInicio = labelsParceiras.length;
 
         for (const parceira of parceiras) {
@@ -409,7 +438,7 @@ function renderizarGraficos() {
         labelsParceiras,
         valoresParceiras,
         {
-            tamanhoX: 11,
+            tamanhoX: FONTE_PADRAO_GRAFICO,
             pontoRaio: 4,
             grupoMeses: gruposMesesParceiras,
             paddingBottom: 18
@@ -443,7 +472,7 @@ function renderizarGraficos() {
             canvasId,
             ultimosMesesParceiras.map(item => formatarMes(item.mes)),
             valores,
-            { tamanhoX: 12, pontoRaio: 3.5 }
+            { tamanhoX: FONTE_PADRAO_GRAFICO, pontoRaio: 3.5 }
         );
     });
 }
