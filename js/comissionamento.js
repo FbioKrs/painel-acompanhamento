@@ -14,6 +14,9 @@ const CORES = {
     grade: "rgba(92, 111, 128, 0.13)"
 };
 
+const ULTIMOS_MESES_RESUMO = 2;
+const ULTIMOS_MESES_PARCEIRAS = 6;
+
 let dadosGlobais = [];
 let graficos = [];
 let temporizadorRotacao = null;
@@ -125,7 +128,7 @@ function formatarMes(mes) {
     return mes.charAt(0).toUpperCase() + mes.slice(1);
 }
 
-function formatarEixoFinanceiro(valor) {
+function formatarValorFinanceiro(valor) {
     const numeroValor = numero(valor);
     const absoluto = Math.abs(numeroValor);
 
@@ -154,6 +157,48 @@ function formatarEixoFinanceiro(valor) {
    CHART.JS
    ================================================================ */
 
+const pluginRotuloMesAgrupado = {
+    id: "rotuloMesAgrupado",
+    afterDraw(chart, _args, pluginOptions) {
+        const opcoes = pluginOptions || {};
+        if (!opcoes.display) return;
+
+        const escalaX = chart.scales?.x;
+        if (!escalaX || !Array.isArray(opcoes.grupos) || opcoes.grupos.length === 0) {
+            return;
+        }
+
+        const ctx = chart.ctx;
+        const y = escalaX.bottom + (opcoes.offsetY ?? 18);
+        const cor = opcoes.color || CORES.texto;
+        const peso = opcoes.fontWeight || "700";
+        const tamanho = opcoes.fontSize || 11;
+        const familia = opcoes.fontFamily || '"Segoe UI", Arial, Helvetica, sans-serif';
+
+        ctx.save();
+        ctx.fillStyle = cor;
+        ctx.font = `${peso} ${tamanho}px ${familia}`;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+
+        for (const grupo of opcoes.grupos) {
+            const indiceInicio = numero(grupo?.inicio);
+            const indiceFim = numero(grupo?.fim);
+            const rotulo = String(grupo?.rotulo || "").trim();
+
+            if (!rotulo) continue;
+
+            const xInicio = escalaX.getPixelForTick(indiceInicio);
+            const xFim = escalaX.getPixelForTick(indiceFim);
+            const xCentro = (xInicio + xFim) / 2;
+
+            ctx.fillText(rotulo, xCentro, y);
+        }
+
+        ctx.restore();
+    }
+};
+
 function destruirGraficos() {
     for (const grafico of graficos) {
         try {
@@ -177,31 +222,10 @@ function criarDatasets(valores, pontoRaio = 4) {
             borderRadius: 3,
             borderSkipped: false,
             stack: "status",
-            order: 1
-        },
-        {
-            type: "bar",
-            label: "PEND",
-            data: valores.map(item => item.pend),
-            backgroundColor: CORES.pend,
-            borderColor: CORES.pend,
-            borderWidth: 0,
-            borderRadius: 3,
-            borderSkipped: false,
-            stack: "status",
-            order: 1
-        },
-        {
-            type: "bar",
-            label: "CONC",
-            data: valores.map(item => item.conc),
-            backgroundColor: CORES.conc,
-            borderColor: CORES.conc,
-            borderWidth: 0,
-            borderRadius: 3,
-            borderSkipped: false,
-            stack: "status",
-            order: 1
+            order: 1,
+            datalabels: {
+                display: false
+            }
         },
         {
             type: "line",
@@ -217,12 +241,30 @@ function criarDatasets(valores, pontoRaio = 4) {
             pointBorderWidth: 2,
             tension: 0.16,
             fill: false,
-            order: 0
+            order: 0,
+            datalabels: {
+                display: true,
+                color: CORES.faturado,
+                anchor: "end",
+                align: "top",
+                offset: 4,
+                clamp: true,
+                formatter: formatarValorFinanceiro,
+                font: {
+                    size: 11,
+                    weight: "700"
+                }
+            }
         }
     ];
 }
 
-function opcoesGrafico({ tamanhoX = 14, tamanhoY = 13, rotacaoX = 0 } = {}) {
+function opcoesGrafico({
+    tamanhoX = 14,
+    rotacaoX = 0,
+    paddingBottom = 0,
+    grupoMeses = null
+} = {}) {
     return {
         responsive: true,
         maintainAspectRatio: false,
@@ -235,9 +277,9 @@ function opcoesGrafico({ tamanhoX = 14, tamanhoY = 13, rotacaoX = 0 } = {}) {
         },
         layout: {
             padding: {
-                top: 2,
-                right: 4,
-                bottom: 0,
+                top: 8,
+                right: 8,
+                bottom: paddingBottom,
                 left: 0
             }
         },
@@ -250,7 +292,19 @@ function opcoesGrafico({ tamanhoX = 14, tamanhoY = 13, rotacaoX = 0 } = {}) {
             },
             datalabels: {
                 display: false
-            }
+            },
+            rotuloMesAgrupado: grupoMeses
+                ? {
+                    display: true,
+                    grupos: grupoMeses,
+                    offsetY: 18,
+                    color: CORES.texto,
+                    fontSize: 11,
+                    fontWeight: "700"
+                }
+                : {
+                    display: false
+                }
         },
         scales: {
             x: {
@@ -263,6 +317,7 @@ function opcoesGrafico({ tamanhoX = 14, tamanhoY = 13, rotacaoX = 0 } = {}) {
                 },
                 ticks: {
                     color: CORES.texto,
+                    padding: grupoMeses ? 4 : 6,
                     font: {
                         size: tamanhoX,
                         weight: "600"
@@ -275,23 +330,16 @@ function opcoesGrafico({ tamanhoX = 14, tamanhoY = 13, rotacaoX = 0 } = {}) {
             y: {
                 stacked: true,
                 beginAtZero: true,
-                grace: "7%",
+                grace: "8%",
+                display: false,
                 grid: {
-                    color: CORES.grade,
-                    lineWidth: 1
+                    display: false
                 },
                 border: {
                     display: false
                 },
                 ticks: {
-                    color: CORES.texto,
-                    padding: 8,
-                    maxTicksLimit: 5,
-                    font: {
-                        size: tamanhoY,
-                        weight: "600"
-                    },
-                    callback: formatarEixoFinanceiro
+                    display: false
                 }
             }
         }
@@ -308,7 +356,8 @@ function criarGrafico(canvasId, labels, valores, opcoes = {}) {
             labels,
             datasets: criarDatasets(valores, opcoes.pontoRaio || 4)
         },
-        options: opcoesGrafico(opcoes)
+        options: opcoesGrafico(opcoes),
+        plugins: [pluginRotuloMesAgrupado]
     });
 
     graficos.push(grafico);
@@ -325,31 +374,46 @@ function renderizarGraficos() {
 
     const meses = obterMeses();
     const parceiras = obterParceiras();
-    const ultimosMeses = meses.slice(-2);
+    const ultimosMeses = meses.slice(-ULTIMOS_MESES_RESUMO);
+    const ultimosMesesParceiras = meses.slice(-ULTIMOS_MESES_PARCEIRAS);
 
     const valoresResumo = ultimosMeses.map(item => consolidarMes(item.ordem));
     criarGrafico(
         "graficoResumo",
         ultimosMeses.map(item => formatarMes(item.mes)),
         valoresResumo,
-        { tamanhoX: 16, tamanhoY: 13, pontoRaio: 5 }
+        { tamanhoX: 16, pontoRaio: 5 }
     );
 
     const labelsParceiras = [];
     const valoresParceiras = [];
+    const gruposMesesParceiras = [];
 
-    for (const mes of ultimosMeses) {
+    ultimosMeses.forEach((mes, indiceMes) => {
+        const indiceInicio = labelsParceiras.length;
+
         for (const parceira of parceiras) {
-            labelsParceiras.push([mes.mes, parceira]);
+            labelsParceiras.push(parceira);
             valoresParceiras.push(consolidarMesParceira(mes.ordem, parceira));
         }
-    }
+
+        gruposMesesParceiras.push({
+            inicio: indiceInicio,
+            fim: labelsParceiras.length - 1,
+            rotulo: formatarMes(mes.mes)
+        });
+    });
 
     criarGrafico(
         "graficoParceiras",
         labelsParceiras,
         valoresParceiras,
-        { tamanhoX: 12, tamanhoY: 13, pontoRaio: 4 }
+        {
+            tamanhoX: 11,
+            pontoRaio: 4,
+            grupoMeses: gruposMesesParceiras,
+            paddingBottom: 18
+        }
     );
 
     const slots = [
@@ -363,23 +427,23 @@ function renderizarGraficos() {
         const titulo = document.getElementById(tituloId);
 
         if (!parceira) {
-            if (titulo) titulo.textContent = "Sem parceira — evolução mensal";
+            if (titulo) titulo.textContent = "Sem parceira — últimos 6 meses";
             return;
         }
 
         if (titulo) {
-            titulo.textContent = `${parceira} — evolução mensal`;
+            titulo.textContent = `${parceira} — últimos 6 meses`;
         }
 
-        const valores = meses.map(item =>
+        const valores = ultimosMesesParceiras.map(item =>
             consolidarMesParceira(item.ordem, parceira)
         );
 
         criarGrafico(
             canvasId,
-            meses.map(item => item.mes),
+            ultimosMesesParceiras.map(item => formatarMes(item.mes)),
             valores,
-            { tamanhoX: 13, tamanhoY: 12, pontoRaio: 3.5 }
+            { tamanhoX: 12, pontoRaio: 3.5 }
         );
     });
 }
@@ -391,7 +455,8 @@ function renderizarGraficos() {
 
 function atualizarTextos() {
     const meses = obterMeses();
-    const ultimosMeses = meses.slice(-2);
+    const ultimosMeses = meses.slice(-ULTIMOS_MESES_RESUMO);
+    const ultimosMesesParceiras = meses.slice(-ULTIMOS_MESES_PARCEIRAS);
 
     window.PAINEL_BASE?.definirCabecalho({
         titulo: "Obras Comissionadas",
@@ -408,14 +473,23 @@ function atualizarTextos() {
     const resumo = document.getElementById("subtituloResumo");
     if (resumo && ultimosMeses.length > 0) {
         resumo.textContent =
-            `Consolidado • ${ultimosMeses.map(item => formatarMes(item.mes)).join(" e ")}`;
+            `COMS x Faturado • ${ultimosMeses.map(item => formatarMes(item.mes)).join(" e ")}`;
     }
 
     const parceiras = document.getElementById("subtituloParceiras");
     if (parceiras && ultimosMeses.length > 0) {
         parceiras.textContent =
-            `Comparativo por parceira • ${ultimosMeses.map(item => formatarMes(item.mes)).join(" e ")}`;
+            `Parceiras • ${ultimosMeses.map(item => formatarMes(item.mes)).join(" e ")}`;
     }
+
+    const subtitulosHistorico = document.querySelectorAll(".comissionamento-subtitulo-historico");
+    const textoHistorico = ultimosMesesParceiras.length > 0
+        ? `COMS x Faturado • ${formatarMes(ultimosMesesParceiras[0].mes)}–${formatarMes(ultimosMesesParceiras[ultimosMesesParceiras.length - 1].mes)}`
+        : "COMS x Faturado • Últimos 6 meses";
+
+    subtitulosHistorico.forEach(item => {
+        item.textContent = textoHistorico;
+    });
 }
 
 function renderizarVisao() {
