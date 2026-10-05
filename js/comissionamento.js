@@ -62,65 +62,6 @@ function registrarPlugins() {
     }
 }
 
-function caminhoArredondado(ctx, x, y, largura, altura, raio) {
-    const r = Math.min(raio, largura / 2, altura / 2);
-    ctx.beginPath();
-    ctx.moveTo(x + r, y);
-    ctx.arcTo(x + largura, y, x + largura, y + altura, r);
-    ctx.arcTo(x + largura, y + altura, x, y + altura, r);
-    ctx.arcTo(x, y + altura, x, y, r);
-    ctx.arcTo(x, y, x + largura, y, r);
-    ctx.closePath();
-}
-
-const pluginVariacaoParceiras = {
-    id: "variacaoParceiras",
-    afterDraw(chart, _args, opcoes) {
-        const variacoes = opcoes?.variacoes;
-        const comparacao = opcoes?.comparacao;
-        const escalaX = chart.scales?.x;
-
-        if (!escalaX || !Array.isArray(variacoes) || variacoes.length === 0) {
-            return;
-        }
-
-        const ctx = chart.ctx;
-        const yBadge = escalaX.bottom + 20;
-        const yComparacao = yBadge + 36;
-
-        ctx.save();
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-
-        variacoes.forEach((variacao, indice) => {
-            const x = escalaX.getPixelForTick(indice);
-            const tendencia = classificarTendencia(variacao);
-            const estilo = obterEstiloTendencia(tendencia);
-            const texto = formatarPercentualVariacao(variacao);
-            const seta = tendencia === "positivo" ? "↑" : tendencia === "negativo" ? "↓" : "•";
-
-            const largura = 112;
-            const altura = 30;
-            const esquerda = x - largura / 2;
-
-            caminhoArredondado(ctx, esquerda, yBadge, largura, altura, 8);
-            ctx.fillStyle = estilo.fundo;
-            ctx.fill();
-
-            ctx.fillStyle = estilo.cor;
-            ctx.font = `${TIPOGRAFIA_GRAFICOS.pesoValor} ${TIPOGRAFIA_GRAFICOS.rotuloValor}px \"Segoe UI\", Arial, sans-serif`;
-            ctx.fillText(`${seta}  ${texto}`, x, yBadge + altura / 2);
-
-            ctx.fillStyle = "#83929f";
-            ctx.font = `${TIPOGRAFIA_GRAFICOS.pesoEixo} ${TIPOGRAFIA_GRAFICOS.rotuloEixo}px \"Segoe UI\", Arial, sans-serif`;
-            ctx.fillText(`vs. ${comparacao || "mês anterior"}`, x, yComparacao);
-        });
-
-        ctx.restore();
-    }
-};
-
-
 /* ================================================================
    NORMALIZAÇÃO E AGREGAÇÕES
    ================================================================ */
@@ -204,8 +145,15 @@ function consolidarMesParceira(ordem, parceira) {
         item => item.mesOrdem === ordem && item.parceira === parceira
     );
 
+    const coms = somar(registros, "coms");
+    const conc = somar(registros, "conc");
+    const pend = somar(registros, "pend");
+
     return {
-        coms: somar(registros, "coms"),
+        coms,
+        conc,
+        pend,
+        projecao: coms + conc + pend,
         faturado: somar(registros, "faturado")
     };
 }
@@ -562,41 +510,43 @@ function criarGraficoResumo(meses, valores) {
     graficos.push(grafico);
 }
 
-function criarGraficoParceiras(parceiras, mesAnterior, mesAtual) {
-    const canvas = document.getElementById("graficoParceiras");
+function criarGraficoSmallMultiple(canvas, meses, valores, limiteY) {
     if (!canvas || typeof Chart === "undefined") return;
 
-    const anterior = parceiras.map(parceira => consolidarMesParceira(mesAnterior.ordem, parceira));
-    const atual = parceiras.map(parceira => consolidarMesParceira(mesAtual.ordem, parceira));
-    const variacoes = parceiras.map((_, indice) =>
-        variacaoPercentual(atual[indice].coms, anterior[indice].coms)
-    );
+    const indiceAtual = valores.length - 1;
+    const opcoes = opcoesBaseGrafico({ paddingTop: 34, paddingBottom: 0 });
+    opcoes.scales.x.stacked = true;
+    opcoes.scales.y.stacked = true;
+    opcoes.scales.y.grace = "8%";
 
-    const opcoes = opcoesBaseGrafico({ paddingTop: 32, paddingBottom: 66 });
-    opcoes.plugins.variacaoParceiras = {
-        variacoes,
-        comparacao: formatarMesCompleto(mesAnterior.mes)
-    };
+    if (Number.isFinite(limiteY) && limiteY > 0) {
+        opcoes.scales.y.max = limiteY;
+    }
 
     const grafico = new Chart(canvas, {
         type: "bar",
         data: {
-            labels: parceiras,
+            labels: meses.map(item => formatarMes(item.mes)),
             datasets: [
                 {
-                    label: formatarMes(mesAnterior.mes),
-                    data: anterior.map(item => item.coms),
-                    backgroundColor: CORES.azulClaro,
-                    borderRadius: 3,
+                    type: "bar",
+                    label: "COMS",
+                    data: valores.map(item => item.coms),
+                    backgroundColor(contexto) {
+                        const { ctx, chartArea } = contexto.chart;
+                        return criarGradienteVertical(ctx, chartArea, "#4e9bec", CORES.azul);
+                    },
+                    borderRadius: 4,
                     borderSkipped: false,
-                    barPercentage: 0.78,
-                    categoryPercentage: 0.70,
+                    stack: "projecao",
+                    barPercentage: 0.66,
+                    categoryPercentage: 0.74,
+                    order: 1,
                     datalabels: {
                         display: pluginDataLabelsDisponivel,
-                        color: CORES.texto,
-                        anchor: "end",
-                        align: "top",
-                        offset: 3,
+                        color: "#ffffff",
+                        anchor: "center",
+                        align: "center",
                         clamp: true,
                         formatter: formatarFinanceiro,
                         font: {
@@ -606,19 +556,55 @@ function criarGraficoParceiras(parceiras, mesAnterior, mesAtual) {
                     }
                 },
                 {
-                    label: formatarMes(mesAtual.mes),
-                    data: atual.map(item => item.coms),
-                    backgroundColor: CORES.azul,
+                    type: "bar",
+                    label: "CONC",
+                    data: valores.map((item, indice) => indice === indiceAtual ? item.conc : 0),
+                    backgroundColor: CORES.conc,
                     borderRadius: 3,
                     borderSkipped: false,
-                    barPercentage: 0.78,
-                    categoryPercentage: 0.70,
+                    stack: "projecao",
+                    barPercentage: 0.66,
+                    categoryPercentage: 0.74,
+                    order: 1,
+                    datalabels: { display: false }
+                },
+                {
+                    type: "bar",
+                    label: "PEND",
+                    data: valores.map((item, indice) => indice === indiceAtual ? item.pend : 0),
+                    backgroundColor: CORES.pend,
+                    borderRadius: 3,
+                    borderSkipped: false,
+                    stack: "projecao",
+                    barPercentage: 0.66,
+                    categoryPercentage: 0.74,
+                    order: 1,
+                    datalabels: { display: false }
+                },
+                {
+                    type: "line",
+                    label: "Faturado",
+                    data: valores.map(item => item.faturado),
+                    borderColor: CORES.linha,
+                    backgroundColor: CORES.linha,
+                    borderWidth: 2.5,
+                    borderDash: [9, 6],
+                    pointRadius: 0,
+                    pointHoverRadius: 0,
+                    pointHitRadius: 8,
+                    stepped: "middle",
+                    tension: 0,
+                    fill: false,
+                    order: 0,
                     datalabels: {
                         display: pluginDataLabelsDisponivel,
-                        color: CORES.texto,
+                        color: CORES.linha,
+                        backgroundColor: "rgba(255,255,255,0.90)",
+                        borderRadius: 4,
+                        padding: { top: 2, bottom: 2, left: 3, right: 3 },
                         anchor: "end",
                         align: "top",
-                        offset: 3,
+                        offset: 6,
                         clamp: true,
                         formatter: formatarFinanceiro,
                         font: {
@@ -629,13 +615,54 @@ function criarGraficoParceiras(parceiras, mesAnterior, mesAtual) {
                 }
             ]
         },
-        options: opcoes,
-        plugins: [pluginVariacaoParceiras]
+        options: opcoes
     });
 
     graficos.push(grafico);
 }
 
+function renderizarSmallMultiplesParceiras(parceiras, meses) {
+    const container = document.getElementById("smallMultiplesParceiras");
+    if (!container) return;
+
+    container.innerHTML = "";
+
+    const series = parceiras.map(parceira => ({
+        parceira,
+        valores: meses.map(item => consolidarMesParceira(item.ordem, parceira))
+    }));
+
+    const maiorValor = series.reduce((maior, serie) => {
+        for (const item of serie.valores) {
+            maior = Math.max(maior, item.projecao, item.faturado);
+        }
+        return maior;
+    }, 0);
+
+    const limiteY = maiorValor > 0 ? maiorValor * 1.22 : undefined;
+
+    series.forEach((serie, indice) => {
+        const painel = document.createElement("section");
+        painel.className = "com-small-multiple";
+
+        const titulo = document.createElement("div");
+        titulo.className = "com-small-multiple-titulo";
+        titulo.textContent = serie.parceira;
+
+        const graficoBox = document.createElement("div");
+        graficoBox.className = "com-grafico com-small-multiple-grafico";
+
+        const canvas = document.createElement("canvas");
+        canvas.id = `graficoResumoParceira${indice + 1}`;
+        graficoBox.appendChild(canvas);
+
+        painel.appendChild(titulo);
+        painel.appendChild(graficoBox);
+        container.appendChild(painel);
+
+        criarGraficoSmallMultiple(canvas, meses, serie.valores, limiteY);
+    });
+}
 function criarGraficoHistorico(canvasId, meses, valores) {
     const canvas = document.getElementById(canvasId);
     if (!canvas || typeof Chart === "undefined") return;
@@ -714,22 +741,6 @@ function atualizarCabecalho() {
     });
 }
 
-function atualizarLegendaParceiras(mesAnterior, mesAtual) {
-    const legenda = document.getElementById("legendaMesesParceiras");
-    if (!legenda) return;
-
-    legenda.innerHTML = `
-        <span class="com-legenda-item">
-            <span class="com-legenda-barra com-legenda-barra-anterior"></span>
-            <span>${formatarMes(mesAnterior.mes)}</span>
-        </span>
-        <span class="com-legenda-item">
-            <span class="com-legenda-barra com-legenda-barra-ultimo"></span>
-            <span>${formatarMes(mesAtual.mes)}</span>
-        </span>
-    `;
-}
-
 function atualizarResumo(meses, valores) {
     const [dadosAnterior, dadosAtual] = valores;
 
@@ -787,10 +798,9 @@ function renderizarVisao() {
 
     const resumoValores = ultimosDois.map(item => consolidarMes(item.ordem));
     atualizarResumo(ultimosDois, resumoValores);
-    atualizarLegendaParceiras(ultimosDois[0], ultimosDois[1]);
 
     criarGraficoResumo(ultimosDois, resumoValores);
-    criarGraficoParceiras(parceiras, ultimosDois[0], ultimosDois[1]);
+    renderizarSmallMultiplesParceiras(parceiras, ultimosDois);
 
     const slots = [
         ["tituloParceira1", "subtituloParceira1", "graficoParceira1", "kpiParceira1"],

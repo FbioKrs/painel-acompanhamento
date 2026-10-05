@@ -591,7 +591,7 @@ Faturado Comissionamento → parcela das obras comissionadas já faturada
 A visão possui uma única tela organizada em duas colunas, seguindo a leitura executiva da referência visual vigente:
 
 1. **Consolidado — últimos 2 meses**: no mês anterior a barra exibe somente `COMS`; no último mês a barra é empilhada em `COMS + CONC + PEND`, representando a projeção de comissionamento. `Faturado Comissionamento` é exibido como linha em degrau (“malhete”), tracejada e sem marcadores. O painel lateral segue a ordem Comissionado → Projeção de Comissionamento → Faturado;
-2. **Últimos 2 meses por parceira**: barras agrupadas de `COMS` para o penúltimo e o último mês, com um badge de variação percentual por parceira;
+2. **Últimos 2 meses por parceira**: conjunto de *small multiples*, um mini-gráfico por parceira, repetindo a mesma semântica visual do Consolidado. Em cada mini-gráfico, o mês anterior exibe somente `COMS`; o mês atual empilha `COMS + CONC + PEND`; `Faturado Comissionamento` é uma linha em degrau (“malhete”), tracejada e sem marcadores. Todos os mini-gráficos usam a mesma escala vertical para permitir comparação direta entre parceiras;
 3. **Histórico da primeira parceira**: últimos 6 meses de `COMS` + linha de faturado, com painel lateral 2×2 contendo Comissionamento atual, Faturamento atual, Média de comissionamento e Média de faturamento;
 4. **Histórico da segunda parceira**: mesma composição;
 5. **Histórico da terceira parceira**: mesma composição.

@@ -283,6 +283,66 @@
     margin-top: 1px;
 }
 
+.visao-comissionamento .com-card-header-parceiras {
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.visao-comissionamento .com-legenda-parceiras {
+    gap: 12px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.visao-comissionamento .com-legenda-parceiras .com-legenda-item {
+    gap: 5px;
+}
+
+.visao-comissionamento .com-legenda-parceiras .com-legenda-barra {
+    width: 18px;
+    height: 12px;
+}
+
+.visao-comissionamento .com-legenda-parceiras .com-legenda-linha {
+    width: 27px;
+    height: 12px;
+}
+
+.visao-comissionamento .com-small-multiples {
+    flex: 1;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.visao-comissionamento .com-small-multiple {
+    min-width: 0;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 8px 8px 5px;
+    border-radius: 12px;
+    background: linear-gradient(180deg, #fbfdff 0%, #f6faff 100%);
+    border: 1px solid rgba(45, 100, 158, 0.09);
+}
+
+.visao-comissionamento .com-small-multiple-titulo {
+    flex-shrink: 0;
+    min-height: 22px;
+    padding: 0 2px 2px;
+    font-size: 16px;
+    line-height: 1.1;
+    font-weight: 800;
+    color: #17345f;
+    text-align: center;
+}
+
+.visao-comissionamento .com-small-multiple-grafico {
+    flex: 1;
+    min-height: 0;
+}
+
 .visao-comissionamento .com-variacao-panel,
 .visao-comissionamento .com-kpi-lateral {
     min-width: 0;

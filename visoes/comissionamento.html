@@ -85,18 +85,33 @@
                 </article>
 
                 <article class="painel com-card com-card-parceiras">
-                    <header class="com-card-header">
+                    <header class="com-card-header com-card-header-parceiras">
                         <div>
                             <div class="painel-titulo">Últimos 2 meses por parceira</div>
-                            <div class="painel-subtitulo">Comissionado (COMS)</div>
+                            <div class="painel-subtitulo">Mesma leitura do consolidado • escala comum entre parceiras</div>
                         </div>
 
-                        <div id="legendaMesesParceiras" class="com-legenda" aria-label="Legenda dos meses"></div>
+                        <div class="com-legenda com-legenda-parceiras" aria-label="Legenda dos gráficos por parceira">
+                            <span class="com-legenda-item">
+                                <span class="com-legenda-barra com-legenda-barra-atual"></span>
+                                <span>COMS</span>
+                            </span>
+                            <span class="com-legenda-item">
+                                <span class="com-legenda-barra com-legenda-barra-conc"></span>
+                                <span>CONC</span>
+                            </span>
+                            <span class="com-legenda-item">
+                                <span class="com-legenda-barra com-legenda-barra-pend"></span>
+                                <span>PEND</span>
+                            </span>
+                            <span class="com-legenda-item">
+                                <span class="com-legenda-linha com-legenda-linha-malhete"></span>
+                                <span>Faturado</span>
+                            </span>
+                        </div>
                     </header>
 
-                    <div class="com-grafico com-grafico-parceiras">
-                        <canvas id="graficoParceiras"></canvas>
-                    </div>
+                    <div id="smallMultiplesParceiras" class="com-small-multiples" aria-label="Comparativo por parceira"></div>
                 </article>
 
             </div>
