@@ -360,10 +360,10 @@
     display: grid;
     /* Tela 1: ~20% da largura antes usada pelo gráfico é transferida aos cartões. */
     grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr);
-    grid-template-rows: auto minmax(0, 1fr);
+    grid-template-rows: 19px minmax(0, 1fr);
     column-gap: 12px;
-    row-gap: 3px;
-    padding: 9px 10px 8px;
+    row-gap: 1px;
+    padding: 6px 10px 5px;
     border-radius: 12px;
     background: linear-gradient(180deg, #fbfdff 0%, #f6faff 100%);
     border: 1px solid rgba(45, 100, 158, 0.09);
@@ -372,10 +372,10 @@
 .visao-comissionamento .com-small-multiple-titulo {
     grid-column: 1 / -1;
     grid-row: 1;
-    min-height: 22px;
-    padding: 0 2px 2px;
-    font-size: 17px;
-    line-height: 1.1;
+    min-height: 0;
+    padding: 0 2px;
+    font-size: 16px;
+    line-height: 1;
     font-weight: 800;
     color: #17345f;
     text-align: left;
@@ -396,7 +396,7 @@
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: repeat(3, minmax(0, 1fr));
-    gap: 6px;
+    gap: 4px;
 }
 
 .visao-comissionamento .com-small-kpi {
@@ -567,9 +567,11 @@
 
 .visao-comissionamento .com-variacao-detalhe {
     margin-top: 5px;
-    font-size: 11px;
+    font-size: 16.5px;
+    line-height: 1.1;
     color: #83929f;
     font-weight: 600;
+    white-space: nowrap;
 }
 
 .visao-comissionamento .com-variacao-separador {
@@ -709,7 +711,8 @@
 
 /* Ajuste de distribuição — small multiples + históricos compactos */
 .visao-comissionamento .com-small-multiple-kpis .com-small-kpi {
-    padding: 6px 6px 5px;
+    padding: 4px 6px;
+    overflow: visible;
 }
 
 .visao-comissionamento .com-small-multiple-kpis .com-small-kpi-label {
@@ -722,9 +725,13 @@
     font-size: 17px;
 }
 
+.visao-comissionamento .com-small-multiple-kpis .com-small-kpi-valor-linha {
+    margin-top: 1px;
+}
+
 .visao-comissionamento .com-small-multiple-kpis .com-small-kpi-chip {
-    min-height: 32px;
-    padding: 3px 7px;
+    min-height: 30px;
+    padding: 2px 7px;
     gap: 3px;
 }
 
@@ -738,8 +745,11 @@
 }
 
 .visao-comissionamento .com-small-multiple-kpis .com-small-kpi-detalhe {
+    margin-top: 2px;
     font-size: 15px;
-    line-height: 1.08;
+    line-height: 1;
+    overflow: visible;
+    text-overflow: clip;
 }
 
 .visao-comissionamento .com-kpi-grid-medias {
