@@ -590,7 +590,7 @@ Faturado Comissionamento → parcela das obras comissionadas já faturada
 
 A visão possui uma única tela organizada em duas colunas, seguindo a leitura executiva da referência visual vigente:
 
-1. **Consolidado — últimos 2 meses**: barras de `COMS` + linha de `Faturado Comissionamento`, acompanhadas por um painel lateral com o valor atual e a variação de COMS, o valor atual e a variação do faturado e a conversão atual com sua variação em pontos percentuais;
+1. **Consolidado — últimos 2 meses**: no mês anterior a barra exibe somente `COMS`; no último mês a barra é empilhada em `COMS + CONC + PEND`, representando a projeção de comissionamento. `Faturado Comissionamento` é exibido como linha em degrau (“malhete”), tracejada e sem marcadores. O painel lateral mostra Comissionado, Faturado e Projeção de Comissionamento, todos com variação percentual contra o mês anterior;
 2. **Últimos 2 meses por parceira**: barras agrupadas de `COMS` para o penúltimo e o último mês, com um badge de variação percentual por parceira;
 3. **Histórico da primeira parceira**: últimos 6 meses de `COMS` + linha de faturado, com painel lateral 2×2 contendo Comissionamento atual, Faturamento atual, Média de comissionamento e Média de faturamento;
 4. **Histórico da segunda parceira**: mesma composição;
@@ -598,7 +598,10 @@ A visão possui uma única tela organizada em duas colunas, seguindo a leitura e
 
 Regras da visualização:
 
-- `COMS` é a única série exibida em barras;
+- no consolidado, o mês anterior exibe somente `COMS`; o último mês empilha `COMS`, `CONC` e `PEND`;
+- no consolidado, `Projeção de Comissionamento = COMS + CONC + PEND` e sua variação compara a mesma soma entre o último e o penúltimo mês;
+- no consolidado, `Faturado Comissionamento` usa linha em degrau (“malhete”), tracejada e sem marcadores;
+- nos demais gráficos de barras, permanece a regra específica já documentada para cada composição;
 - `Faturado Comissionamento` é exibido como linha somente no consolidado e nos históricos de 6 meses;
 - os dois gráficos da coluna esquerda utilizam os dois últimos meses existentes no JSON;
 - os três gráficos da coluna direita utilizam os seis últimos meses existentes no JSON;
@@ -610,9 +613,8 @@ Regras da visualização:
 - os eixos Y não exibem régua ou rótulos;
 - valores das barras são mostrados diretamente no gráfico;
 - o consolidado também mostra os valores da linha de faturado;
-- `Conversão = Faturado Comissionamento / COMS × 100`;
-- variações mensais de COMS e faturado usam `(atual - anterior) / anterior × 100`;
-- a variação da conversão é apresentada em pontos percentuais;
+- o painel lateral do consolidado não exibe mais Conversão; exibe Comissionado, Faturado e Projeção de Comissionamento;
+- variações mensais de COMS, faturado e projeção usam `(atual - anterior) / anterior × 100`;
 - meses são ordenados por `MES_ORDEM`;
 - parceiras são obtidas dinamicamente do JSON e não ficam hardcoded no módulo.
 

@@ -9,6 +9,8 @@
     --com-azul-claro: #88bdf3;
     --com-azul-claro-2: #dff0ff;
     --com-linha: #17345f;
+    --com-conc: #9db4c9;
+    --com-pend: #f1b24b;
     --com-verde: #16a36a;
     --com-verde-bg: #e8f7f0;
     --com-vermelho: #e14343;
@@ -133,8 +135,20 @@
     white-space: nowrap;
 }
 
+.visao-comissionamento .com-card-consolidado .com-card-header {
+    flex-direction: column;
+    gap: 5px;
+}
+
 .visao-comissionamento .com-card-consolidado .com-legenda {
-    gap: 22px;
+    gap: 14px;
+}
+
+.visao-comissionamento .com-legenda-consolidado {
+    width: 100%;
+    max-width: none;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
 }
 
 .visao-comissionamento .com-legenda-item {
@@ -161,6 +175,14 @@
 
 .visao-comissionamento .com-legenda-barra-ultimo {
     background: #1959b5;
+}
+
+.visao-comissionamento .com-legenda-barra-conc {
+    background: var(--com-conc);
+}
+
+.visao-comissionamento .com-legenda-barra-pend {
+    background: var(--com-pend);
 }
 
 .visao-comissionamento .com-legenda-linha {
@@ -191,6 +213,27 @@
     background: var(--com-linha);
     border: 2px solid #ffffff;
     box-shadow: 0 0 0 1px var(--com-linha);
+}
+
+.visao-comissionamento .com-legenda-linha-malhete::before {
+    top: 3px;
+    height: 8px;
+    background: none;
+    border-top: 2px dashed var(--com-linha);
+    border-bottom: 2px dashed var(--com-linha);
+    clip-path: polygon(0 0, 48% 0, 48% 100%, 52% 100%, 52% 0, 100% 0, 100% 25%, 54% 25%, 54% 100%, 46% 100%, 46% 25%, 0 25%);
+}
+
+.visao-comissionamento .com-legenda-linha-malhete::after {
+    left: 14px;
+    top: 2px;
+    width: 0;
+    height: 9px;
+    border: 0;
+    border-left: 2px dashed var(--com-linha);
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
 }
 
 .visao-comissionamento .com-grafico {
@@ -266,8 +309,8 @@
 }
 
 .visao-comissionamento .com-resumo-variacao-chip {
-    min-height: 32px;
-    padding: 4px 9px;
+    min-height: 38px;
+    padding: 6px 10px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -279,14 +322,14 @@
 }
 
 .visao-comissionamento .com-resumo-variacao-chip strong {
-    font-size: 14px;
+    font-size: 18px;
     line-height: 1;
     font-weight: 800;
     font-variant-numeric: tabular-nums;
 }
 
 .visao-comissionamento .com-resumo-seta {
-    font-size: 20px;
+    font-size: 24px;
     line-height: 1;
     font-weight: 900;
 }

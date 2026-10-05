@@ -13,6 +13,8 @@ const CORES = {
     azulMedio: "#3f8fe7",
     azulClaro: "#88bdf3",
     azulClaro2: "#b7d9f8",
+    conc: "#9db4c9",
+    pend: "#f1b24b",
     linha: "#17345f",
     texto: "#17345f",
     textoSecundario: "#64798a",
@@ -184,8 +186,15 @@ function somar(registros, campo) {
 function consolidarMes(ordem) {
     const registros = dadosGlobais.filter(item => item.mesOrdem === ordem);
 
+    const coms = somar(registros, "coms");
+    const conc = somar(registros, "conc");
+    const pend = somar(registros, "pend");
+
     return {
-        coms: somar(registros, "coms"),
+        coms,
+        conc,
+        pend,
+        projecao: coms + conc + pend,
         faturado: somar(registros, "faturado")
     };
 }
@@ -211,12 +220,6 @@ function variacaoPercentual(atual, anterior) {
     }
 
     return ((valorAtual - base) / Math.abs(base)) * 100;
-}
-
-function conversao(coms, faturado) {
-    const base = numero(coms);
-    if (base <= 0) return 0;
-    return (numero(faturado) / base) * 100;
 }
 
 function classificarTendencia(valor) {
@@ -287,14 +290,6 @@ function formatarFinanceiro(valor) {
     })}`;
 }
 
-function formatarPercentual(valor) {
-    const v = Number.isFinite(valor) ? valor : 0;
-    return `${v.toLocaleString("pt-BR", {
-        minimumFractionDigits: 1,
-        maximumFractionDigits: 1
-    })}%`;
-}
-
 function formatarPercentualVariacao(valor) {
     if (valor === null || !Number.isFinite(valor)) return "N/D";
 
@@ -303,14 +298,6 @@ function formatarPercentualVariacao(valor) {
         minimumFractionDigits: 1,
         maximumFractionDigits: 1
     })}%`;
-}
-
-function formatarPontosPercentuais(valor) {
-    const prefixo = valor > 0 ? "+" : "";
-    return `${prefixo}${valor.toLocaleString("pt-BR", {
-        minimumFractionDigits: 1,
-        maximumFractionDigits: 1
-    })} p.p.`;
 }
 
 
@@ -325,7 +312,7 @@ function aplicarTendenciaBloco(elemento, valor) {
     elemento.classList.add(classificarTendencia(valor));
 }
 
-function atualizarVariacaoResumo(idAtual, idValor, idIcone, idDetalhe, atualTexto, valor, detalhe, tipo = "percentual") {
+function atualizarVariacaoResumo(idAtual, idValor, idIcone, idDetalhe, atualTexto, valor, detalhe) {
     const elementoAtual = document.getElementById(idAtual);
     const elementoValor = document.getElementById(idValor);
     const elementoIcone = document.getElementById(idIcone);
@@ -336,9 +323,7 @@ function atualizarVariacaoResumo(idAtual, idValor, idIcone, idDetalhe, atualText
 
     if (elementoAtual) elementoAtual.textContent = atualTexto;
     if (elementoValor) {
-        elementoValor.textContent = tipo === "pp"
-            ? formatarPontosPercentuais(valor || 0)
-            : formatarPercentualVariacao(valor);
+        elementoValor.textContent = formatarPercentualVariacao(valor);
     }
 
     if (elementoIcone) elementoIcone.textContent = estilo.seta;
@@ -474,7 +459,10 @@ function criarGraficoResumo(meses, valores) {
     const canvas = document.getElementById("graficoResumo");
     if (!canvas || typeof Chart === "undefined") return;
 
-    const opcoes = opcoesBaseGrafico({ paddingTop: 34 });
+    const indiceAtual = valores.length - 1;
+    const opcoes = opcoesBaseGrafico({ paddingTop: 38 });
+    opcoes.scales.x.stacked = true;
+    opcoes.scales.y.stacked = true;
 
     const grafico = new Chart(canvas, {
         type: "bar",
@@ -483,7 +471,7 @@ function criarGraficoResumo(meses, valores) {
             datasets: [
                 {
                     type: "bar",
-                    label: "Comissionado (COMS)",
+                    label: "COMS",
                     data: valores.map(item => item.coms),
                     backgroundColor(contexto) {
                         const { ctx, chartArea } = contexto.chart;
@@ -491,15 +479,15 @@ function criarGraficoResumo(meses, valores) {
                     },
                     borderRadius: 4,
                     borderSkipped: false,
+                    stack: "projecao",
                     barPercentage: 0.64,
                     categoryPercentage: 0.72,
                     order: 1,
                     datalabels: {
                         display: pluginDataLabelsDisponivel,
-                        color: CORES.texto,
-                        anchor: "end",
-                        align: "top",
-                        offset: 4,
+                        color: "#ffffff",
+                        anchor: "center",
+                        align: "center",
                         clamp: true,
                         formatter: formatarFinanceiro,
                         font: {
@@ -509,29 +497,55 @@ function criarGraficoResumo(meses, valores) {
                     }
                 },
                 {
+                    type: "bar",
+                    label: "CONC",
+                    data: valores.map((item, indice) => indice === indiceAtual ? item.conc : 0),
+                    backgroundColor: CORES.conc,
+                    borderRadius: 3,
+                    borderSkipped: false,
+                    stack: "projecao",
+                    barPercentage: 0.64,
+                    categoryPercentage: 0.72,
+                    order: 1,
+                    datalabels: { display: false }
+                },
+                {
+                    type: "bar",
+                    label: "PEND",
+                    data: valores.map((item, indice) => indice === indiceAtual ? item.pend : 0),
+                    backgroundColor: CORES.pend,
+                    borderRadius: 3,
+                    borderSkipped: false,
+                    stack: "projecao",
+                    barPercentage: 0.64,
+                    categoryPercentage: 0.72,
+                    order: 1,
+                    datalabels: { display: false }
+                },
+                {
                     type: "line",
                     label: "Faturado",
                     data: valores.map(item => item.faturado),
                     borderColor: CORES.linha,
                     backgroundColor: CORES.linha,
                     borderWidth: 3,
-                    pointRadius: 5,
-                    pointHoverRadius: 5,
-                    pointBackgroundColor: CORES.linha,
-                    pointBorderColor: "#ffffff",
-                    pointBorderWidth: 2,
-                    tension: 0.12,
+                    borderDash: [10, 7],
+                    pointRadius: 0,
+                    pointHoverRadius: 0,
+                    pointHitRadius: 8,
+                    stepped: "middle",
+                    tension: 0,
                     fill: false,
                     order: 0,
                     datalabels: {
                         display: pluginDataLabelsDisponivel,
                         color: CORES.linha,
-                        backgroundColor: "rgba(255,255,255,0.88)",
+                        backgroundColor: "rgba(255,255,255,0.90)",
                         borderRadius: 4,
                         padding: { top: 2, bottom: 2, left: 4, right: 4 },
-                        anchor: "center",
-                        align: context => context.dataIndex === 0 ? "bottom" : "top",
-                        offset: 10,
+                        anchor: "end",
+                        align: "top",
+                        offset: 8,
                         clamp: true,
                         formatter: formatarFinanceiro,
                         font: {
@@ -717,14 +731,12 @@ function atualizarLegendaParceiras(mesAnterior, mesAtual) {
 }
 
 function atualizarResumo(meses, valores) {
-    const [mesAnterior, mesAtual] = meses;
     const [dadosAnterior, dadosAtual] = valores;
 
     const variacaoComs = variacaoPercentual(dadosAtual.coms, dadosAnterior.coms);
     const variacaoFaturado = variacaoPercentual(dadosAtual.faturado, dadosAnterior.faturado);
-    const conversaoAnterior = conversao(dadosAnterior.coms, dadosAnterior.faturado);
-    const conversaoAtual = conversao(dadosAtual.coms, dadosAtual.faturado);
-    const variacaoConversao = conversaoAtual - conversaoAnterior;
+    const variacaoProjecao = variacaoPercentual(dadosAtual.projecao, dadosAnterior.projecao);
+    const referenciaAnterior = `vs. ${formatarMesCompleto(meses[0].mes)}`;
 
     atualizarVariacaoResumo(
         "valorComsAtualResumo",
@@ -733,7 +745,7 @@ function atualizarResumo(meses, valores) {
         "detalheVarComs",
         formatarFinanceiro(dadosAtual.coms),
         variacaoComs,
-        `vs. ${formatarMesCompleto(meses[0].mes)}`
+        referenciaAnterior
     );
 
     atualizarVariacaoResumo(
@@ -743,18 +755,17 @@ function atualizarResumo(meses, valores) {
         "detalheVarFaturado",
         formatarFinanceiro(dadosAtual.faturado),
         variacaoFaturado,
-        `vs. ${formatarMesCompleto(meses[0].mes)}`
+        referenciaAnterior
     );
 
     atualizarVariacaoResumo(
-        "valorConversaoAtualResumo",
-        "variacaoConversao",
-        "iconeVarConversao",
-        "detalheVarConversao",
-        formatarPercentual(conversaoAtual),
-        variacaoConversao,
-        `vs. ${formatarMesCompleto(meses[0].mes)}`,
-        "pp"
+        "valorProjecaoAtualResumo",
+        "variacaoProjecao",
+        "iconeVarProjecao",
+        "detalheVarProjecao",
+        formatarFinanceiro(dadosAtual.projecao),
+        variacaoProjecao,
+        referenciaAnterior
     );
 }
 
