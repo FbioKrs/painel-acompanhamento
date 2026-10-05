@@ -31,7 +31,7 @@
     min-height: 0;
 
     display: grid;
-    grid-template-columns: 0.98fr 1.02fr;
+    grid-template-columns: 1.18fr 0.82fr;
     gap: var(--com-gap);
 }
 
@@ -80,7 +80,7 @@
 }
 
 .visao-comissionamento .com-card-historico {
-    grid-template-columns: minmax(0, 1fr) 276px;
+    grid-template-columns: minmax(0, 1fr) 154px;
     padding: 12px 12px 10px 16px;
     gap: 12px;
 }
@@ -319,16 +319,20 @@
 .visao-comissionamento .com-small-multiple {
     min-width: 0;
     min-height: 0;
-    display: flex;
-    flex-direction: column;
-    padding: 8px 8px 5px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 122px;
+    grid-template-rows: auto minmax(0, 1fr);
+    column-gap: 7px;
+    row-gap: 3px;
+    padding: 8px 8px 6px;
     border-radius: 12px;
     background: linear-gradient(180deg, #fbfdff 0%, #f6faff 100%);
     border: 1px solid rgba(45, 100, 158, 0.09);
 }
 
 .visao-comissionamento .com-small-multiple-titulo {
-    flex-shrink: 0;
+    grid-column: 1 / -1;
+    grid-row: 1;
     min-height: 22px;
     padding: 0 2px 2px;
     font-size: 16px;
@@ -339,16 +343,20 @@
 }
 
 .visao-comissionamento .com-small-multiple-grafico {
-    flex: 1;
+    grid-column: 1;
+    grid-row: 2;
     min-height: 118px;
 }
 
 .visao-comissionamento .com-small-multiple-kpis {
-    flex-shrink: 0;
-    min-height: 100px;
-    margin-top: 6px;
+    grid-column: 2;
+    grid-row: 2;
+    min-width: 0;
+    min-height: 0;
+    margin-top: 0;
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: repeat(3, minmax(0, 1fr));
     gap: 5px;
 }
 
@@ -547,7 +555,7 @@
     flex: 1;
     min-height: 0;
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 1fr);
     grid-template-rows: repeat(2, minmax(0, 1fr));
     gap: 6px;
 }
@@ -654,4 +662,51 @@
 
 .visao-comissionamento #erro {
     top: 112px;
+}
+
+
+/* Ajuste de distribuição — small multiples + históricos compactos */
+.visao-comissionamento .com-small-multiple-kpis .com-small-kpi {
+    padding: 6px 6px 5px;
+}
+
+.visao-comissionamento .com-small-multiple-kpis .com-small-kpi-label {
+    min-height: 0;
+    font-size: 9px;
+    line-height: 1.05;
+}
+
+.visao-comissionamento .com-small-multiple-kpis .com-small-kpi-valor {
+    font-size: 14px;
+}
+
+.visao-comissionamento .com-small-multiple-kpis .com-small-kpi-chip {
+    min-height: 24px;
+    padding: 3px 5px;
+}
+
+.visao-comissionamento .com-small-multiple-kpis .com-small-kpi-chip strong {
+    font-size: 12px;
+}
+
+.visao-comissionamento .com-small-multiple-kpis .com-small-kpi-detalhe {
+    font-size: 8px;
+}
+
+.visao-comissionamento .com-kpi-grid-medias {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.visao-comissionamento .com-kpi-grid-medias .com-kpi-item {
+    padding: 9px 8px;
+}
+
+.visao-comissionamento .com-kpi-grid-medias .com-kpi-label {
+    font-size: 11px;
+}
+
+.visao-comissionamento .com-kpi-grid-medias .com-kpi-media {
+    font-size: 19px;
 }

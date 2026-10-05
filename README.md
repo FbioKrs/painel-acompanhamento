@@ -591,8 +591,8 @@ Faturado Comissionamento → parcela das obras comissionadas já faturada
 A visão possui uma única tela organizada em duas colunas, seguindo a leitura executiva da referência visual vigente:
 
 1. **Consolidado — últimos 2 meses**: no mês anterior a barra exibe somente `COMS`; no último mês a barra é empilhada em `COMS + CONC + PEND`, representando a projeção de comissionamento. `Faturado Comissionamento` é exibido como linha em degrau (“malhete”), tracejada e sem marcadores. O painel lateral segue a ordem Comissionado → Projeção de Comissionamento → Faturado;
-2. **Últimos 2 meses por parceira**: conjunto de *small multiples*, um mini-gráfico por parceira, repetindo a mesma semântica visual do Consolidado. Em cada mini-gráfico, o mês anterior exibe somente `COMS`; o mês atual empilha `COMS + CONC + PEND`; `Faturado Comissionamento` é uma linha em degrau (“malhete”), tracejada e sem marcadores. Todos os mini-gráficos usam a mesma escala vertical para permitir comparação direta entre parceiras. Cada *small multiple* também reproduz, na mesma ordem, os cartões **Comissionado → Projeção de Comissionamento → Faturado**, com valor atual, variação e referência do mês anterior;
-3. **Histórico da primeira parceira**: últimos 6 meses de `COMS` + linha de faturado, com painel lateral 2×2 contendo Comissionamento atual, Faturamento atual, Média de comissionamento e Média de faturamento;
+2. **Últimos 2 meses por parceira**: conjunto de *small multiples*, um mini-gráfico por parceira, repetindo a mesma semântica visual do Consolidado. Em cada mini-gráfico, o mês anterior exibe somente `COMS`; o mês atual empilha `COMS + CONC + PEND`; `Faturado Comissionamento` é uma linha em degrau (“malhete”), tracejada e sem marcadores. Todos os mini-gráficos usam a mesma escala vertical para permitir comparação direta entre parceiras. Cada *small multiple* reproduz, na lateral direita do respectivo mini-gráfico e em disposição vertical, os cartões **Comissionado → Projeção de Comissionamento → Faturado**, com valor atual, variação e referência do mês anterior;
+3. **Histórico da primeira parceira**: últimos 6 meses de `COMS` + linha de faturado, com painel lateral compacto contendo somente **Média de comissionamento** e **Média de faturamento**, organizadas verticalmente;
 4. **Histórico da segunda parceira**: mesma composição;
 5. **Histórico da terceira parceira**: mesma composição.
 
@@ -607,10 +607,12 @@ Regras da visualização:
 - os dois gráficos da coluna esquerda utilizam os dois últimos meses existentes no JSON;
 - os três gráficos da coluna direita utilizam os seis últimos meses existentes no JSON;
 - nos *small multiples* por parceira, os cartões usam as mesmas regras do consolidado: Comissionado compara `COMS` atual versus `COMS` anterior; Projeção compara `COMS + CONC + PEND` atual versus `COMS` anterior; Faturado compara faturamento atual versus faturamento anterior;
+- os três cartões de cada *small multiple* ficam na lateral direita do mini-gráfico, organizados verticalmente;
+- para acomodar essa composição, a coluna dos históricos de 6 meses é aproximadamente 20% mais estreita que na versão anterior e a coluna dos dois blocos da esquerda recebe o espaço liberado;
+- nos históricos de 6 meses, o painel lateral mantém somente Média de comissionamento e Média de faturamento, empilhadas verticalmente;
 - no comparativo por parceira, o mês anterior usa somente `COMS` e o mês atual representa a projeção com `COMS + CONC + PEND`;
 - nos históricos, o último mês é destacado em azul escuro;
-- nos cartões laterais dos históricos, Comissionamento atual e Faturamento atual mostram também a variação percentual e a referência do mês imediatamente anterior;
-- Média de comissionamento e Média de faturamento são calculadas sobre os seis meses exibidos no respectivo histórico e ocupam a segunda linha da grade 2×2;
+- Média de comissionamento e Média de faturamento são calculadas sobre os seis meses exibidos no respectivo histórico e são os únicos indicadores mantidos no painel lateral dos históricos;
 - Tipografia dos gráficos da COM-V1 é centralizada em `TIPOGRAFIA_GRAFICOS`, dentro de `js/comissionamento.js`: rótulos quantitativos, rótulos do eixo X e anotações de variação desenhadas nos gráficos usam **14 px**; valores usam peso `800` e eixos/anotações auxiliares usam peso `700`. Não alterar `Chart.defaults`, para evitar efeito colateral nas demais visões do PG-V2;
 - os eixos Y não exibem régua ou rótulos;
 - valores das barras são mostrados diretamente no gráfico;

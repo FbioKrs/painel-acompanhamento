@@ -299,33 +299,18 @@ function aplicarTendenciaKpi(bloco, valor) {
     if (percentual) percentual.textContent = formatarPercentualVariacao(valor);
 }
 
-function atualizarKpiLateral(elementoId, mesAtual, mesAnterior, dadosAtual, dadosAnterior, valoresHistorico) {
+function atualizarKpiLateral(elementoId, _mesAtual, _mesAnterior, _dadosAtual, _dadosAnterior, valoresHistorico) {
     const elemento = document.getElementById(elementoId);
     if (!elemento) return;
 
-    const variacaoComs = variacaoPercentual(dadosAtual.coms, dadosAnterior.coms);
-    const variacaoFaturado = variacaoPercentual(dadosAtual.faturado, dadosAnterior.faturado);
     const mediaComs = mediaValores(valoresHistorico, "coms");
     const mediaFaturado = mediaValores(valoresHistorico, "faturado");
 
-    const comsAtual = elemento.querySelector(".com-kpi-coms-atual");
-    const faturadoAtual = elemento.querySelector(".com-kpi-faturado-atual");
     const mediaComsElemento = elemento.querySelector(".com-kpi-media-coms");
     const mediaFaturadoElemento = elemento.querySelector(".com-kpi-media-faturado");
-    const comparacaoComs = elemento.querySelector(".com-kpi-comp-coms");
-    const comparacaoFaturado = elemento.querySelector(".com-kpi-comp-faturado");
 
-    if (comsAtual) comsAtual.textContent = formatarFinanceiro(dadosAtual.coms);
-    if (faturadoAtual) faturadoAtual.textContent = formatarFinanceiro(dadosAtual.faturado);
     if (mediaComsElemento) mediaComsElemento.textContent = formatarFinanceiro(mediaComs);
     if (mediaFaturadoElemento) mediaFaturadoElemento.textContent = formatarFinanceiro(mediaFaturado);
-
-    const textoComparacao = `vs. ${formatarMesCompleto(mesAnterior?.mes || "")}`;
-    if (comparacaoComs) comparacaoComs.textContent = textoComparacao;
-    if (comparacaoFaturado) comparacaoFaturado.textContent = textoComparacao;
-
-    aplicarTendenciaKpi(elemento.querySelector(".com-kpi-var-coms"), variacaoComs);
-    aplicarTendenciaKpi(elemento.querySelector(".com-kpi-var-faturado"), variacaoFaturado);
 }
 
 
