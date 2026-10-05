@@ -591,7 +591,7 @@ Faturado Comissionamento → parcela das obras comissionadas já faturada
 A visão possui uma única tela organizada em duas colunas, seguindo a leitura executiva da referência visual vigente:
 
 1. **Consolidado — últimos 2 meses**: no mês anterior a barra exibe somente `COMS`; no último mês a barra é empilhada em `COMS + CONC + PEND`, representando a projeção de comissionamento. `Faturado Comissionamento` é exibido como linha em degrau (“malhete”), tracejada e sem marcadores. O painel lateral segue a ordem Comissionado → Projeção de Comissionamento → Faturado;
-2. **Últimos 2 meses por parceira**: conjunto de *small multiples*, um mini-gráfico por parceira, repetindo a mesma semântica visual do Consolidado. Em cada mini-gráfico, o mês anterior exibe somente `COMS`; o mês atual empilha `COMS + CONC + PEND`; `Faturado Comissionamento` é uma linha em degrau (“malhete”), tracejada e sem marcadores. Todos os mini-gráficos usam a mesma escala vertical para permitir comparação direta entre parceiras;
+2. **Últimos 2 meses por parceira**: conjunto de *small multiples*, um mini-gráfico por parceira, repetindo a mesma semântica visual do Consolidado. Em cada mini-gráfico, o mês anterior exibe somente `COMS`; o mês atual empilha `COMS + CONC + PEND`; `Faturado Comissionamento` é uma linha em degrau (“malhete”), tracejada e sem marcadores. Todos os mini-gráficos usam a mesma escala vertical para permitir comparação direta entre parceiras. Cada *small multiple* também reproduz, na mesma ordem, os cartões **Comissionado → Projeção de Comissionamento → Faturado**, com valor atual, variação e referência do mês anterior;
 3. **Histórico da primeira parceira**: últimos 6 meses de `COMS` + linha de faturado, com painel lateral 2×2 contendo Comissionamento atual, Faturamento atual, Média de comissionamento e Média de faturamento;
 4. **Histórico da segunda parceira**: mesma composição;
 5. **Histórico da terceira parceira**: mesma composição.
@@ -603,10 +603,11 @@ Regras da visualização:
 - no consolidado, `Faturado Comissionamento` usa linha em degrau (“malhete”), tracejada e sem marcadores;
 - no consolidado, a legenda do gráfico combinado é 30% maior que a legenda-base da visão, incluindo texto e amostras visuais;
 - nos demais gráficos de barras, permanece a regra específica já documentada para cada composição;
-- `Faturado Comissionamento` é exibido como linha somente no consolidado e nos históricos de 6 meses;
+- `Faturado Comissionamento` é exibido como linha no consolidado, nos *small multiples* por parceira e nos históricos de 6 meses;
 - os dois gráficos da coluna esquerda utilizam os dois últimos meses existentes no JSON;
 - os três gráficos da coluna direita utilizam os seis últimos meses existentes no JSON;
-- no comparativo por parceira, o mês anterior usa azul claro e o mês atual usa azul escuro;
+- nos *small multiples* por parceira, os cartões usam as mesmas regras do consolidado: Comissionado compara `COMS` atual versus `COMS` anterior; Projeção compara `COMS + CONC + PEND` atual versus `COMS` anterior; Faturado compara faturamento atual versus faturamento anterior;
+- no comparativo por parceira, o mês anterior usa somente `COMS` e o mês atual representa a projeção com `COMS + CONC + PEND`;
 - nos históricos, o último mês é destacado em azul escuro;
 - nos cartões laterais dos históricos, Comissionamento atual e Faturamento atual mostram também a variação percentual e a referência do mês imediatamente anterior;
 - Média de comissionamento e Média de faturamento são calculadas sobre os seis meses exibidos no respectivo histórico e ocupam a segunda linha da grade 2×2;

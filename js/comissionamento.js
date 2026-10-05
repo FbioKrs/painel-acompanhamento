@@ -621,6 +621,86 @@ function criarGraficoSmallMultiple(canvas, meses, valores, limiteY) {
     graficos.push(grafico);
 }
 
+function criarCartaoSmallMultiple(rotulo, valorAtual, variacao, detalhe, classeExtra = "") {
+    const tendencia = classificarTendencia(variacao);
+    const estilo = obterEstiloTendencia(tendencia);
+
+    const cartao = document.createElement("div");
+    cartao.className = `com-small-kpi ${tendencia} ${classeExtra}`.trim();
+
+    const label = document.createElement("div");
+    label.className = "com-small-kpi-label";
+    label.textContent = rotulo;
+
+    const valorLinha = document.createElement("div");
+    valorLinha.className = "com-small-kpi-valor-linha";
+
+    const valor = document.createElement("strong");
+    valor.className = "com-small-kpi-valor";
+    valor.textContent = formatarFinanceiro(valorAtual);
+
+    const chip = document.createElement("span");
+    chip.className = "com-small-kpi-chip";
+    chip.innerHTML = `<span class="com-small-kpi-seta">${estilo.seta}</span><strong>${formatarPercentualVariacao(variacao)}</strong>`;
+
+    const detalheElemento = document.createElement("div");
+    detalheElemento.className = "com-small-kpi-detalhe";
+    detalheElemento.textContent = detalhe;
+
+    valorLinha.appendChild(valor);
+    valorLinha.appendChild(chip);
+    cartao.appendChild(label);
+    cartao.appendChild(valorLinha);
+    cartao.appendChild(detalheElemento);
+
+    return cartao;
+}
+
+function criarCardsSmallMultiple(meses, valores) {
+    const container = document.createElement("div");
+    container.className = "com-small-multiple-kpis";
+
+    const [mesAnterior, mesAtual] = meses;
+    const [dadosAnterior, dadosAtual] = valores;
+
+    const variacaoComs = variacaoPercentual(dadosAtual.coms, dadosAnterior.coms);
+    const variacaoProjecao = variacaoPercentual(dadosAtual.projecao, dadosAnterior.coms);
+    const variacaoFaturado = variacaoPercentual(dadosAtual.faturado, dadosAnterior.faturado);
+
+    const referenciaAnterior = `vs. ${formatarMesCompleto(mesAnterior?.mes || "")}`;
+    const referenciaProjecao = `vs. ${formatarMesCompleto(mesAnterior?.mes || "")} (COMS)`;
+
+    container.appendChild(
+        criarCartaoSmallMultiple(
+            "Comissionado",
+            dadosAtual.coms,
+            variacaoComs,
+            referenciaAnterior
+        )
+    );
+
+    container.appendChild(
+        criarCartaoSmallMultiple(
+            "Projeção de Comissionamento",
+            dadosAtual.projecao,
+            variacaoProjecao,
+            referenciaProjecao,
+            "com-small-kpi-projecao"
+        )
+    );
+
+    container.appendChild(
+        criarCartaoSmallMultiple(
+            "Faturado",
+            dadosAtual.faturado,
+            variacaoFaturado,
+            referenciaAnterior
+        )
+    );
+
+    return container;
+}
+
 function renderizarSmallMultiplesParceiras(parceiras, meses) {
     const container = document.getElementById("smallMultiplesParceiras");
     if (!container) return;
@@ -656,8 +736,11 @@ function renderizarSmallMultiplesParceiras(parceiras, meses) {
         canvas.id = `graficoResumoParceira${indice + 1}`;
         graficoBox.appendChild(canvas);
 
+        const cards = criarCardsSmallMultiple(meses, serie.valores);
+
         painel.appendChild(titulo);
         painel.appendChild(graficoBox);
+        painel.appendChild(cards);
         container.appendChild(painel);
 
         criarGraficoSmallMultiple(canvas, meses, serie.valores, limiteY);

@@ -340,7 +340,101 @@
 
 .visao-comissionamento .com-small-multiple-grafico {
     flex: 1;
-    min-height: 0;
+    min-height: 118px;
+}
+
+.visao-comissionamento .com-small-multiple-kpis {
+    flex-shrink: 0;
+    min-height: 100px;
+    margin-top: 6px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 5px;
+}
+
+.visao-comissionamento .com-small-kpi {
+    min-width: 0;
+    padding: 7px 6px 6px;
+    border-radius: 9px;
+    background: rgba(242, 248, 254, 0.96);
+    border: 1px solid rgba(63, 143, 231, 0.08);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.visao-comissionamento .com-small-kpi-label {
+    min-height: 25px;
+    font-size: 11px;
+    line-height: 1.08;
+    font-weight: 800;
+    color: #315074;
+    text-transform: uppercase;
+}
+
+.visao-comissionamento .com-small-kpi-valor-linha {
+    margin-top: 3px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+}
+
+.visao-comissionamento .com-small-kpi-valor {
+    min-width: 0;
+    font-size: 16px;
+    line-height: 1;
+    font-weight: 800;
+    color: #17345f;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+.visao-comissionamento .com-small-kpi-chip {
+    min-height: 25px;
+    padding: 4px 7px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    color: var(--com-vermelho);
+    background: var(--com-vermelho-bg);
+    white-space: nowrap;
+}
+
+.visao-comissionamento .com-small-kpi-chip strong {
+    font-size: 12px;
+    line-height: 1;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+}
+
+.visao-comissionamento .com-small-kpi-seta {
+    font-size: 16px;
+    line-height: 1;
+    font-weight: 900;
+}
+
+.visao-comissionamento .com-small-kpi.positivo .com-small-kpi-chip {
+    color: var(--com-verde);
+    background: var(--com-verde-bg);
+}
+
+.visao-comissionamento .com-small-kpi.neutro .com-small-kpi-chip {
+    color: var(--com-neutro);
+    background: #eef2f5;
+}
+
+.visao-comissionamento .com-small-kpi-detalhe {
+    margin-top: 4px;
+    font-size: 9px;
+    line-height: 1.05;
+    font-weight: 600;
+    color: #84929e;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .visao-comissionamento .com-variacao-panel,
