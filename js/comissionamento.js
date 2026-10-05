@@ -735,8 +735,9 @@ function atualizarResumo(meses, valores) {
 
     const variacaoComs = variacaoPercentual(dadosAtual.coms, dadosAnterior.coms);
     const variacaoFaturado = variacaoPercentual(dadosAtual.faturado, dadosAnterior.faturado);
-    const variacaoProjecao = variacaoPercentual(dadosAtual.projecao, dadosAnterior.projecao);
+    const variacaoProjecao = variacaoPercentual(dadosAtual.projecao, dadosAnterior.coms);
     const referenciaAnterior = `vs. ${formatarMesCompleto(meses[0].mes)}`;
+    const referenciaProjecao = `vs. ${formatarMesCompleto(meses[0].mes)} (COMS)`;
 
     atualizarVariacaoResumo(
         "valorComsAtualResumo",
@@ -765,7 +766,7 @@ function atualizarResumo(meses, valores) {
         "detalheVarProjecao",
         formatarFinanceiro(dadosAtual.projecao),
         variacaoProjecao,
-        referenciaAnterior
+        referenciaProjecao
     );
 }
 

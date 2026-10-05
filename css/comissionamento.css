@@ -141,7 +141,34 @@
 }
 
 .visao-comissionamento .com-card-consolidado .com-legenda {
-    gap: 14px;
+    gap: 18px;
+    font-size: 14.3px;
+    font-weight: 700;
+}
+
+.visao-comissionamento .com-card-consolidado .com-legenda-barra {
+    width: 26px;
+    height: 17px;
+    border-radius: 4px;
+}
+
+.visao-comissionamento .com-card-consolidado .com-legenda-linha {
+    width: 39px;
+    height: 17px;
+}
+
+.visao-comissionamento .com-card-consolidado .com-legenda-linha-malhete::before {
+    top: 4px;
+    height: 10px;
+    border-top-width: 3px;
+    border-bottom-width: 3px;
+}
+
+.visao-comissionamento .com-card-consolidado .com-legenda-linha-malhete::after {
+    left: 18px;
+    top: 3px;
+    height: 11px;
+    border-left-width: 3px;
 }
 
 .visao-comissionamento .com-legenda-consolidado {
