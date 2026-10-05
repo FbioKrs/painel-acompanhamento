@@ -592,8 +592,8 @@ A COM-V1 possui **duas Subvisões internas**, ambas dentro do mesmo fragmento e 
 
 **Tela 1 — Consolidado e últimos 2 meses por parceira**
 
-1. **COMS x Faturado — Consolidado** ocupa 100% da altura útil e **40% da largura**. No mês anterior, a barra exibe somente `COMS`; no último mês, a barra é empilhada em `COMS + CONC + PEND`, representando a projeção de comissionamento. `Faturado Comissionamento` é exibido como linha em degrau (“malhete”), tracejada e sem marcadores. O painel lateral segue a ordem Comissionado → Projeção de Comissionamento → Faturado;
-2. **Últimos 2 meses por parceira** ocupa os **60% restantes da largura** e 100% da altura útil. Os *small multiples* são distribuídos **verticalmente**, um por parceira, mantendo a mesma semântica visual do Consolidado. Em cada mini-gráfico, o mês anterior exibe somente `COMS`; o mês atual empilha `COMS + CONC + PEND`; `Faturado Comissionamento` é uma linha em degrau (“malhete”), tracejada e sem marcadores. Todos os mini-gráficos usam a mesma escala vertical. Na lateral direita de cada *small multiple*, os cartões **Comissionado → Projeção de Comissionamento → Faturado** permanecem organizados verticalmente.
+1. A coluna esquerda ocupa **40% da largura**. No topo ficam três cartões horizontais com os valores do mês atual para `COMS`, `CONC` e `PEND`; cada cartão usa no canto superior esquerdo o detalhe diagonal já adotado em outras visões, com a mesma cor da respectiva série na legenda. Abaixo desses KPIs fica a área **COMS x Faturado — Consolidado**, que consome o restante da altura da coluna. No mês anterior, a barra exibe somente `COMS`; no último mês, a barra é empilhada em `COMS + CONC + PEND`, representando a projeção de comissionamento. `Faturado Comissionamento` é exibido como linha em degrau (“malhete”), tracejada e sem marcadores. O painel lateral segue a ordem Comissionado → Projeção de Comissionamento → Faturado;
+2. **Últimos 2 meses por parceira** ocupa os **60% restantes da largura** e 100% da altura útil. Os *small multiples* são distribuídos **verticalmente**, um por parceira, mantendo a mesma semântica visual do Consolidado. Em cada mini-gráfico, o mês anterior exibe somente `COMS`; o mês atual empilha `COMS + CONC + PEND`; `Faturado Comissionamento` é uma linha em degrau (“malhete”), tracejada e sem marcadores. Cada mini-gráfico utiliza **escala Y independente**, calculada a partir dos próprios valores da parceira. Na lateral direita de cada *small multiple*, os cartões **Comissionado → Projeção de Comissionamento → Faturado** permanecem organizados verticalmente.
 
 **Tela 2 — Históricos dos últimos 6 meses**
 
@@ -602,6 +602,9 @@ A COM-V1 possui **duas Subvisões internas**, ambas dentro do mesmo fragmento e 
 
 Regras da visualização:
 
+- as duas Subvisões não exibem subtítulos internos nos painéis nem subtítulo no cabeçalho global da COM-V1;
+- na Tela 1, os três cartões de status acima do Consolidado exibem `COMS`, `CONC` e `PEND` do último mês disponível; o detalhe diagonal no canto superior esquerdo segue a cor da respectiva série;
+- os cartões internos do painel lateral do Consolidado e dos *small multiples* usam superfície branca, borda e sombra discretas para se destacarem do fundo que os contém;
 - no consolidado, o mês anterior exibe somente `COMS`; o último mês empilha `COMS`, `CONC` e `PEND`;
 - no consolidado, `Projeção de Comissionamento = COMS + CONC + PEND` do mês atual e sua variação compara essa projeção contra o `COMS` do mês anterior;
 - no consolidado, `Faturado Comissionamento` usa linha em degrau (“malhete”), tracejada e sem marcadores;

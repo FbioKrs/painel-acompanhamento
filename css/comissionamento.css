@@ -58,6 +58,101 @@
     grid-template-columns: 2fr 3fr;
 }
 
+.visao-comissionamento .com-tela1-coluna-consolidado {
+    min-width: 0;
+    min-height: 0;
+    height: 100%;
+    display: grid;
+    grid-template-rows: 108px minmax(0, 1fr);
+    gap: 12px;
+}
+
+.visao-comissionamento .com-status-atual {
+    min-width: 0;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.visao-comissionamento .com-status-card {
+    --com-status-cor: #2b77ce;
+    --com-status-cor-clara: #59a2ef;
+    position: relative;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+    padding: 15px 12px 10px 16px;
+    border-radius: 14px;
+    background: #ffffff;
+    border: 1px solid rgba(42, 82, 124, 0.10);
+    box-shadow: 0 7px 18px rgba(28, 61, 96, 0.09);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.visao-comissionamento .com-status-card::before {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    width: 42px;
+    height: 42px;
+    clip-path: polygon(0 0, 100% 0, 0 100%);
+    background: linear-gradient(
+        135deg,
+        var(--com-status-cor) 0% 48%,
+        var(--com-status-cor-clara) 49% 68%,
+        transparent 69%
+    );
+    pointer-events: none;
+}
+
+.visao-comissionamento .com-status-card-coms {
+    --com-status-cor: #2b77ce;
+    --com-status-cor-clara: #59a2ef;
+}
+
+.visao-comissionamento .com-status-card-conc {
+    --com-status-cor: var(--com-conc);
+    --com-status-cor-clara: #c4d1dd;
+}
+
+.visao-comissionamento .com-status-card-pend {
+    --com-status-cor: var(--com-pend);
+    --com-status-cor-clara: #f7cf8c;
+}
+
+.visao-comissionamento .com-status-label {
+    padding-left: 20px;
+    font-size: 13px;
+    line-height: 1;
+    font-weight: 800;
+    color: #315074;
+    letter-spacing: 0.2px;
+}
+
+.visao-comissionamento .com-status-valor {
+    margin-top: 7px;
+    font-size: 23px;
+    line-height: 1;
+    font-weight: 800;
+    color: #17345f;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.visao-comissionamento .com-status-mes {
+    margin-top: 6px;
+    font-size: 12px;
+    line-height: 1;
+    font-weight: 650;
+    color: #81909c;
+    white-space: nowrap;
+}
+
 .visao-comissionamento .com-tela2-layout {
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: repeat(3, minmax(0, 1fr));
@@ -403,8 +498,9 @@
     min-width: 0;
     padding: 7px 6px 6px;
     border-radius: 9px;
-    background: rgba(242, 248, 254, 0.96);
-    border: 1px solid rgba(63, 143, 231, 0.08);
+    background: #ffffff;
+    border: 1px solid rgba(49, 100, 153, 0.14);
+    box-shadow: 0 4px 12px rgba(35, 79, 122, 0.08);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -497,9 +593,10 @@
 }
 
 .visao-comissionamento .com-variacao-panel {
-    padding: 14px 16px 10px;
+    padding: 12px;
     display: flex;
     flex-direction: column;
+    gap: 8px;
     justify-content: space-between;
 }
 
@@ -511,7 +608,12 @@
 }
 
 .visao-comissionamento .com-variacao-bloco {
-    padding: 5px 0;
+    min-height: 0;
+    padding: 10px 10px 9px;
+    border-radius: 10px;
+    background: #ffffff;
+    border: 1px solid rgba(49, 100, 153, 0.14);
+    box-shadow: 0 4px 12px rgba(35, 79, 122, 0.08);
 }
 
 .visao-comissionamento .com-variacao-label {
@@ -575,8 +677,7 @@
 }
 
 .visao-comissionamento .com-variacao-separador {
-    height: 1px;
-    background: rgba(66, 101, 135, 0.09);
+    display: none;
 }
 
 .visao-comissionamento .com-variacao-bloco.positivo .com-resumo-variacao-chip {
@@ -779,6 +880,7 @@
 }
 
 .visao-comissionamento .com-subvisao-resumo .com-card-consolidado {
+    min-height: 0;
     padding: 18px 16px 16px 18px;
 }
 

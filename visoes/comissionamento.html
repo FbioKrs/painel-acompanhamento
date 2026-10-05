@@ -7,13 +7,33 @@
         <section id="comSubvisaoResumo" class="com-subvisao com-subvisao-resumo ativa" data-subvisao="0" aria-hidden="false">
             <div class="com-tela1-layout">
 
-                <article class="painel com-card com-card-consolidado">
-                    <div class="com-card-main">
-                        <header class="com-card-header">
-                            <div>
-                                <div class="painel-titulo">COMS x Faturado — Consolidado</div>
-                                <div id="subtituloResumo" class="painel-subtitulo">Comparativo dos últimos 2 meses</div>
-                            </div>
+                <div class="com-tela1-coluna-consolidado">
+                    <section class="com-status-atual" aria-label="Status financeiros do mês atual">
+                        <article class="com-status-card com-status-card-coms">
+                            <div class="com-status-label">COMS</div>
+                            <strong id="valorStatusComs" class="com-status-valor">--</strong>
+                            <div id="mesStatusComs" class="com-status-mes">--</div>
+                        </article>
+
+                        <article class="com-status-card com-status-card-conc">
+                            <div class="com-status-label">CONC</div>
+                            <strong id="valorStatusConc" class="com-status-valor">--</strong>
+                            <div id="mesStatusConc" class="com-status-mes">--</div>
+                        </article>
+
+                        <article class="com-status-card com-status-card-pend">
+                            <div class="com-status-label">PEND</div>
+                            <strong id="valorStatusPend" class="com-status-valor">--</strong>
+                            <div id="mesStatusPend" class="com-status-mes">--</div>
+                        </article>
+                    </section>
+
+                    <article class="painel com-card com-card-consolidado">
+                        <div class="com-card-main">
+                            <header class="com-card-header">
+                                <div>
+                                    <div class="painel-titulo">COMS x Faturado — Consolidado</div>
+                                </div>
 
                             <div class="com-legenda com-legenda-consolidado" aria-label="Legenda do gráfico consolidado">
                                 <span class="com-legenda-item">
@@ -81,13 +101,13 @@
                             <div id="detalheVarFaturado" class="com-variacao-detalhe">--</div>
                         </div>
                     </aside>
-                </article>
+                    </article>
+                </div>
 
                 <article class="painel com-card com-card-parceiras">
                     <header class="com-card-header com-card-header-parceiras">
                         <div>
                             <div class="painel-titulo">Últimos 2 meses por parceira</div>
-                            <div class="painel-subtitulo">Mesma leitura do consolidado • escala comum entre parceiras</div>
                         </div>
 
                         <div class="com-legenda com-legenda-parceiras" aria-label="Legenda dos gráficos por parceira">
@@ -124,7 +144,6 @@
                         <header class="com-card-header">
                             <div>
                                 <div id="tituloParceira1" class="painel-titulo">PRETEL — últimos 6 meses</div>
-                                <div id="subtituloParceira1" class="painel-subtitulo">COMS x Faturado</div>
                             </div>
 
                             <div class="com-legenda">
@@ -166,7 +185,6 @@
                         <header class="com-card-header">
                             <div>
                                 <div id="tituloParceira2" class="painel-titulo">DPL — últimos 6 meses</div>
-                                <div id="subtituloParceira2" class="painel-subtitulo">COMS x Faturado</div>
                             </div>
 
                             <div class="com-legenda">
@@ -208,7 +226,6 @@
                         <header class="com-card-header">
                             <div>
                                 <div id="tituloParceira3" class="painel-titulo">CENA — últimos 6 meses</div>
-                                <div id="subtituloParceira3" class="painel-subtitulo">COMS x Faturado</div>
                             </div>
 
                             <div class="com-legenda">

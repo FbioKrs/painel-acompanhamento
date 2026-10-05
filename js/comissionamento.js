@@ -699,15 +699,6 @@ function renderizarSmallMultiplesParceiras(parceiras, meses) {
         valores: meses.map(item => consolidarMesParceira(item.ordem, parceira))
     }));
 
-    const maiorValor = series.reduce((maior, serie) => {
-        for (const item of serie.valores) {
-            maior = Math.max(maior, item.projecao, item.faturado);
-        }
-        return maior;
-    }, 0);
-
-    const limiteY = maiorValor > 0 ? maiorValor * 1.22 : undefined;
-
     series.forEach((serie, indice) => {
         const painel = document.createElement("section");
         painel.className = "com-small-multiple";
@@ -730,7 +721,7 @@ function renderizarSmallMultiplesParceiras(parceiras, meses) {
         painel.appendChild(cards);
         container.appendChild(painel);
 
-        criarGraficoSmallMultiple(canvas, meses, serie.valores, limiteY);
+        criarGraficoSmallMultiple(canvas, meses, serie.valores);
     });
 }
 function criarGraficoHistorico(canvasId, meses, valores) {
@@ -804,14 +795,28 @@ function criarGraficoHistorico(canvasId, meses, valores) {
    ================================================================ */
 
 function atualizarCabecalho() {
-    const telaHistorico = indiceSubvisao === 1;
-
     window.PAINEL_BASE?.definirCabecalho({
         titulo: "Comissionamento por Parceira",
-        subtitulo: telaHistorico
-            ? "Histórico dos últimos 6 meses"
-            : "Consolidado e últimos 2 meses por parceira",
+        subtitulo: "",
         contexto: `COMISSIONAMENTO • ${indiceSubvisao + 1}/${TOTAL_SUBVISOES}`
+    });
+}
+
+function atualizarStatusAtual(mesAtual, dadosAtual) {
+    const referencias = [
+        ["valorStatusComs", "mesStatusComs", dadosAtual.coms],
+        ["valorStatusConc", "mesStatusConc", dadosAtual.conc],
+        ["valorStatusPend", "mesStatusPend", dadosAtual.pend]
+    ];
+
+    const rotuloMes = formatarMesCompleto(mesAtual?.mes || "");
+
+    referencias.forEach(([valorId, mesId, valor]) => {
+        const valorElemento = document.getElementById(valorId);
+        const mesElemento = document.getElementById(mesId);
+
+        if (valorElemento) valorElemento.textContent = formatarFinanceiro(valor);
+        if (mesElemento) mesElemento.textContent = rotuloMes || "--";
     });
 }
 
@@ -884,6 +889,7 @@ function renderizarTelaResumo(meses, parceiras) {
     }
 
     const resumoValores = ultimosDois.map(item => consolidarMes(item.ordem));
+    atualizarStatusAtual(ultimosDois[1], resumoValores[1]);
     atualizarResumo(ultimosDois, resumoValores);
     criarGraficoResumo(ultimosDois, resumoValores);
     renderizarSmallMultiplesParceiras(parceiras, ultimosDois);
@@ -894,19 +900,17 @@ function renderizarTelaHistorico(meses, parceiras) {
     const parceirasHistorico = ordenarParceirasHistorico(parceiras);
 
     const slots = [
-        ["tituloParceira1", "subtituloParceira1", "graficoParceira1", "kpiParceira1"],
-        ["tituloParceira2", "subtituloParceira2", "graficoParceira2", "kpiParceira2"],
-        ["tituloParceira3", "subtituloParceira3", "graficoParceira3", "kpiParceira3"]
+        ["tituloParceira1", "graficoParceira1", "kpiParceira1"],
+        ["tituloParceira2", "graficoParceira2", "kpiParceira2"],
+        ["tituloParceira3", "graficoParceira3", "kpiParceira3"]
     ];
 
-    slots.forEach(([tituloId, subtituloId, canvasId, kpiId], indice) => {
+    slots.forEach(([tituloId, canvasId, kpiId], indice) => {
         const parceira = parceirasHistorico[indice];
         const titulo = document.getElementById(tituloId);
-        const subtitulo = document.getElementById(subtituloId);
 
         if (!parceira) {
             if (titulo) titulo.textContent = "Sem parceira — últimos 6 meses";
-            if (subtitulo) subtitulo.textContent = "COMS x Faturado";
             return;
         }
 
@@ -915,9 +919,6 @@ function renderizarTelaHistorico(meses, parceiras) {
         );
 
         if (titulo) titulo.textContent = `${parceira} — últimos 6 meses`;
-        if (subtitulo && ultimosSeis.length) {
-            subtitulo.textContent = `COMS x Faturado • ${formatarMes(ultimosSeis[0].mes)} – ${formatarMes(ultimosSeis[ultimosSeis.length - 1].mes)}`;
-        }
 
         criarGraficoHistorico(canvasId, ultimosSeis, valores);
 
