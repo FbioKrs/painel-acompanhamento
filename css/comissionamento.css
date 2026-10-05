@@ -633,6 +633,18 @@
     gap: 8px;
 }
 
+/* Consolidado: valor principal e variação ficam empilhados verticalmente. */
+.visao-comissionamento .com-card-consolidado .com-resumo-atual-linha {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 7px;
+}
+
+.visao-comissionamento .com-card-consolidado .com-resumo-variacao-chip {
+    align-self: flex-start;
+}
+
 .visao-comissionamento .com-resumo-atual {
     min-width: 0;
     font-size: 23px;
