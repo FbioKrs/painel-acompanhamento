@@ -63,8 +63,8 @@ window.PAINEL_CONFIG = {
             id: "COM-V1",
             ativo: true,
             nome: "Comissionamento de Obras",
-            titulo: "Obras Comissionadas",
-            subtitulo: "Volume financeiro por status de análise",
+            titulo: "Comissionamento",
+            subtitulo: "",
             fragmento: "./visoes/comissionamento.html",
             css: "./css/comissionamento.css",
             modulo: "./js/comissionamento.js"

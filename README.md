@@ -577,6 +577,8 @@ dados/base_comissionamento.json
 
 A **COM-V1** acompanha o volume financeiro das obras sinalizadas para comissionamento, o resultado da análise e o faturamento associado às obras já comissionadas.
 
+Título exibido no cabeçalho da visão: **Comissionamento**.
+
 ### Status financeiros
 
 ```text
@@ -592,8 +594,8 @@ A COM-V1 possui **duas Subvisões internas**, ambas dentro do mesmo fragmento e 
 
 **Tela 1 — Consolidado e últimos 2 meses por parceira**
 
-1. A coluna esquerda ocupa **40% da largura**. No topo ficam três cartões horizontais com os valores do mês atual para `COMS`, `CONC` e `PEND`; cada cartão usa no canto superior esquerdo o detalhe diagonal já adotado em outras visões, com a mesma cor da respectiva série na legenda. Abaixo desses KPIs fica a área **COMS x Faturado — Consolidado**, que consome o restante da altura da coluna. No mês anterior, a barra exibe somente `COMS`; no último mês, a barra é empilhada em `COMS + CONC + PEND`, representando a projeção de comissionamento. `Faturado Comissionamento` é exibido como linha em degrau (“malhete”), tracejada e sem marcadores. O painel lateral segue a ordem Comissionado → Projeção de Comissionamento → Faturado;
-2. **Últimos 2 meses por parceira** ocupa os **60% restantes da largura** e 100% da altura útil. Os *small multiples* são distribuídos **verticalmente**, um por parceira, mantendo a mesma semântica visual do Consolidado. Em cada mini-gráfico, o mês anterior exibe somente `COMS`; o mês atual empilha `COMS + CONC + PEND`; `Faturado Comissionamento` é uma linha em degrau (“malhete”), tracejada e sem marcadores. Cada mini-gráfico utiliza **escala Y independente**, calculada a partir dos próprios valores da parceira. Na lateral direita de cada *small multiple*, os cartões **Comissionado → Projeção de Comissionamento → Faturado** permanecem organizados verticalmente.
+1. A coluna esquerda ocupa **44% da largura** (10% a mais que a largura anterior de 40%). No topo ficam três cartões horizontais com os valores do mês atual para `COMS`, `CONC` e `PEND`; cada cartão usa no canto superior esquerdo o detalhe diagonal já adotado em outras visões, com a mesma cor da respectiva série na legenda. Abaixo desses KPIs fica a área **COMS x Faturado — Consolidado**, que consome o restante da altura da coluna. No mês anterior, a barra exibe somente `COMS`; no último mês, a barra é empilhada em `COMS + CONC + PEND`, representando a projeção de comissionamento. `Faturado Comissionamento` é exibido como linha em degrau (“malhete”), tracejada e sem marcadores. O painel lateral segue a ordem Comissionado → Projeção de Comissionamento → Faturado;
+2. **Últimos 2 meses por parceira** ocupa os **56% restantes da largura** e 100% da altura útil. Os *small multiples* são distribuídos **verticalmente**, um por parceira, mantendo a mesma semântica visual do Consolidado. Em cada mini-gráfico, o mês anterior exibe somente `COMS`; o mês atual empilha `COMS + CONC + PEND`; `Faturado Comissionamento` é uma linha em degrau (“malhete”), tracejada e sem marcadores. Cada mini-gráfico utiliza **escala Y independente**, calculada a partir dos próprios valores da parceira. Na lateral direita de cada *small multiple*, os cartões **Comissionado → Projeção de Comissionamento → Faturado** permanecem organizados verticalmente.
 
 **Tela 2 — Históricos dos últimos 6 meses**
 
@@ -615,7 +617,7 @@ Regras da visualização:
 - na Tela 2, os três históricos utilizam os seis últimos meses existentes no JSON;
 - nos *small multiples* por parceira, os cartões usam as mesmas regras do consolidado: Comissionado compara `COMS` atual versus `COMS` anterior; Projeção compara `COMS + CONC + PEND` atual versus `COMS` anterior; Faturado compara faturamento atual versus faturamento anterior;
 - os três cartões de cada *small multiple* ficam na lateral direita do mini-gráfico, organizados verticalmente;
-- na Tela 1, cada *small multiple* reserva aproximadamente **2/3 da largura para o gráfico e 1/3 para os cartões**, transferindo cerca de 20% da largura anteriormente usada pelo gráfico para a área de indicadores; dentro de cada cartão, o valor financeiro e a variação percentual ficam alinhados horizontalmente na mesma linha, com a referência comparativa abaixo;
+- na Tela 1, a distribuição principal é de aproximadamente **44% para o Consolidado e 56% para Últimos 2 meses por parceira**; dentro de cada *small multiple*, a redução de largura é absorvida prioritariamente pelo gráfico combinado, enquanto a coluna de cartões permanece preservada e ligeiramente mais larga proporcionalmente; dentro de cada cartão, o valor financeiro e a variação percentual ficam alinhados horizontalmente na mesma linha, com a referência comparativa abaixo;
 - no painel lateral do Consolidado, os textos de referência (`vs. <mês>` / `vs. <mês> (COMS)`) recebem destaque tipográfico ampliado em **50%** em relação à configuração anterior;
 - nos cartões laterais dos *small multiples* da Tela 1, os percentuais de variação versus o mês anterior e os textos de referência (`vs. <mês>` / `vs. <mês> (COMS)`) recebem destaque tipográfico ampliado em **50%** em relação à configuração anterior; o espaçamento vertical desses cartões deve preservar a exibição integral da linha de referência, sem recorte inferior;
 - nos históricos de 6 meses, o painel lateral mantém somente Média de comissionamento e Média de faturamento, empilhadas verticalmente;

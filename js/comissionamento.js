@@ -796,7 +796,7 @@ function criarGraficoHistorico(canvasId, meses, valores) {
 
 function atualizarCabecalho() {
     window.PAINEL_BASE?.definirCabecalho({
-        titulo: "Comissionamento por Parceira",
+        titulo: "Comissionamento",
         subtitulo: "",
         contexto: `COMISSIONAMENTO • ${indiceSubvisao + 1}/${TOTAL_SUBVISOES}`
     });
