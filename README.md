@@ -606,6 +606,7 @@ Regras da visualização:
 - nos históricos, o último mês é destacado em azul escuro;
 - nos cartões laterais dos históricos, Comissionamento atual e Faturamento atual mostram também a variação percentual e a referência do mês imediatamente anterior;
 - Média de comissionamento e Média de faturamento são calculadas sobre os seis meses exibidos no respectivo histórico e ocupam a segunda linha da grade 2×2;
+- Tipografia dos gráficos da COM-V1 é centralizada em `TIPOGRAFIA_GRAFICOS`, dentro de `js/comissionamento.js`: rótulos quantitativos, rótulos do eixo X e anotações de variação desenhadas nos gráficos usam **14 px**; valores usam peso `800` e eixos/anotações auxiliares usam peso `700`. Não alterar `Chart.defaults`, para evitar efeito colateral nas demais visões do PG-V2;
 - os eixos Y não exibem régua ou rótulos;
 - valores das barras são mostrados diretamente no gráfico;
 - o consolidado também mostra os valores da linha de faturado;

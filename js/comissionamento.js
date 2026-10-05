@@ -24,6 +24,13 @@ const CORES = {
     neutroBg: "#eef2f5"
 };
 
+const TIPOGRAFIA_GRAFICOS = Object.freeze({
+    rotuloEixo: 14,
+    rotuloValor: 14,
+    pesoEixo: "700",
+    pesoValor: "800"
+});
+
 let dadosGlobais = [];
 let graficos = [];
 let temporizadorRotacao = null;
@@ -77,7 +84,7 @@ const pluginVariacaoParceiras = {
 
         const ctx = chart.ctx;
         const yBadge = escalaX.bottom + 20;
-        const yComparacao = yBadge + 30;
+        const yComparacao = yBadge + 36;
 
         ctx.save();
         ctx.textAlign = "center";
@@ -90,8 +97,8 @@ const pluginVariacaoParceiras = {
             const texto = formatarPercentualVariacao(variacao);
             const seta = tendencia === "positivo" ? "↑" : tendencia === "negativo" ? "↓" : "•";
 
-            const largura = 105;
-            const altura = 27;
+            const largura = 112;
+            const altura = 30;
             const esquerda = x - largura / 2;
 
             caminhoArredondado(ctx, esquerda, yBadge, largura, altura, 8);
@@ -99,11 +106,11 @@ const pluginVariacaoParceiras = {
             ctx.fill();
 
             ctx.fillStyle = estilo.cor;
-            ctx.font = '800 13px "Segoe UI", Arial, sans-serif';
+            ctx.font = `${TIPOGRAFIA_GRAFICOS.pesoValor} ${TIPOGRAFIA_GRAFICOS.rotuloValor}px \"Segoe UI\", Arial, sans-serif`;
             ctx.fillText(`${seta}  ${texto}`, x, yBadge + altura / 2);
 
             ctx.fillStyle = "#83929f";
-            ctx.font = '600 10px "Segoe UI", Arial, sans-serif';
+            ctx.font = `${TIPOGRAFIA_GRAFICOS.pesoEixo} ${TIPOGRAFIA_GRAFICOS.rotuloEixo}px \"Segoe UI\", Arial, sans-serif`;
             ctx.fillText(`vs. ${comparacao || "mês anterior"}`, x, yComparacao);
         });
 
@@ -413,7 +420,7 @@ function criarGradienteVertical(ctx, chartArea, corTopo, corBase) {
     return gradiente;
 }
 
-function opcoesBaseGrafico({ paddingTop = 22, paddingBottom = 2, tamanhoX = 13 } = {}) {
+function opcoesBaseGrafico({ paddingTop = 22, paddingBottom = 2 } = {}) {
     return {
         responsive: true,
         maintainAspectRatio: false,
@@ -441,7 +448,10 @@ function opcoesBaseGrafico({ paddingTop = 22, paddingBottom = 2, tamanhoX = 13 }
                 border: { color: "rgba(49, 80, 116, 0.18)" },
                 ticks: {
                     color: "#51677a",
-                    font: { size: tamanhoX, weight: "700" },
+                    font: {
+                        size: TIPOGRAFIA_GRAFICOS.rotuloEixo,
+                        weight: TIPOGRAFIA_GRAFICOS.pesoEixo
+                    },
                     autoSkip: false,
                     maxRotation: 0,
                     minRotation: 0,
@@ -464,7 +474,7 @@ function criarGraficoResumo(meses, valores) {
     const canvas = document.getElementById("graficoResumo");
     if (!canvas || typeof Chart === "undefined") return;
 
-    const opcoes = opcoesBaseGrafico({ paddingTop: 34, tamanhoX: 14 });
+    const opcoes = opcoesBaseGrafico({ paddingTop: 34 });
 
     const grafico = new Chart(canvas, {
         type: "bar",
@@ -492,7 +502,10 @@ function criarGraficoResumo(meses, valores) {
                         offset: 4,
                         clamp: true,
                         formatter: formatarFinanceiro,
-                        font: { size: 15, weight: "800" }
+                        font: {
+                            size: TIPOGRAFIA_GRAFICOS.rotuloValor,
+                            weight: TIPOGRAFIA_GRAFICOS.pesoValor
+                        }
                     }
                 },
                 {
@@ -521,7 +534,10 @@ function criarGraficoResumo(meses, valores) {
                         offset: 10,
                         clamp: true,
                         formatter: formatarFinanceiro,
-                        font: { size: 14, weight: "800" }
+                        font: {
+                            size: TIPOGRAFIA_GRAFICOS.rotuloValor,
+                            weight: TIPOGRAFIA_GRAFICOS.pesoValor
+                        }
                     }
                 }
             ]
@@ -542,7 +558,7 @@ function criarGraficoParceiras(parceiras, mesAnterior, mesAtual) {
         variacaoPercentual(atual[indice].coms, anterior[indice].coms)
     );
 
-    const opcoes = opcoesBaseGrafico({ paddingTop: 32, paddingBottom: 54, tamanhoX: 14 });
+    const opcoes = opcoesBaseGrafico({ paddingTop: 32, paddingBottom: 66 });
     opcoes.plugins.variacaoParceiras = {
         variacoes,
         comparacao: formatarMesCompleto(mesAnterior.mes)
@@ -569,7 +585,10 @@ function criarGraficoParceiras(parceiras, mesAnterior, mesAtual) {
                         offset: 3,
                         clamp: true,
                         formatter: formatarFinanceiro,
-                        font: { size: 13, weight: "800" }
+                        font: {
+                            size: TIPOGRAFIA_GRAFICOS.rotuloValor,
+                            weight: TIPOGRAFIA_GRAFICOS.pesoValor
+                        }
                     }
                 },
                 {
@@ -588,7 +607,10 @@ function criarGraficoParceiras(parceiras, mesAnterior, mesAtual) {
                         offset: 3,
                         clamp: true,
                         formatter: formatarFinanceiro,
-                        font: { size: 13, weight: "800" }
+                        font: {
+                            size: TIPOGRAFIA_GRAFICOS.rotuloValor,
+                            weight: TIPOGRAFIA_GRAFICOS.pesoValor
+                        }
                     }
                 }
             ]
@@ -605,7 +627,7 @@ function criarGraficoHistorico(canvasId, meses, valores) {
     if (!canvas || typeof Chart === "undefined") return;
 
     const ultimoIndice = meses.length - 1;
-    const opcoes = opcoesBaseGrafico({ paddingTop: 28, tamanhoX: 12 });
+    const opcoes = opcoesBaseGrafico({ paddingTop: 28 });
 
     const grafico = new Chart(canvas, {
         type: "bar",
@@ -634,7 +656,10 @@ function criarGraficoHistorico(canvasId, meses, valores) {
                         offset: 2,
                         clamp: true,
                         formatter: formatarFinanceiro,
-                        font: { size: 11, weight: "800" }
+                        font: {
+                            size: TIPOGRAFIA_GRAFICOS.rotuloValor,
+                            weight: TIPOGRAFIA_GRAFICOS.pesoValor
+                        }
                     }
                 },
                 {
