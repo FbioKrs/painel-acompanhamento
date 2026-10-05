@@ -4,50 +4,89 @@
 
     <div id="painelConteudo" class="conteudo comissionamento-conteudo">
 
-        <section class="comissionamento-legenda" aria-label="Legenda dos gráficos">
-            <div class="legenda-status">
-                <span class="legenda-item">
-                    <span class="legenda-amostra legenda-coms"></span>
-                    <span><strong>COMS</strong> Comissionadas</span>
-                </span>
-
-                <span class="legenda-item">
-                    <span class="legenda-linha"></span>
-                    <span><strong>Faturado</strong> Comissionamento</span>
-                </span>
-            </div>
-
-            <div id="periodoDados" class="periodo-dados">
-                Período: --
-            </div>
-        </section>
-
         <section class="comissionamento-layout">
 
             <div class="comissionamento-coluna-esquerda">
 
-                <article class="painel painel-grafico comissionamento-card card-resumo">
-                    <div class="painel-cabecalho comissionamento-card-cabecalho">
-                        <div>
-                            <div class="painel-titulo">Resumo geral — últimos 2 meses</div>
-                            <div id="subtituloResumo" class="painel-subtitulo">COMS x Faturado</div>
+                <article class="painel com-card com-card-consolidado">
+                    <div class="com-card-main">
+                        <header class="com-card-header">
+                            <div>
+                                <div class="painel-titulo">COMS x Faturado — Consolidado</div>
+                                <div id="subtituloResumo" class="painel-subtitulo">Comparativo dos últimos 2 meses</div>
+                            </div>
+
+                            <div class="com-legenda" aria-label="Legenda do gráfico consolidado">
+                                <span class="com-legenda-item">
+                                    <span class="com-legenda-barra com-legenda-barra-atual"></span>
+                                    <span>Comissionado (COMS)</span>
+                                </span>
+                                <span class="com-legenda-item">
+                                    <span class="com-legenda-linha"></span>
+                                    <span>Faturado</span>
+                                </span>
+                            </div>
+                        </header>
+
+                        <div class="com-grafico com-grafico-consolidado">
+                            <canvas id="graficoResumo"></canvas>
                         </div>
                     </div>
 
-                    <div class="grafico comissionamento-grafico">
-                        <canvas id="graficoResumo"></canvas>
-                    </div>
+                    <aside class="com-variacao-panel" aria-label="Variação do consolidado">
+                        <div class="com-variacao-bloco">
+                            <div class="com-variacao-label">COMISSIONADO</div>
+                            <div class="com-resumo-atual-linha">
+                                <strong id="valorComsAtualResumo" class="com-resumo-atual">--</strong>
+                                <span class="com-resumo-variacao-chip">
+                                    <span id="iconeVarComs" class="com-resumo-seta">↓</span>
+                                    <strong id="variacaoComs">--</strong>
+                                </span>
+                            </div>
+                            <div id="detalheVarComs" class="com-variacao-detalhe">--</div>
+                        </div>
+
+                        <div class="com-variacao-separador"></div>
+
+                        <div class="com-variacao-bloco">
+                            <div class="com-variacao-label">FATURADO</div>
+                            <div class="com-resumo-atual-linha">
+                                <strong id="valorFaturadoAtualResumo" class="com-resumo-atual">--</strong>
+                                <span class="com-resumo-variacao-chip">
+                                    <span id="iconeVarFaturado" class="com-resumo-seta">↓</span>
+                                    <strong id="variacaoFaturado">--</strong>
+                                </span>
+                            </div>
+                            <div id="detalheVarFaturado" class="com-variacao-detalhe">--</div>
+                        </div>
+
+                        <div class="com-variacao-separador"></div>
+
+                        <div class="com-variacao-bloco">
+                            <div class="com-variacao-label">CONVERSÃO</div>
+                            <div class="com-resumo-atual-linha">
+                                <strong id="valorConversaoAtualResumo" class="com-resumo-atual">--</strong>
+                                <span class="com-resumo-variacao-chip">
+                                    <span id="iconeVarConversao" class="com-resumo-seta">↓</span>
+                                    <strong id="variacaoConversao">--</strong>
+                                </span>
+                            </div>
+                            <div id="detalheVarConversao" class="com-variacao-detalhe">--</div>
+                        </div>
+                    </aside>
                 </article>
 
-                <article class="painel painel-grafico comissionamento-card card-parceiras">
-                    <div class="painel-cabecalho comissionamento-card-cabecalho">
+                <article class="painel com-card com-card-parceiras">
+                    <header class="com-card-header">
                         <div>
                             <div class="painel-titulo">Últimos 2 meses por parceira</div>
-                            <div id="subtituloParceiras" class="painel-subtitulo">Comparativo de COMS e faturado</div>
+                            <div class="painel-subtitulo">Comissionado (COMS)</div>
                         </div>
-                    </div>
 
-                    <div class="grafico comissionamento-grafico">
+                        <div id="legendaMesesParceiras" class="com-legenda" aria-label="Legenda dos meses"></div>
+                    </header>
+
+                    <div class="com-grafico com-grafico-parceiras">
                         <canvas id="graficoParceiras"></canvas>
                     </div>
                 </article>
@@ -56,43 +95,184 @@
 
             <div class="comissionamento-coluna-direita">
 
-                <article class="painel painel-grafico comissionamento-card">
-                    <div class="painel-cabecalho comissionamento-card-cabecalho">
-                        <div>
-                            <div id="tituloParceira1" class="painel-titulo">Parceira 1 — últimos 6 meses</div>
-                            <div class="painel-subtitulo comissionamento-subtitulo-historico">COMS x Faturado • Últimos 6 meses</div>
+                <article class="painel com-card com-card-historico">
+                    <div class="com-card-main">
+                        <header class="com-card-header">
+                            <div>
+                                <div id="tituloParceira1" class="painel-titulo">Parceira 1 — últimos 6 meses</div>
+                                <div id="subtituloParceira1" class="painel-subtitulo">COMS x Faturado</div>
+                            </div>
+
+                            <div class="com-legenda">
+                                <span class="com-legenda-item">
+                                    <span class="com-legenda-barra com-legenda-barra-historico"></span>
+                                    <span>Comissionado (COMS)</span>
+                                </span>
+                                <span class="com-legenda-item">
+                                    <span class="com-legenda-linha"></span>
+                                    <span>Faturado</span>
+                                </span>
+                            </div>
+                        </header>
+
+                        <div class="com-grafico com-grafico-historico">
+                            <canvas id="graficoParceira1"></canvas>
                         </div>
                     </div>
 
-                    <div class="grafico comissionamento-grafico">
-                        <canvas id="graficoParceira1"></canvas>
-                    </div>
+                    <aside id="kpiParceira1" class="com-kpi-lateral" aria-label="Indicadores da parceira">
+                        <div class="com-kpi-grid">
+                            <div class="com-kpi-item com-kpi-item-atual">
+                                <div class="com-kpi-label">Comissionamento atual</div>
+                                <div class="com-kpi-valor com-kpi-coms-atual">--</div>
+                                <div class="com-kpi-variacao com-kpi-var-coms">
+                                    <span class="com-kpi-seta">•</span><strong>--</strong>
+                                </div>
+                                <div class="com-kpi-comparacao com-kpi-comp-coms">vs. mês anterior</div>
+                            </div>
+
+                            <div class="com-kpi-item com-kpi-item-atual">
+                                <div class="com-kpi-label">Faturamento atual</div>
+                                <div class="com-kpi-valor com-kpi-faturado-atual">--</div>
+                                <div class="com-kpi-variacao com-kpi-var-faturado">
+                                    <span class="com-kpi-seta">•</span><strong>--</strong>
+                                </div>
+                                <div class="com-kpi-comparacao com-kpi-comp-faturado">vs. mês anterior</div>
+                            </div>
+
+                            <div class="com-kpi-item com-kpi-item-media">
+                                <div class="com-kpi-label">Média comissionamento</div>
+                                <div class="com-kpi-media com-kpi-media-coms">--</div>
+                                <div class="com-kpi-nota">últimos 6 meses</div>
+                            </div>
+
+                            <div class="com-kpi-item com-kpi-item-media">
+                                <div class="com-kpi-label">Média faturamento</div>
+                                <div class="com-kpi-media com-kpi-media-faturado">--</div>
+                                <div class="com-kpi-nota">últimos 6 meses</div>
+                            </div>
+                        </div>
+                    </aside>
                 </article>
 
-                <article class="painel painel-grafico comissionamento-card">
-                    <div class="painel-cabecalho comissionamento-card-cabecalho">
-                        <div>
-                            <div id="tituloParceira2" class="painel-titulo">Parceira 2 — últimos 6 meses</div>
-                            <div class="painel-subtitulo comissionamento-subtitulo-historico">COMS x Faturado • Últimos 6 meses</div>
+                <article class="painel com-card com-card-historico">
+                    <div class="com-card-main">
+                        <header class="com-card-header">
+                            <div>
+                                <div id="tituloParceira2" class="painel-titulo">Parceira 2 — últimos 6 meses</div>
+                                <div id="subtituloParceira2" class="painel-subtitulo">COMS x Faturado</div>
+                            </div>
+
+                            <div class="com-legenda">
+                                <span class="com-legenda-item">
+                                    <span class="com-legenda-barra com-legenda-barra-historico"></span>
+                                    <span>Comissionado (COMS)</span>
+                                </span>
+                                <span class="com-legenda-item">
+                                    <span class="com-legenda-linha"></span>
+                                    <span>Faturado</span>
+                                </span>
+                            </div>
+                        </header>
+
+                        <div class="com-grafico com-grafico-historico">
+                            <canvas id="graficoParceira2"></canvas>
                         </div>
                     </div>
 
-                    <div class="grafico comissionamento-grafico">
-                        <canvas id="graficoParceira2"></canvas>
-                    </div>
+                    <aside id="kpiParceira2" class="com-kpi-lateral" aria-label="Indicadores da parceira">
+                        <div class="com-kpi-grid">
+                            <div class="com-kpi-item com-kpi-item-atual">
+                                <div class="com-kpi-label">Comissionamento atual</div>
+                                <div class="com-kpi-valor com-kpi-coms-atual">--</div>
+                                <div class="com-kpi-variacao com-kpi-var-coms">
+                                    <span class="com-kpi-seta">•</span><strong>--</strong>
+                                </div>
+                                <div class="com-kpi-comparacao com-kpi-comp-coms">vs. mês anterior</div>
+                            </div>
+
+                            <div class="com-kpi-item com-kpi-item-atual">
+                                <div class="com-kpi-label">Faturamento atual</div>
+                                <div class="com-kpi-valor com-kpi-faturado-atual">--</div>
+                                <div class="com-kpi-variacao com-kpi-var-faturado">
+                                    <span class="com-kpi-seta">•</span><strong>--</strong>
+                                </div>
+                                <div class="com-kpi-comparacao com-kpi-comp-faturado">vs. mês anterior</div>
+                            </div>
+
+                            <div class="com-kpi-item com-kpi-item-media">
+                                <div class="com-kpi-label">Média comissionamento</div>
+                                <div class="com-kpi-media com-kpi-media-coms">--</div>
+                                <div class="com-kpi-nota">últimos 6 meses</div>
+                            </div>
+
+                            <div class="com-kpi-item com-kpi-item-media">
+                                <div class="com-kpi-label">Média faturamento</div>
+                                <div class="com-kpi-media com-kpi-media-faturado">--</div>
+                                <div class="com-kpi-nota">últimos 6 meses</div>
+                            </div>
+                        </div>
+                    </aside>
                 </article>
 
-                <article class="painel painel-grafico comissionamento-card">
-                    <div class="painel-cabecalho comissionamento-card-cabecalho">
-                        <div>
-                            <div id="tituloParceira3" class="painel-titulo">Parceira 3 — últimos 6 meses</div>
-                            <div class="painel-subtitulo comissionamento-subtitulo-historico">COMS x Faturado • Últimos 6 meses</div>
+                <article class="painel com-card com-card-historico">
+                    <div class="com-card-main">
+                        <header class="com-card-header">
+                            <div>
+                                <div id="tituloParceira3" class="painel-titulo">Parceira 3 — últimos 6 meses</div>
+                                <div id="subtituloParceira3" class="painel-subtitulo">COMS x Faturado</div>
+                            </div>
+
+                            <div class="com-legenda">
+                                <span class="com-legenda-item">
+                                    <span class="com-legenda-barra com-legenda-barra-historico"></span>
+                                    <span>Comissionado (COMS)</span>
+                                </span>
+                                <span class="com-legenda-item">
+                                    <span class="com-legenda-linha"></span>
+                                    <span>Faturado</span>
+                                </span>
+                            </div>
+                        </header>
+
+                        <div class="com-grafico com-grafico-historico">
+                            <canvas id="graficoParceira3"></canvas>
                         </div>
                     </div>
 
-                    <div class="grafico comissionamento-grafico">
-                        <canvas id="graficoParceira3"></canvas>
-                    </div>
+                    <aside id="kpiParceira3" class="com-kpi-lateral" aria-label="Indicadores da parceira">
+                        <div class="com-kpi-grid">
+                            <div class="com-kpi-item com-kpi-item-atual">
+                                <div class="com-kpi-label">Comissionamento atual</div>
+                                <div class="com-kpi-valor com-kpi-coms-atual">--</div>
+                                <div class="com-kpi-variacao com-kpi-var-coms">
+                                    <span class="com-kpi-seta">•</span><strong>--</strong>
+                                </div>
+                                <div class="com-kpi-comparacao com-kpi-comp-coms">vs. mês anterior</div>
+                            </div>
+
+                            <div class="com-kpi-item com-kpi-item-atual">
+                                <div class="com-kpi-label">Faturamento atual</div>
+                                <div class="com-kpi-valor com-kpi-faturado-atual">--</div>
+                                <div class="com-kpi-variacao com-kpi-var-faturado">
+                                    <span class="com-kpi-seta">•</span><strong>--</strong>
+                                </div>
+                                <div class="com-kpi-comparacao com-kpi-comp-faturado">vs. mês anterior</div>
+                            </div>
+
+                            <div class="com-kpi-item com-kpi-item-media">
+                                <div class="com-kpi-label">Média comissionamento</div>
+                                <div class="com-kpi-media com-kpi-media-coms">--</div>
+                                <div class="com-kpi-nota">últimos 6 meses</div>
+                            </div>
+
+                            <div class="com-kpi-item com-kpi-item-media">
+                                <div class="com-kpi-label">Média faturamento</div>
+                                <div class="com-kpi-media com-kpi-media-faturado">--</div>
+                                <div class="com-kpi-nota">últimos 6 meses</div>
+                            </div>
+                        </div>
+                    </aside>
                 </article>
 
             </div>
@@ -100,13 +280,5 @@
         </section>
 
     </div>
-
-    <footer class="rodape">
-        <span>Dados recarregados a cada nova exibição da visão</span>
-
-        <span id="statusAtualizacao" class="status-ok">
-            Última atualização: --
-        </span>
-    </footer>
 
 </main>

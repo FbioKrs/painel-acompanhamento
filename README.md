@@ -588,20 +588,30 @@ Faturado Comissionamento → parcela das obras comissionadas já faturada
 
 ### Composição da tela
 
-A visão possui cinco gráficos combinados de barras verticais empilhadas + linha:
+A visão possui uma única tela organizada em duas colunas, seguindo a leitura executiva da referência visual vigente:
 
-1. `Resumo geral — últimos 2 meses`: consolidado mensal de todas as parceiras;
-2. `Últimos 2 meses por parceira`: mês + parceira no eixo X;
-3. evolução mensal da primeira parceira disponível;
-4. evolução mensal da segunda parceira disponível;
-5. evolução mensal da terceira parceira disponível.
+1. **Consolidado — últimos 2 meses**: barras de `COMS` + linha de `Faturado Comissionamento`, acompanhadas por um painel lateral com o valor atual e a variação de COMS, o valor atual e a variação do faturado e a conversão atual com sua variação em pontos percentuais;
+2. **Últimos 2 meses por parceira**: barras agrupadas de `COMS` para o penúltimo e o último mês, com um badge de variação percentual por parceira;
+3. **Histórico da primeira parceira**: últimos 6 meses de `COMS` + linha de faturado, com painel lateral 2×2 contendo Comissionamento atual, Faturamento atual, Média de comissionamento e Média de faturamento;
+4. **Histórico da segunda parceira**: mesma composição;
+5. **Histórico da terceira parceira**: mesma composição.
 
-Nos gráficos:
+Regras da visualização:
 
-- barras empilhadas: `COMS`, `PEND` e `CONC`;
-- linha: `Faturado Comissionamento`;
-- os dois gráficos da coluna esquerda mostram os dois últimos meses existentes no JSON;
-- os três gráficos da coluna direita mostram todos os meses existentes no JSON;
+- `COMS` é a única série exibida em barras;
+- `Faturado Comissionamento` é exibido como linha somente no consolidado e nos históricos de 6 meses;
+- os dois gráficos da coluna esquerda utilizam os dois últimos meses existentes no JSON;
+- os três gráficos da coluna direita utilizam os seis últimos meses existentes no JSON;
+- no comparativo por parceira, o mês anterior usa azul claro e o mês atual usa azul escuro;
+- nos históricos, o último mês é destacado em azul escuro;
+- nos cartões laterais dos históricos, Comissionamento atual e Faturamento atual mostram também a variação percentual e a referência do mês imediatamente anterior;
+- Média de comissionamento e Média de faturamento são calculadas sobre os seis meses exibidos no respectivo histórico e ocupam a segunda linha da grade 2×2;
+- os eixos Y não exibem régua ou rótulos;
+- valores das barras são mostrados diretamente no gráfico;
+- o consolidado também mostra os valores da linha de faturado;
+- `Conversão = Faturado Comissionamento / COMS × 100`;
+- variações mensais de COMS e faturado usam `(atual - anterior) / anterior × 100`;
+- a variação da conversão é apresentada em pontos percentuais;
 - meses são ordenados por `MES_ORDEM`;
 - parceiras são obtidas dinamicamente do JSON e não ficam hardcoded no módulo.
 

@@ -4,125 +4,32 @@
    ================================================================ */
 
 .visao-comissionamento {
-    --com-cor-coms: #1959b5;
-    --com-cor-coms-clara: #4d84d8;
-    --com-cor-pend: #f2aa3f;
-    --com-cor-conc: #6f91b9;
-    --com-cor-faturado: #17345f;
-    --com-gap: 16px;
+    --com-azul: #1959b5;
+    --com-azul-medio: #3f8fe7;
+    --com-azul-claro: #88bdf3;
+    --com-azul-claro-2: #dff0ff;
+    --com-linha: #17345f;
+    --com-verde: #16a36a;
+    --com-verde-bg: #e8f7f0;
+    --com-vermelho: #e14343;
+    --com-vermelho-bg: #ffeded;
+    --com-neutro: #6b7a87;
+    --com-gap: 14px;
+
+    padding: 14px 18px 12px;
 }
 
 .visao-comissionamento .comissionamento-conteudo {
-    display: flex;
-    flex-direction: column;
     min-height: 0;
-}
-
-.visao-comissionamento .comissionamento-legenda {
-    height: 48px;
-    flex-shrink: 0;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 24px;
-
-    padding: 0 16px;
-    margin-bottom: 12px;
-
-    background: rgba(255, 255, 255, 0.78);
-    border: 1px solid rgba(111, 145, 185, 0.13);
-    border-radius: 14px;
-    box-shadow: 0 4px 16px rgba(24, 38, 52, 0.045);
-}
-
-.visao-comissionamento .legenda-status {
-    min-width: 0;
-    display: flex;
-    align-items: center;
-    gap: 30px;
-}
-
-.visao-comissionamento .legenda-item {
-    display: inline-flex;
-    align-items: center;
-    gap: 9px;
-
-    white-space: nowrap;
-    font-size: 14px;
-    color: #68747e;
-}
-
-.visao-comissionamento .legenda-item strong {
-    margin-right: 4px;
-    color: #2f3b45;
-    font-size: 14px;
-}
-
-.visao-comissionamento .legenda-amostra {
-    display: inline-block;
-    width: 28px;
-    height: 12px;
-    border-radius: 4px;
-}
-
-.visao-comissionamento .legenda-coms {
-    background: linear-gradient(180deg, var(--com-cor-coms-clara) 0%, var(--com-cor-coms) 100%);
-}
-
-.visao-comissionamento .legenda-pend {
-    background: var(--com-cor-pend);
-}
-
-.visao-comissionamento .legenda-conc {
-    background: var(--com-cor-conc);
-}
-
-.visao-comissionamento .legenda-linha {
-    position: relative;
-    display: inline-block;
-    width: 34px;
-    height: 12px;
-}
-
-.visao-comissionamento .legenda-linha::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 5px;
-    height: 3px;
-    border-radius: 3px;
-    background: var(--com-cor-faturado);
-}
-
-.visao-comissionamento .legenda-linha::after {
-    content: "";
-    position: absolute;
-    left: 13px;
-    top: 1px;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: var(--com-cor-faturado);
-    border: 2px solid #ffffff;
-    box-shadow: 0 0 0 1px rgba(23, 52, 95, 0.18);
-}
-
-.visao-comissionamento .periodo-dados {
-    flex-shrink: 0;
-    font-size: 14px;
-    font-weight: 700;
-    color: #53616d;
-    font-variant-numeric: tabular-nums;
+    height: 100%;
 }
 
 .visao-comissionamento .comissionamento-layout {
-    flex: 1;
+    height: 100%;
     min-height: 0;
 
     display: grid;
-    grid-template-columns: 690px minmax(0, 1fr);
+    grid-template-columns: 0.98fr 1.02fr;
     gap: var(--com-gap);
 }
 
@@ -135,61 +42,392 @@
 }
 
 .visao-comissionamento .comissionamento-coluna-esquerda {
-    grid-template-rows: repeat(2, minmax(0, 1fr));
+    grid-template-rows: 1.08fr 0.92fr;
 }
 
 .visao-comissionamento .comissionamento-coluna-direita {
     grid-template-rows: repeat(3, minmax(0, 1fr));
 }
 
-.visao-comissionamento .comissionamento-card {
+.visao-comissionamento .com-card {
+    min-width: 0;
+    min-height: 0;
     overflow: hidden;
-    padding: 14px 16px 12px;
-    border: 1px solid rgba(68, 91, 111, 0.08);
+
+    border-radius: 16px;
+    border: 1px solid rgba(60, 91, 122, 0.05);
+    box-shadow: 0 5px 18px rgba(28, 61, 96, 0.07);
 }
 
-.visao-comissionamento .comissionamento-card-cabecalho {
-    min-height: 44px;
-    margin-bottom: 4px;
+.visao-comissionamento .com-card-main {
+    min-width: 0;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.visao-comissionamento .com-card-consolidado,
+.visao-comissionamento .com-card-historico {
+    display: grid;
+}
+
+.visao-comissionamento .com-card-consolidado {
+    grid-template-columns: minmax(0, 1fr) 300px;
+    padding: 16px 16px 14px 18px;
+    gap: 16px;
+}
+
+.visao-comissionamento .com-card-historico {
+    grid-template-columns: minmax(0, 1fr) 276px;
+    padding: 12px 12px 10px 16px;
+    gap: 12px;
+}
+
+.visao-comissionamento .com-card-parceiras {
+    display: flex;
+    flex-direction: column;
+    padding: 14px 18px 10px;
+}
+
+.visao-comissionamento .com-card-header {
+    flex-shrink: 0;
+    min-width: 0;
 
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    gap: 12px;
+    gap: 14px;
+
+    margin-bottom: 4px;
 }
 
 .visao-comissionamento .painel-titulo {
+    font-size: 20px;
+    line-height: 1.08;
+    font-weight: 750;
+    color: #17345f;
+    letter-spacing: -0.15px;
+    white-space: nowrap;
+}
+
+.visao-comissionamento .com-card-historico .painel-titulo {
     font-size: 19px;
-    line-height: 1.12;
-    color: #26333f;
 }
 
 .visao-comissionamento .painel-subtitulo {
     margin-top: 4px;
     font-size: 12px;
-    line-height: 1.2;
-    color: #84909a;
+    line-height: 1.15;
+    color: #738492;
 }
 
-.visao-comissionamento .comissionamento-grafico {
-    width: 100%;
+.visao-comissionamento .com-legenda {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding-top: 2px;
+    color: #486174;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.visao-comissionamento .com-card-consolidado .com-legenda {
+    gap: 22px;
+}
+
+.visao-comissionamento .com-legenda-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.visao-comissionamento .com-legenda-barra {
+    width: 20px;
+    height: 13px;
+    border-radius: 3px;
+    display: inline-block;
+}
+
+.visao-comissionamento .com-legenda-barra-atual,
+.visao-comissionamento .com-legenda-barra-historico {
+    background: linear-gradient(180deg, #59a2ef 0%, #2b77ce 100%);
+}
+
+.visao-comissionamento .com-legenda-barra-anterior {
+    background: #9ac9f7;
+}
+
+.visao-comissionamento .com-legenda-barra-ultimo {
+    background: #1959b5;
+}
+
+.visao-comissionamento .com-legenda-linha {
+    position: relative;
+    width: 30px;
+    height: 13px;
+    display: inline-block;
+}
+
+.visao-comissionamento .com-legenda-linha::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 6px;
+    height: 2px;
+    background: var(--com-linha);
+}
+
+.visao-comissionamento .com-legenda-linha::after {
+    content: "";
+    position: absolute;
+    left: 11px;
+    top: 2px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--com-linha);
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 0 1px var(--com-linha);
+}
+
+.visao-comissionamento .com-grafico {
+    position: relative;
+    flex: 1;
     min-height: 0;
+    width: 100%;
 }
 
-.visao-comissionamento .comissionamento-grafico canvas {
+.visao-comissionamento .com-grafico canvas {
     width: 100% !important;
     height: 100% !important;
 }
 
-.visao-comissionamento .card-resumo .painel-titulo,
-.visao-comissionamento .card-parceiras .painel-titulo {
-    font-size: 20px;
+.visao-comissionamento .com-grafico-consolidado {
+    margin-top: 2px;
 }
 
-.visao-comissionamento .rodape {
-    padding-top: 4px;
+.visao-comissionamento .com-grafico-parceiras {
+    margin-top: 1px;
 }
+
+.visao-comissionamento .com-variacao-panel,
+.visao-comissionamento .com-kpi-lateral {
+    min-width: 0;
+    min-height: 0;
+    border-radius: 12px;
+    background: linear-gradient(180deg, #f2f8fe 0%, #eaf5fc 100%);
+    border: 1px solid rgba(63, 143, 231, 0.07);
+}
+
+.visao-comissionamento .com-variacao-panel {
+    padding: 14px 16px 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.visao-comissionamento .com-variacao-titulo {
+    font-size: 16px;
+    font-weight: 750;
+    color: #17345f;
+    margin-bottom: 4px;
+}
+
+.visao-comissionamento .com-variacao-bloco {
+    padding: 5px 0;
+}
+
+.visao-comissionamento .com-variacao-label {
+    font-size: 12px;
+    font-weight: 800;
+    color: #315074;
+    letter-spacing: 0.1px;
+}
+
+.visao-comissionamento .com-resumo-atual-linha {
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.visao-comissionamento .com-resumo-atual {
+    min-width: 0;
+    font-size: 23px;
+    line-height: 1;
+    font-weight: 800;
+    color: #17345f;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.visao-comissionamento .com-resumo-variacao-chip {
+    min-height: 32px;
+    padding: 4px 9px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    border-radius: 9px;
+    background: var(--com-vermelho-bg);
+    color: var(--com-vermelho);
+    white-space: nowrap;
+}
+
+.visao-comissionamento .com-resumo-variacao-chip strong {
+    font-size: 14px;
+    line-height: 1;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+}
+
+.visao-comissionamento .com-resumo-seta {
+    font-size: 20px;
+    line-height: 1;
+    font-weight: 900;
+}
+
+.visao-comissionamento .com-variacao-detalhe {
+    margin-top: 5px;
+    font-size: 11px;
+    color: #83929f;
+    font-weight: 600;
+}
+
+.visao-comissionamento .com-variacao-separador {
+    height: 1px;
+    background: rgba(66, 101, 135, 0.09);
+}
+
+.visao-comissionamento .com-variacao-bloco.positivo .com-resumo-variacao-chip {
+    color: var(--com-verde);
+    background: var(--com-verde-bg);
+}
+
+.visao-comissionamento .com-variacao-bloco.neutro .com-resumo-variacao-chip {
+    color: var(--com-neutro);
+    background: #eef2f5;
+}
+
+.visao-comissionamento .com-kpi-lateral {
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+}
+
+.visao-comissionamento .com-kpi-grid {
+    flex: 1;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+}
+
+.visao-comissionamento .com-kpi-item {
+    min-width: 0;
+    min-height: 0;
+    padding: 7px 7px 6px;
+    border-radius: 9px;
+    background: rgba(255, 255, 255, 0.72);
+    border: 1px solid rgba(49, 80, 116, 0.06);
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.visao-comissionamento .com-kpi-item-atual {
+    background: rgba(255, 255, 255, 0.90);
+}
+
+.visao-comissionamento .com-kpi-item-media {
+    background: rgba(223, 240, 255, 0.58);
+}
+
+.visao-comissionamento .com-kpi-label {
+    font-size: 11px;
+    line-height: 1.12;
+    font-weight: 700;
+    color: #607789;
+}
+
+.visao-comissionamento .com-kpi-valor,
+.visao-comissionamento .com-kpi-media {
+    margin-top: 4px;
+    font-size: 18px;
+    line-height: 1;
+    font-weight: 800;
+    color: #17345f;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.visao-comissionamento .com-kpi-media {
+    font-size: 17px;
+}
+
+.visao-comissionamento .com-kpi-variacao {
+    margin-top: 5px;
+    min-height: 21px;
+    padding: 2px 6px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+
+    border-radius: 7px;
+    background: var(--com-vermelho-bg);
+    color: var(--com-vermelho);
+}
+
+.visao-comissionamento .com-kpi-variacao strong {
+    font-size: 11px;
+    line-height: 1;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+}
+
+.visao-comissionamento .com-kpi-seta {
+    font-size: 15px;
+    line-height: 1;
+    font-weight: 900;
+}
+
+.visao-comissionamento .com-kpi-variacao.positivo {
+    background: var(--com-verde-bg);
+    color: var(--com-verde);
+}
+
+.visao-comissionamento .com-kpi-variacao.neutro {
+    background: #eef2f5;
+    color: var(--com-neutro);
+}
+
+.visao-comissionamento .com-kpi-comparacao {
+    margin-top: 4px;
+    font-size: 9px;
+    line-height: 1;
+    font-weight: 600;
+    color: #81909c;
+    white-space: nowrap;
+}
+
+.visao-comissionamento .com-kpi-nota {
+    margin-top: 4px;
+    font-size: 9px;
+    line-height: 1;
+    color: #8a9aa7;
+    white-space: nowrap;
+}
+
 
 .visao-comissionamento #erro {
-    top: 116px;
+    top: 112px;
 }
