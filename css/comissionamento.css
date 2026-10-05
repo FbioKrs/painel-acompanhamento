@@ -358,7 +358,8 @@
     min-width: 0;
     min-height: 0;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 190px;
+    /* Tela 1: ~20% da largura antes usada pelo gráfico é transferida aos cartões. */
+    grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr);
     grid-template-rows: auto minmax(0, 1fr);
     column-gap: 12px;
     row-gap: 3px;
@@ -421,13 +422,15 @@
 .visao-comissionamento .com-small-kpi-valor-linha {
     margin-top: 3px;
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 5px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
 }
 
 .visao-comissionamento .com-small-kpi-valor {
     min-width: 0;
+    flex: 1 1 auto;
     font-size: 16px;
     line-height: 1;
     font-weight: 800;
@@ -437,6 +440,7 @@
 }
 
 .visao-comissionamento .com-small-kpi-chip {
+    flex: 0 0 auto;
     min-height: 25px;
     padding: 4px 7px;
     border-radius: 6px;
