@@ -586,15 +586,19 @@ COMS  → obras comissionadas
 Faturado Comissionamento → parcela das obras comissionadas já faturada
 ```
 
-### Composição da tela
+### Composição das Subvisões
 
-A visão possui uma única tela organizada em duas colunas, seguindo a leitura executiva da referência visual vigente:
+A COM-V1 possui **duas Subvisões internas**, ambas dentro do mesmo fragmento e do mesmo módulo:
 
-1. **Consolidado — últimos 2 meses**: no mês anterior a barra exibe somente `COMS`; no último mês a barra é empilhada em `COMS + CONC + PEND`, representando a projeção de comissionamento. `Faturado Comissionamento` é exibido como linha em degrau (“malhete”), tracejada e sem marcadores. O painel lateral segue a ordem Comissionado → Projeção de Comissionamento → Faturado;
-2. **Últimos 2 meses por parceira**: conjunto de *small multiples*, um mini-gráfico por parceira, repetindo a mesma semântica visual do Consolidado. Em cada mini-gráfico, o mês anterior exibe somente `COMS`; o mês atual empilha `COMS + CONC + PEND`; `Faturado Comissionamento` é uma linha em degrau (“malhete”), tracejada e sem marcadores. Todos os mini-gráficos usam a mesma escala vertical para permitir comparação direta entre parceiras. Cada *small multiple* reproduz, na lateral direita do respectivo mini-gráfico e em disposição vertical, os cartões **Comissionado → Projeção de Comissionamento → Faturado**, com valor atual, variação e referência do mês anterior;
-3. **Histórico da primeira parceira**: últimos 6 meses de `COMS` + linha de faturado, com painel lateral compacto contendo somente **Média de comissionamento** e **Média de faturamento**, organizadas verticalmente;
-4. **Histórico da segunda parceira**: mesma composição;
-5. **Histórico da terceira parceira**: mesma composição.
+**Tela 1 — Consolidado e últimos 2 meses por parceira**
+
+1. **COMS x Faturado — Consolidado** ocupa 100% da altura útil e **40% da largura**. No mês anterior, a barra exibe somente `COMS`; no último mês, a barra é empilhada em `COMS + CONC + PEND`, representando a projeção de comissionamento. `Faturado Comissionamento` é exibido como linha em degrau (“malhete”), tracejada e sem marcadores. O painel lateral segue a ordem Comissionado → Projeção de Comissionamento → Faturado;
+2. **Últimos 2 meses por parceira** ocupa os **60% restantes da largura** e 100% da altura útil. Os *small multiples* são distribuídos **verticalmente**, um por parceira, mantendo a mesma semântica visual do Consolidado. Em cada mini-gráfico, o mês anterior exibe somente `COMS`; o mês atual empilha `COMS + CONC + PEND`; `Faturado Comissionamento` é uma linha em degrau (“malhete”), tracejada e sem marcadores. Todos os mini-gráficos usam a mesma escala vertical. Na lateral direita de cada *small multiple*, os cartões **Comissionado → Projeção de Comissionamento → Faturado** permanecem organizados verticalmente.
+
+**Tela 2 — Históricos dos últimos 6 meses**
+
+3. Os históricos de **PRETEL**, **DPL** e **CENA** ocupam individualmente **100% da largura útil** e aproximadamente **1/3 da altura**, empilhados verticalmente nessa ordem;
+4. Cada histórico exibe os últimos 6 meses de `COMS` + linha de faturado e mantém, na lateral direita, somente **Média de comissionamento** e **Média de faturamento**, organizadas verticalmente.
 
 Regras da visualização:
 
@@ -604,11 +608,10 @@ Regras da visualização:
 - no consolidado, a legenda do gráfico combinado é 30% maior que a legenda-base da visão, incluindo texto e amostras visuais;
 - nos demais gráficos de barras, permanece a regra específica já documentada para cada composição;
 - `Faturado Comissionamento` é exibido como linha no consolidado, nos *small multiples* por parceira e nos históricos de 6 meses;
-- os dois gráficos da coluna esquerda utilizam os dois últimos meses existentes no JSON;
-- os três gráficos da coluna direita utilizam os seis últimos meses existentes no JSON;
+- na Tela 1, o Consolidado e todos os *small multiples* utilizam os dois últimos meses existentes no JSON;
+- na Tela 2, os três históricos utilizam os seis últimos meses existentes no JSON;
 - nos *small multiples* por parceira, os cartões usam as mesmas regras do consolidado: Comissionado compara `COMS` atual versus `COMS` anterior; Projeção compara `COMS + CONC + PEND` atual versus `COMS` anterior; Faturado compara faturamento atual versus faturamento anterior;
 - os três cartões de cada *small multiple* ficam na lateral direita do mini-gráfico, organizados verticalmente;
-- para acomodar essa composição, a coluna dos históricos de 6 meses é aproximadamente 20% mais estreita que na versão anterior e a coluna dos dois blocos da esquerda recebe o espaço liberado;
 - nos históricos de 6 meses, o painel lateral mantém somente Média de comissionamento e Média de faturamento, empilhadas verticalmente;
 - no comparativo por parceira, o mês anterior usa somente `COMS` e o mês atual representa a projeção com `COMS + CONC + PEND`;
 - nos históricos, o último mês é destacado em azul escuro;
@@ -622,7 +625,7 @@ Regras da visualização:
 - meses são ordenados por `MES_ORDEM`;
 - parceiras são obtidas dinamicamente do JSON e não ficam hardcoded no módulo.
 
-A COM-V1 é uma visão única, sem Subvisões internas, e permanece **15 segundos** antes de devolver o controle ao player.
+A COM-V1 possui **2 Subvisões internas de 15 segundos cada**. A Tela 1 é exibida por 15 segundos, depois a Tela 2 por mais 15 segundos; somente após a segunda tela o módulo devolve o controle ao player. No modo `?dev=1`, `→` e `←` navegam entre essas duas Subvisões seguindo as regras globais do PG-V2.
 
 ### Dados
 
@@ -637,7 +640,7 @@ O formato canônico de `dados/base_comissionamento.json` é uma lista direta de 
 - `COMS`;
 - `Faturado Comissionamento`.
 
-O JSON é carregado uma única vez na entrada da COM-V1, usando `no-store` e cache-buster. Não há temporizador próprio de atualização durante os 15 segundos da visão. Uma nova leitura ocorre naturalmente quando a COM-V1 for carregada novamente em um novo ciclo do painel. Falhas de gráfico são tratadas localmente e não devem interromper o player.
+O JSON é carregado uma única vez na entrada da COM-V1, usando `no-store` e cache-buster, e é compartilhado pelas duas Subvisões. Não há temporizador próprio de atualização durante os **30 segundos do ciclo interno** (15 s por tela). Uma nova leitura ocorre naturalmente quando a COM-V1 for carregada novamente em um novo ciclo do painel. Falhas de gráfico são tratadas localmente e não devem interromper o player.
 
 ---
 

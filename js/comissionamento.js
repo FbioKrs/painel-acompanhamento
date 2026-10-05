@@ -4,7 +4,8 @@
    ================================================================ */
 
 const URL_DADOS = "./dados/base_comissionamento.json";
-const TEMPO_VISAO = 15;
+const TEMPO_SUBVISAO = 15;
+const TOTAL_SUBVISOES = 2;
 const ULTIMOS_MESES_RESUMO = 2;
 const ULTIMOS_MESES_HISTORICO = 6;
 
@@ -37,10 +38,11 @@ let dadosGlobais = [];
 let graficos = [];
 let temporizadorRotacao = null;
 let resolverCiclo = null;
-let segundosRestantes = TEMPO_VISAO;
+let segundosRestantes = TEMPO_SUBVISAO;
 let cicloAtivo = false;
 let pausado = false;
 let pluginDataLabelsDisponivel = false;
+let indiceSubvisao = 0;
 
 
 /* ================================================================
@@ -802,10 +804,14 @@ function criarGraficoHistorico(canvasId, meses, valores) {
    ================================================================ */
 
 function atualizarCabecalho() {
+    const telaHistorico = indiceSubvisao === 1;
+
     window.PAINEL_BASE?.definirCabecalho({
         titulo: "Comissionamento por Parceira",
-        subtitulo: "COMS x Faturado",
-        contexto: "COMISSIONAMENTO"
+        subtitulo: telaHistorico
+            ? "Histórico dos últimos 6 meses"
+            : "Consolidado e últimos 2 meses por parceira",
+        contexto: `COMISSIONAMENTO • ${indiceSubvisao + 1}/${TOTAL_SUBVISOES}`
     });
 }
 
@@ -849,16 +855,29 @@ function atualizarResumo(meses, valores) {
     );
 }
 
-function renderizarVisao() {
-    if (!dadosGlobais.length) return;
+function ordenarParceirasHistorico(parceiras) {
+    const prioridade = ["PRETEL", "DPL", "CENA"];
+    const mapaPrioridade = new Map(prioridade.map((nome, indice) => [nome, indice]));
 
-    destruirGraficos();
-    atualizarCabecalho();
+    return [...parceiras].sort((a, b) => {
+        const ordemA = mapaPrioridade.has(a) ? mapaPrioridade.get(a) : prioridade.length;
+        const ordemB = mapaPrioridade.has(b) ? mapaPrioridade.get(b) : prioridade.length;
 
-    const meses = obterMeses();
-    const parceiras = obterParceiras();
+        if (ordemA !== ordemB) return ordemA - ordemB;
+        return a.localeCompare(b, "pt-BR");
+    });
+}
+
+function atualizarSubvisoesDOM() {
+    document.querySelectorAll(".visao-comissionamento .com-subvisao").forEach((elemento, indice) => {
+        const ativa = indice === indiceSubvisao;
+        elemento.classList.toggle("ativa", ativa);
+        elemento.setAttribute("aria-hidden", ativa ? "false" : "true");
+    });
+}
+
+function renderizarTelaResumo(meses, parceiras) {
     const ultimosDois = meses.slice(-ULTIMOS_MESES_RESUMO);
-    const ultimosSeis = meses.slice(-ULTIMOS_MESES_HISTORICO);
 
     if (ultimosDois.length < 2) {
         throw new Error("COM-V1 requer pelo menos dois meses para o comparativo.");
@@ -866,9 +885,13 @@ function renderizarVisao() {
 
     const resumoValores = ultimosDois.map(item => consolidarMes(item.ordem));
     atualizarResumo(ultimosDois, resumoValores);
-
     criarGraficoResumo(ultimosDois, resumoValores);
     renderizarSmallMultiplesParceiras(parceiras, ultimosDois);
+}
+
+function renderizarTelaHistorico(meses, parceiras) {
+    const ultimosSeis = meses.slice(-ULTIMOS_MESES_HISTORICO);
+    const parceirasHistorico = ordenarParceirasHistorico(parceiras);
 
     const slots = [
         ["tituloParceira1", "subtituloParceira1", "graficoParceira1", "kpiParceira1"],
@@ -877,12 +900,13 @@ function renderizarVisao() {
     ];
 
     slots.forEach(([tituloId, subtituloId, canvasId, kpiId], indice) => {
-        const parceira = parceiras[indice];
+        const parceira = parceirasHistorico[indice];
         const titulo = document.getElementById(tituloId);
         const subtitulo = document.getElementById(subtituloId);
 
         if (!parceira) {
             if (titulo) titulo.textContent = "Sem parceira — últimos 6 meses";
+            if (subtitulo) subtitulo.textContent = "COMS x Faturado";
             return;
         }
 
@@ -909,6 +933,26 @@ function renderizarVisao() {
             );
         }
     });
+}
+
+function renderizarSubvisaoAtual() {
+    destruirGraficos();
+    atualizarSubvisoesDOM();
+    atualizarCabecalho();
+
+    if (!dadosGlobais.length) {
+        atualizarContador();
+        return;
+    }
+
+    const meses = obterMeses();
+    const parceiras = obterParceiras();
+
+    if (indiceSubvisao === 0) {
+        renderizarTelaResumo(meses, parceiras);
+    } else {
+        renderizarTelaHistorico(meses, parceiras);
+    }
 
     atualizarContador();
 }
@@ -948,7 +992,7 @@ async function carregarDados() {
         }
 
         dadosGlobais = normalizados;
-        renderizarVisao();
+        renderizarSubvisaoAtual();
 
         if (erro) {
             erro.style.display = "none";
@@ -964,7 +1008,7 @@ async function carregarDados() {
 
         if (dadosGlobais.length) {
             try {
-                renderizarVisao();
+                renderizarSubvisaoAtual();
             } catch (erroRender) {
                 console.error("Falha ao renderizar último dado válido de COM-V1:", erroRender);
             }
@@ -1008,20 +1052,38 @@ function atualizarContador() {
     if (!contador || !barra) return;
 
     contador.textContent = `${segundosRestantes}s`;
-    barra.style.width = `${Math.max(0, (segundosRestantes / TEMPO_VISAO) * 100)}%`;
+    barra.style.width = `${Math.max(0, (segundosRestantes / TEMPO_SUBVISAO) * 100)}%`;
+}
+
+function irParaSubvisao(novoIndice) {
+    indiceSubvisao = Math.max(0, Math.min(TOTAL_SUBVISOES - 1, novoIndice));
+    segundosRestantes = TEMPO_SUBVISAO;
+    renderizarSubvisaoAtual();
+    atualizarContador();
+}
+
+function avancarAutomaticamente() {
+    if (indiceSubvisao < TOTAL_SUBVISOES - 1) {
+        irParaSubvisao(indiceSubvisao + 1);
+        return;
+    }
+
+    concluirCiclo();
 }
 
 function iniciarRotacao() {
     pararRotacao();
     cicloAtivo = true;
-    segundosRestantes = TEMPO_VISAO;
+    segundosRestantes = TEMPO_SUBVISAO;
     atualizarContador();
 
     temporizadorRotacao = setInterval(() => {
         if (!cicloAtivo || pausado) return;
 
         segundosRestantes--;
-        if (segundosRestantes <= 0) concluirCiclo();
+        if (segundosRestantes <= 0) {
+            avancarAutomaticamente();
+        }
         atualizarContador();
     }, 1000);
 }
@@ -1032,7 +1094,8 @@ function iniciarRotacao() {
    ================================================================ */
 
 export async function iniciar() {
-    segundosRestantes = TEMPO_VISAO;
+    indiceSubvisao = 0;
+    segundosRestantes = TEMPO_SUBVISAO;
     cicloAtivo = true;
     pausado = false;
 
@@ -1049,12 +1112,24 @@ export async function iniciar() {
 
 export function avancarSubvisao() {
     if (!cicloAtivo) return;
+
+    if (indiceSubvisao < TOTAL_SUBVISOES - 1) {
+        irParaSubvisao(indiceSubvisao + 1);
+        return;
+    }
+
     concluirCiclo();
 }
 
 export function voltarSubvisao() {
     if (!cicloAtivo) return;
-    segundosRestantes = TEMPO_VISAO;
+
+    if (indiceSubvisao > 0) {
+        irParaSubvisao(indiceSubvisao - 1);
+        return;
+    }
+
+    segundosRestantes = TEMPO_SUBVISAO;
     atualizarContador();
 }
 
@@ -1067,6 +1142,7 @@ export function alternarPausa() {
 export function destruir() {
     cicloAtivo = false;
     pausado = false;
+    indiceSubvisao = 0;
     pararRotacao();
     destruirGraficos();
     resolverCiclo = null;
