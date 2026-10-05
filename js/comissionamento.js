@@ -390,16 +390,197 @@ function opcoesBaseGrafico({ paddingTop = 22, paddingBottom = 2 } = {}) {
     };
 }
 
-function possuiEspacoParaRotuloBarra(contexto, minimoPixels = 26) {
+function obterElementoGrafico(contexto) {
+    const chart = contexto?.chart;
+    if (!chart || typeof chart.getDatasetMeta !== "function") return null;
+
+    const meta = chart.getDatasetMeta(contexto.datasetIndex);
+    return meta?.data?.[contexto.dataIndex] || null;
+}
+
+function medirLarguraRotulo(contexto, texto) {
+    const ctx = contexto?.chart?.ctx;
+    if (!ctx || typeof ctx.measureText !== "function") {
+        return String(texto || "").length * TIPOGRAFIA_GRAFICOS.rotuloValor * 0.58;
+    }
+
+    ctx.save();
+    ctx.font = `${TIPOGRAFIA_GRAFICOS.pesoValor} ${TIPOGRAFIA_GRAFICOS.rotuloValor}px "Segoe UI", Arial, Helvetica, sans-serif`;
+    const largura = ctx.measureText(String(texto || "")).width;
+    ctx.restore();
+    return largura;
+}
+
+function calcularPosicaoRotuloBarra(
+    contexto,
+    { preferenciaExterna = "auto", permitirTopo = true } = {}
+) {
     const valor = numero(contexto?.dataset?.data?.[contexto.dataIndex]);
-    const escalaY = contexto?.chart?.scales?.y;
+    if (!(valor > 0)) {
+        return { display: false, interno: false, anchor: "center", align: "center", offset: 0 };
+    }
 
-    if (!(valor > 0)) return false;
-    if (!escalaY || typeof escalaY.getPixelForValue !== "function") return true;
+    const elemento = obterElementoGrafico(contexto);
+    const area = contexto?.chart?.chartArea;
+    if (!elemento || !area) {
+        return { display: true, interno: true, anchor: "center", align: "center", offset: 0 };
+    }
 
-    const pixelZero = escalaY.getPixelForValue(0);
-    const pixelValor = escalaY.getPixelForValue(valor);
-    return Math.abs(pixelZero - pixelValor) >= minimoPixels;
+    const texto = formatarFinanceiro(valor);
+    const larguraRotulo = medirLarguraRotulo(contexto, texto) + 10;
+    const alturaRotulo = TIPOGRAFIA_GRAFICOS.rotuloValor + 8;
+    const larguraBarra = Math.max(0, numero(elemento.width));
+    const alturaBarra = Math.abs(numero(elemento.base) - numero(elemento.y));
+
+    if (
+        alturaBarra >= alturaRotulo + 4 &&
+        larguraBarra >= larguraRotulo + 4
+    ) {
+        return { display: true, interno: true, anchor: "center", align: "center", offset: 0 };
+    }
+
+    const margem = 7;
+    const x = numero(elemento.x);
+    const meiaLargura = larguraBarra / 2;
+    const espacoEsquerda = (x - meiaLargura) - area.left;
+    const espacoDireita = area.right - (x + meiaLargura);
+
+    let lados;
+    if (preferenciaExterna === "left") {
+        lados = ["left", "right"];
+    } else if (preferenciaExterna === "right") {
+        lados = ["right", "left"];
+    } else {
+        lados = contexto.dataIndex % 2 === 0
+            ? ["left", "right"]
+            : ["right", "left"];
+    }
+
+    for (const lado of lados) {
+        const espaco = lado === "left" ? espacoEsquerda : espacoDireita;
+        if (espaco >= larguraRotulo + margem) {
+            return {
+                display: true,
+                interno: false,
+                anchor: "center",
+                align: lado,
+                offset: margem
+            };
+        }
+    }
+
+    if (permitirTopo) {
+        const espacoAcima = numero(elemento.y) - area.top;
+        if (espacoAcima >= alturaRotulo + margem) {
+            return {
+                display: true,
+                interno: false,
+                anchor: "end",
+                align: "top",
+                offset: margem
+            };
+        }
+    }
+
+    return { display: false, interno: false, anchor: "center", align: "center", offset: 0 };
+}
+
+function criarDatalabelBarra({
+    corInterna = "#ffffff",
+    corExterna = CORES.texto,
+    preferenciaExterna = "auto",
+    permitirTopo = true
+} = {}) {
+    const resolver = contexto => calcularPosicaoRotuloBarra(contexto, {
+        preferenciaExterna,
+        permitirTopo
+    });
+
+    return {
+        display(contexto) {
+            return pluginDataLabelsDisponivel && resolver(contexto).display;
+        },
+        color(contexto) {
+            return resolver(contexto).interno ? corInterna : corExterna;
+        },
+        backgroundColor(contexto) {
+            return resolver(contexto).interno ? null : "rgba(255,255,255,0.94)";
+        },
+        borderRadius: 4,
+        padding: { top: 2, bottom: 2, left: 4, right: 4 },
+        anchor(contexto) {
+            return resolver(contexto).anchor;
+        },
+        align(contexto) {
+            return resolver(contexto).align;
+        },
+        offset(contexto) {
+            return resolver(contexto).offset;
+        },
+        clamp: true,
+        clip: false,
+        formatter: formatarFinanceiro,
+        font: {
+            size: TIPOGRAFIA_GRAFICOS.rotuloValor,
+            weight: TIPOGRAFIA_GRAFICOS.pesoValor
+        }
+    };
+}
+
+function calcularPosicaoRotuloLinha(contexto) {
+    const elemento = obterElementoGrafico(contexto);
+    const area = contexto?.chart?.chartArea;
+
+    if (!elemento || !area) {
+        return { align: "top", offset: 8 };
+    }
+
+    const alturaRotulo = TIPOGRAFIA_GRAFICOS.rotuloValor + 10;
+    const margem = 7;
+    const y = numero(elemento.y);
+    const espacoAcima = y - area.top;
+    const espacoAbaixo = area.bottom - y;
+    const preferencia = contexto.dataIndex % 2 === 0 ? "top" : "bottom";
+
+    if (preferencia === "top" && espacoAcima >= alturaRotulo + margem) {
+        return { align: "top", offset: margem };
+    }
+    if (preferencia === "bottom" && espacoAbaixo >= alturaRotulo + margem) {
+        return { align: "bottom", offset: margem };
+    }
+    if (espacoAcima >= alturaRotulo + margem) {
+        return { align: "top", offset: margem };
+    }
+    if (espacoAbaixo >= alturaRotulo + margem) {
+        return { align: "bottom", offset: margem };
+    }
+
+    return { align: espacoAcima >= espacoAbaixo ? "top" : "bottom", offset: 3 };
+}
+
+function criarDatalabelLinha({ offsetPadrao = 8 } = {}) {
+    return {
+        display: pluginDataLabelsDisponivel,
+        color: CORES.linha,
+        backgroundColor: "rgba(255,255,255,0.92)",
+        borderRadius: 4,
+        padding: { top: 2, bottom: 2, left: 4, right: 4 },
+        anchor: "center",
+        align(contexto) {
+            return calcularPosicaoRotuloLinha(contexto).align;
+        },
+        offset(contexto) {
+            const posicao = calcularPosicaoRotuloLinha(contexto);
+            return Number.isFinite(posicao.offset) ? posicao.offset : offsetPadrao;
+        },
+        clamp: true,
+        clip: false,
+        formatter: formatarFinanceiro,
+        font: {
+            size: TIPOGRAFIA_GRAFICOS.rotuloValor,
+            weight: TIPOGRAFIA_GRAFICOS.pesoValor
+        }
+    };
 }
 
 function criarGraficoResumo(meses, valores) {
@@ -430,18 +611,10 @@ function criarGraficoResumo(meses, valores) {
                     barPercentage: 0.64,
                     categoryPercentage: 0.72,
                     order: 1,
-                    datalabels: {
-                        display: pluginDataLabelsDisponivel,
-                        color: "#ffffff",
-                        anchor: "center",
-                        align: "center",
-                        clamp: true,
-                        formatter: formatarFinanceiro,
-                        font: {
-                            size: TIPOGRAFIA_GRAFICOS.rotuloValor,
-                            weight: TIPOGRAFIA_GRAFICOS.pesoValor
-                        }
-                    }
+                    datalabels: criarDatalabelBarra({
+                        corInterna: "#ffffff",
+                        corExterna: CORES.azul
+                    })
                 },
                 {
                     type: "bar",
@@ -484,22 +657,7 @@ function criarGraficoResumo(meses, valores) {
                     tension: 0,
                     fill: false,
                     order: 0,
-                    datalabels: {
-                        display: pluginDataLabelsDisponivel,
-                        color: CORES.linha,
-                        backgroundColor: "rgba(255,255,255,0.90)",
-                        borderRadius: 4,
-                        padding: { top: 2, bottom: 2, left: 4, right: 4 },
-                        anchor: "end",
-                        align: "top",
-                        offset: 8,
-                        clamp: true,
-                        formatter: formatarFinanceiro,
-                        font: {
-                            size: TIPOGRAFIA_GRAFICOS.rotuloValor,
-                            weight: TIPOGRAFIA_GRAFICOS.pesoValor
-                        }
-                    }
+                    datalabels: criarDatalabelLinha({ offsetPadrao: 8 })
                 }
             ]
         },
@@ -541,18 +699,10 @@ function criarGraficoSmallMultiple(canvas, meses, valores, limiteY) {
                     barPercentage: 0.66,
                     categoryPercentage: 0.74,
                     order: 1,
-                    datalabels: {
-                        display: pluginDataLabelsDisponivel,
-                        color: "#ffffff",
-                        anchor: "center",
-                        align: "center",
-                        clamp: true,
-                        formatter: formatarFinanceiro,
-                        font: {
-                            size: TIPOGRAFIA_GRAFICOS.rotuloValor,
-                            weight: TIPOGRAFIA_GRAFICOS.pesoValor
-                        }
-                    }
+                    datalabels: criarDatalabelBarra({
+                        corInterna: "#ffffff",
+                        corExterna: CORES.azul
+                    })
                 },
                 {
                     type: "bar",
@@ -565,20 +715,12 @@ function criarGraficoSmallMultiple(canvas, meses, valores, limiteY) {
                     barPercentage: 0.66,
                     categoryPercentage: 0.74,
                     order: 1,
-                    datalabels: {
-                        display(contexto) {
-                            return pluginDataLabelsDisponivel && possuiEspacoParaRotuloBarra(contexto);
-                        },
-                        color: CORES.texto,
-                        anchor: "center",
-                        align: "center",
-                        clamp: true,
-                        formatter: formatarFinanceiro,
-                        font: {
-                            size: TIPOGRAFIA_GRAFICOS.rotuloValor,
-                            weight: TIPOGRAFIA_GRAFICOS.pesoValor
-                        }
-                    }
+                    datalabels: criarDatalabelBarra({
+                        corInterna: CORES.texto,
+                        corExterna: CORES.texto,
+                        preferenciaExterna: "right",
+                        permitirTopo: false
+                    })
                 },
                 {
                     type: "bar",
@@ -591,20 +733,12 @@ function criarGraficoSmallMultiple(canvas, meses, valores, limiteY) {
                     barPercentage: 0.66,
                     categoryPercentage: 0.74,
                     order: 1,
-                    datalabels: {
-                        display(contexto) {
-                            return pluginDataLabelsDisponivel && possuiEspacoParaRotuloBarra(contexto);
-                        },
-                        color: "#5c470d",
-                        anchor: "center",
-                        align: "center",
-                        clamp: true,
-                        formatter: formatarFinanceiro,
-                        font: {
-                            size: TIPOGRAFIA_GRAFICOS.rotuloValor,
-                            weight: TIPOGRAFIA_GRAFICOS.pesoValor
-                        }
-                    }
+                    datalabels: criarDatalabelBarra({
+                        corInterna: "#5c470d",
+                        corExterna: "#5c470d",
+                        preferenciaExterna: "left",
+                        permitirTopo: true
+                    })
                 },
                 {
                     type: "line",
@@ -621,22 +755,7 @@ function criarGraficoSmallMultiple(canvas, meses, valores, limiteY) {
                     tension: 0,
                     fill: false,
                     order: 0,
-                    datalabels: {
-                        display: pluginDataLabelsDisponivel,
-                        color: CORES.linha,
-                        backgroundColor: "rgba(255,255,255,0.90)",
-                        borderRadius: 4,
-                        padding: { top: 2, bottom: 2, left: 3, right: 3 },
-                        anchor: "end",
-                        align: "top",
-                        offset: 6,
-                        clamp: true,
-                        formatter: formatarFinanceiro,
-                        font: {
-                            size: TIPOGRAFIA_GRAFICOS.rotuloValor,
-                            weight: TIPOGRAFIA_GRAFICOS.pesoValor
-                        }
-                    }
+                    datalabels: criarDatalabelLinha({ offsetPadrao: 6 })
                 }
             ]
         },
@@ -786,18 +905,10 @@ function criarGraficoHistorico(canvasId, meses, valores) {
                     barPercentage: 0.64,
                     categoryPercentage: 0.72,
                     order: 1,
-                    datalabels: {
-                        display: pluginDataLabelsDisponivel,
-                        color: "#ffffff",
-                        anchor: "center",
-                        align: "center",
-                        clamp: true,
-                        formatter: formatarFinanceiro,
-                        font: {
-                            size: TIPOGRAFIA_GRAFICOS.rotuloValor,
-                            weight: TIPOGRAFIA_GRAFICOS.pesoValor
-                        }
-                    }
+                    datalabels: criarDatalabelBarra({
+                        corInterna: "#ffffff",
+                        corExterna: CORES.azul
+                    })
                 },
                 {
                     type: "line",
@@ -814,22 +925,7 @@ function criarGraficoHistorico(canvasId, meses, valores) {
                     tension: 0,
                     fill: false,
                     order: 0,
-                    datalabels: {
-                        display: pluginDataLabelsDisponivel,
-                        color: CORES.linha,
-                        backgroundColor: "rgba(255,255,255,0.90)",
-                        borderRadius: 4,
-                        padding: { top: 2, bottom: 2, left: 4, right: 4 },
-                        anchor: "end",
-                        align: "top",
-                        offset: 8,
-                        clamp: true,
-                        formatter: formatarFinanceiro,
-                        font: {
-                            size: TIPOGRAFIA_GRAFICOS.rotuloValor,
-                            weight: TIPOGRAFIA_GRAFICOS.pesoValor
-                        }
-                    }
+                    datalabels: criarDatalabelLinha({ offsetPadrao: 8 })
                 }
             ]
         },
