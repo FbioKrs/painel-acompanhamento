@@ -390,6 +390,18 @@ function opcoesBaseGrafico({ paddingTop = 22, paddingBottom = 2 } = {}) {
     };
 }
 
+function possuiEspacoParaRotuloBarra(contexto, minimoPixels = 26) {
+    const valor = numero(contexto?.dataset?.data?.[contexto.dataIndex]);
+    const escalaY = contexto?.chart?.scales?.y;
+
+    if (!(valor > 0)) return false;
+    if (!escalaY || typeof escalaY.getPixelForValue !== "function") return true;
+
+    const pixelZero = escalaY.getPixelForValue(0);
+    const pixelValor = escalaY.getPixelForValue(valor);
+    return Math.abs(pixelZero - pixelValor) >= minimoPixels;
+}
+
 function criarGraficoResumo(meses, valores) {
     const canvas = document.getElementById("graficoResumo");
     if (!canvas || typeof Chart === "undefined") return;
@@ -553,7 +565,20 @@ function criarGraficoSmallMultiple(canvas, meses, valores, limiteY) {
                     barPercentage: 0.66,
                     categoryPercentage: 0.74,
                     order: 1,
-                    datalabels: { display: false }
+                    datalabels: {
+                        display(contexto) {
+                            return pluginDataLabelsDisponivel && possuiEspacoParaRotuloBarra(contexto);
+                        },
+                        color: CORES.texto,
+                        anchor: "center",
+                        align: "center",
+                        clamp: true,
+                        formatter: formatarFinanceiro,
+                        font: {
+                            size: TIPOGRAFIA_GRAFICOS.rotuloValor,
+                            weight: TIPOGRAFIA_GRAFICOS.pesoValor
+                        }
+                    }
                 },
                 {
                     type: "bar",
@@ -566,7 +591,20 @@ function criarGraficoSmallMultiple(canvas, meses, valores, limiteY) {
                     barPercentage: 0.66,
                     categoryPercentage: 0.74,
                     order: 1,
-                    datalabels: { display: false }
+                    datalabels: {
+                        display(contexto) {
+                            return pluginDataLabelsDisponivel && possuiEspacoParaRotuloBarra(contexto);
+                        },
+                        color: "#5c470d",
+                        anchor: "center",
+                        align: "center",
+                        clamp: true,
+                        formatter: formatarFinanceiro,
+                        font: {
+                            size: TIPOGRAFIA_GRAFICOS.rotuloValor,
+                            weight: TIPOGRAFIA_GRAFICOS.pesoValor
+                        }
+                    }
                 },
                 {
                     type: "line",
@@ -728,7 +766,6 @@ function criarGraficoHistorico(canvasId, meses, valores) {
     const canvas = document.getElementById(canvasId);
     if (!canvas || typeof Chart === "undefined") return;
 
-    const ultimoIndice = meses.length - 1;
     const opcoes = opcoesBaseGrafico({ paddingTop: 28 });
 
     const grafico = new Chart(canvas, {
@@ -741,21 +778,19 @@ function criarGraficoHistorico(canvasId, meses, valores) {
                     label: "Comissionado (COMS)",
                     data: valores.map(item => item.coms),
                     backgroundColor(contexto) {
-                        if (contexto.dataIndex === ultimoIndice) return CORES.azul;
                         const { ctx, chartArea } = contexto.chart;
-                        return criarGradienteVertical(ctx, chartArea, "#76b5f1", "#4a96e4");
+                        return criarGradienteVertical(ctx, chartArea, "#4e9bec", CORES.azul);
                     },
-                    borderRadius: 3,
+                    borderRadius: 4,
                     borderSkipped: false,
-                    barPercentage: 0.66,
-                    categoryPercentage: 0.78,
+                    barPercentage: 0.64,
+                    categoryPercentage: 0.72,
                     order: 1,
                     datalabels: {
                         display: pluginDataLabelsDisponivel,
-                        color: CORES.texto,
-                        anchor: "end",
-                        align: "top",
-                        offset: 2,
+                        color: "#ffffff",
+                        anchor: "center",
+                        align: "center",
                         clamp: true,
                         formatter: formatarFinanceiro,
                         font: {
@@ -770,16 +805,31 @@ function criarGraficoHistorico(canvasId, meses, valores) {
                     data: valores.map(item => item.faturado),
                     borderColor: CORES.linha,
                     backgroundColor: CORES.linha,
-                    borderWidth: 2.5,
-                    pointRadius: 4,
-                    pointHoverRadius: 4,
-                    pointBackgroundColor: CORES.linha,
-                    pointBorderColor: "#ffffff",
-                    pointBorderWidth: 2,
-                    tension: 0.15,
+                    borderWidth: 3,
+                    borderDash: [10, 7],
+                    pointRadius: 0,
+                    pointHoverRadius: 0,
+                    pointHitRadius: 8,
+                    stepped: "middle",
+                    tension: 0,
                     fill: false,
                     order: 0,
-                    datalabels: { display: false }
+                    datalabels: {
+                        display: pluginDataLabelsDisponivel,
+                        color: CORES.linha,
+                        backgroundColor: "rgba(255,255,255,0.90)",
+                        borderRadius: 4,
+                        padding: { top: 2, bottom: 2, left: 4, right: 4 },
+                        anchor: "end",
+                        align: "top",
+                        offset: 8,
+                        clamp: true,
+                        formatter: formatarFinanceiro,
+                        font: {
+                            size: TIPOGRAFIA_GRAFICOS.rotuloValor,
+                            weight: TIPOGRAFIA_GRAFICOS.pesoValor
+                        }
+                    }
                 }
             ]
         },

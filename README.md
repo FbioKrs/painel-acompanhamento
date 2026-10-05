@@ -595,12 +595,12 @@ A COM-V1 possui **duas Subvisões internas**, ambas dentro do mesmo fragmento e 
 **Tela 1 — Consolidado e últimos 2 meses por parceira**
 
 1. A coluna esquerda ocupa **44% da largura** (10% a mais que a largura anterior de 40%). No topo ficam três cartões horizontais com os valores do mês atual para `COMS`, `CONC` e `PEND`; cada cartão usa no canto superior esquerdo o detalhe diagonal já adotado em outras visões, com a mesma cor da respectiva série na legenda. Abaixo desses KPIs fica a área **COMS x Faturado — Consolidado**, que consome o restante da altura da coluna. No mês anterior, a barra exibe somente `COMS`; no último mês, a barra é empilhada em `COMS + CONC + PEND`, representando a projeção de comissionamento. `Faturado Comissionamento` é exibido como linha em degrau (“malhete”), tracejada e sem marcadores. O painel lateral segue a ordem Comissionado → Projeção de Comissionamento → Faturado;
-2. **Últimos 2 meses por parceira** ocupa os **56% restantes da largura** e 100% da altura útil. Os *small multiples* são distribuídos **verticalmente**, um por parceira, mantendo a mesma semântica visual do Consolidado. Em cada mini-gráfico, o mês anterior exibe somente `COMS`; o mês atual empilha `COMS + CONC + PEND`; `Faturado Comissionamento` é uma linha em degrau (“malhete”), tracejada e sem marcadores. Cada mini-gráfico utiliza **escala Y independente**, calculada a partir dos próprios valores da parceira. Na lateral direita de cada *small multiple*, os cartões **Comissionado → Projeção de Comissionamento → Faturado** permanecem organizados verticalmente.
+2. **Últimos 2 meses por parceira** ocupa os **56% restantes da largura** e 100% da altura útil. Os *small multiples* são distribuídos **verticalmente**, um por parceira, mantendo a mesma semântica visual do Consolidado. Em cada mini-gráfico, o mês anterior exibe somente `COMS`; o mês atual empilha `COMS + CONC + PEND`; `Faturado Comissionamento` é uma linha em degrau (“malhete”), tracejada e sem marcadores. Cada mini-gráfico utiliza **escala Y independente**, calculada a partir dos próprios valores da parceira. Os segmentos `CONC` e `PEND` exibem seus rótulos financeiros somente quando a altura disponível do respectivo segmento comporta o texto sem sobreposição. Na lateral direita de cada *small multiple*, os cartões **Comissionado → Projeção de Comissionamento → Faturado** permanecem organizados verticalmente.
 
 **Tela 2 — Históricos dos últimos 6 meses**
 
 3. Os históricos de **PRETEL**, **DPL** e **CENA** ocupam individualmente **100% da largura útil** e aproximadamente **1/3 da altura**, empilhados verticalmente nessa ordem;
-4. Cada histórico exibe os últimos 6 meses de `COMS` + linha de faturado e mantém, na lateral direita, somente **Média de comissionamento** e **Média de faturamento**, organizadas verticalmente.
+4. Cada histórico exibe os últimos 6 meses de `COMS` + linha de faturado e mantém, na lateral direita, somente **Média de comissionamento** e **Média de faturamento**, organizadas verticalmente. A formatação interna dos gráficos segue as propriedades visuais do gráfico **COMS x Faturado — Consolidado** da Tela 1, sem alterar as dimensões dos cards da Tela 2.
 
 Regras da visualização:
 
@@ -616,6 +616,7 @@ Regras da visualização:
 - na Tela 1, o Consolidado e todos os *small multiples* utilizam os dois últimos meses existentes no JSON;
 - na Tela 2, os três históricos utilizam os seis últimos meses existentes no JSON;
 - nos *small multiples* por parceira, os cartões usam as mesmas regras do consolidado: Comissionado compara `COMS` atual versus `COMS` anterior; Projeção compara `COMS + CONC + PEND` atual versus `COMS` anterior; Faturado compara faturamento atual versus faturamento anterior;
+- nos *small multiples* da Tela 1, os rótulos de `CONC` e `PEND` são condicionais: aparecem somente quando o segmento possui altura gráfica suficiente para acomodar o texto sem colisão;
 - os três cartões de cada *small multiple* ficam na lateral direita do mini-gráfico, organizados verticalmente;
 - na Tela 1, a distribuição principal é de aproximadamente **44% para o Consolidado e 56% para Últimos 2 meses por parceira**; dentro de cada *small multiple*, a redução de largura é absorvida prioritariamente pelo gráfico combinado, enquanto a coluna de cartões permanece preservada e ligeiramente mais larga proporcionalmente; dentro de cada cartão, o valor financeiro e a variação percentual ficam alinhados horizontalmente na mesma linha, com a referência comparativa abaixo;
 - no painel lateral do Consolidado, os textos de referência (`vs. <mês>` / `vs. <mês> (COMS)`) recebem destaque tipográfico ampliado em **50%** em relação à configuração anterior;
@@ -623,7 +624,7 @@ Regras da visualização:
 - nos cartões laterais dos *small multiples* da Tela 1, os percentuais de variação versus o mês anterior e os textos de referência (`vs. <mês>` / `vs. <mês> (COMS)`) recebem destaque tipográfico ampliado em **50%** em relação à configuração anterior; o espaçamento vertical desses cartões deve preservar a exibição integral da linha de referência, sem recorte inferior;
 - nos históricos de 6 meses, o painel lateral mantém somente Média de comissionamento e Média de faturamento, empilhadas verticalmente;
 - no comparativo por parceira, o mês anterior usa somente `COMS` e o mês atual representa a projeção com `COMS + CONC + PEND`;
-- nos históricos, o último mês é destacado em azul escuro;
+- nos históricos da Tela 2, as barras de `COMS` usam o mesmo gradiente, raio e proporções do Consolidado; a linha de Faturado usa o mesmo traçado em degrau, tracejado e sem marcadores, e os rótulos quantitativos seguem o mesmo padrão visual do Consolidado; as dimensões dos cards e dos gráficos permanecem inalteradas;
 - Média de comissionamento e Média de faturamento são calculadas sobre os seis meses exibidos no respectivo histórico e são os únicos indicadores mantidos no painel lateral dos históricos;
 - Tipografia dos gráficos da COM-V1 é centralizada em `TIPOGRAFIA_GRAFICOS`, dentro de `js/comissionamento.js`: rótulos quantitativos, rótulos do eixo X e anotações de variação desenhadas nos gráficos usam **14 px**; valores usam peso `800` e eixos/anotações auxiliares usam peso `700`. Não alterar `Chart.defaults`, para evitar efeito colateral nas demais visões do PG-V2;
 - os eixos Y não exibem régua ou rótulos;
