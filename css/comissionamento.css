@@ -723,16 +723,23 @@
 }
 
 .visao-comissionamento .com-small-multiple-kpis .com-small-kpi-chip {
-    min-height: 24px;
-    padding: 3px 5px;
+    min-height: 32px;
+    padding: 3px 7px;
+    gap: 3px;
 }
 
+/* Tela 1: destaque reforçado das comparações mensais dos small multiples. */
 .visao-comissionamento .com-small-multiple-kpis .com-small-kpi-chip strong {
-    font-size: 12px;
+    font-size: 18px;
+}
+
+.visao-comissionamento .com-small-multiple-kpis .com-small-kpi-seta {
+    font-size: 24px;
 }
 
 .visao-comissionamento .com-small-multiple-kpis .com-small-kpi-detalhe {
-    font-size: 10px;
+    font-size: 15px;
+    line-height: 1.08;
 }
 
 .visao-comissionamento .com-kpi-grid-medias {

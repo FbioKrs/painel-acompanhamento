@@ -613,6 +613,7 @@ Regras da visualização:
 - nos *small multiples* por parceira, os cartões usam as mesmas regras do consolidado: Comissionado compara `COMS` atual versus `COMS` anterior; Projeção compara `COMS + CONC + PEND` atual versus `COMS` anterior; Faturado compara faturamento atual versus faturamento anterior;
 - os três cartões de cada *small multiple* ficam na lateral direita do mini-gráfico, organizados verticalmente;
 - na Tela 1, cada *small multiple* reserva aproximadamente **2/3 da largura para o gráfico e 1/3 para os cartões**, transferindo cerca de 20% da largura anteriormente usada pelo gráfico para a área de indicadores; dentro de cada cartão, o valor financeiro e a variação percentual ficam alinhados horizontalmente na mesma linha, com a referência comparativa abaixo;
+- nos cartões laterais dos *small multiples* da Tela 1, os percentuais de variação versus o mês anterior e os textos de referência (`vs. <mês>` / `vs. <mês> (COMS)`) recebem destaque tipográfico ampliado em **50%** em relação à configuração anterior;
 - nos históricos de 6 meses, o painel lateral mantém somente Média de comissionamento e Média de faturamento, empilhadas verticalmente;
 - no comparativo por parceira, o mês anterior usa somente `COMS` e o mês atual representa a projeção com `COMS + CONC + PEND`;
 - nos históricos, o último mês é destacado em azul escuro;
