@@ -52,7 +52,6 @@ Não utilizar `iframe` para a circulação das visões do PG-V2.
 | **ME_EXEC-V1** | Metas da Executiva | Em produção | `visoes/metas-executiva.html` |
 | **ME_GER-V1** | Metas da Gerência | Em produção | `visoes/metas-gerencia.html` |
 | **COM-V1** | Comissionamento de Obras | Em produção | `visoes/comissionamento.html` |
-| **CAL-TV** | Calibração tipográfica para TV | Técnica / fora da rotação | `visoes/calibracao-tv.html` |
 | **OA-V1** | Obras Ágeis | Convenção reservada | Pode não existir ainda |
 | **IND-V1** | Indicadores | Convenção reservada | Pode não existir ainda |
 | **PROD-V1** | Produtividade | Convenção reservada | Pode não existir ainda |
@@ -74,16 +73,14 @@ painel-acompanhamento/
 │   ├── dia-c.html
 │   ├── metas-executiva.html
 │   ├── metas-gerencia.html
-│   ├── comissionamento.html
-│   └── calibracao-tv.html
+│   └── comissionamento.html
 │
 ├── css/
 │   ├── painel-base.css
 │   ├── dia-c.css
 │   ├── metas-executiva.css
 │   ├── metas-gerencia.css
-│   ├── comissionamento.css
-│   └── calibracao-tv.css
+│   └── comissionamento.css
 │
 ├── js/
 │   ├── painel-config.js
@@ -94,8 +91,7 @@ painel-acompanhamento/
 │   ├── dia-c.js
 │   ├── metas-executiva.js
 │   ├── metas-gerencia.js
-│   ├── comissionamento.js
-│   └── calibracao-tv.js
+│   └── comissionamento.js
 │
 ├── dados/
 │   ├── metas-executiva.json
@@ -318,36 +314,6 @@ Regras:
 - `←` na primeira Subvisão não volta para a visão principal anterior; permanece na primeira Subvisão da visão atual;
 - a pausa congela a contagem e a barra de tempo no ponto atual; ao retomar, a contagem continua do mesmo ponto;
 - não existe indicador visual de modo DEV no shell.
-
----
-
-## 5.2. Modo técnico de calibração da TV
-
-A visão **CAL-TV** é uma ferramenta técnica para definir a escala tipográfica do painel na TV real. Ela permanece registrada com `ativo: false` e **não participa da rotação normal**.
-
-Para abri-la isoladamente, usar:
-
-```text
-?cal=1
-```
-
-Exemplo:
-
-```text
-https://<host>/painel-acompanhamento/?cal=1
-```
-
-Quando `?cal=1` está presente, o player seleciona exclusivamente a visão `CAL-TV`, mesmo com `ativo: false`, e suspende o timeout de segurança dessa visão para que a tela permaneça disponível durante todo o teste físico. Esse comportamento é exclusivo do modo de calibração; sem o parâmetro, o ciclo normal continua usando apenas as visões ativas.
-
-A CAL-TV deve ser usada na distância habitual de observação da Samsung de 55" para identificar:
-
-- menor tamanho de texto confortável;
-- menor tamanho de rótulo de gráfico confortável;
-- peso tipográfico preferido;
-- contraste mínimo aceitável;
-- tamanho adequado para títulos e KPIs.
-
-O resultado da calibração deve orientar uma futura escala tipográfica global do PG-V2; a criação da CAL-TV, por si só, **não altera a tipografia das visões produtivas**.
 
 ---
 
@@ -688,35 +654,6 @@ O JSON é carregado uma única vez na entrada da COM-V1, usando `no-store` e cac
 
 ---
 
-## 11.1. CAL-TV — Calibração tipográfica
-
-### Arquivos
-
-```text
-visoes/calibracao-tv.html
-css/calibracao-tv.css
-js/calibracao-tv.js
-```
-
-A **CAL-TV** é uma visão técnica estática, sem fonte de dados externa e fora da rotação normal do painel. Seu objetivo é permitir calibração presencial da legibilidade antes de padronizar fontes nas visões produtivas.
-
-A tela contém quatro grupos de teste:
-
-1. escala HTML de **14, 16, 18, 20, 22, 24 e 28 px** usando exemplos reais do painel;
-2. comparação em **18 px** entre pesos `400`, `600`, `700` e `800`, além dos níveis de contraste principal, secundário e suave;
-3. amostras de títulos em **28, 32 e 36 px** e valores KPI em **40, 48, 56 e 60 px**;
-4. gráfico Chart.js real com rótulos em canvas de **14, 16, 18 e 20 px**.
-
-A visão deve permanecer integralmente dentro de 1920×1080, sem scroll, e não deve alterar tokens ou regras tipográficas globais enquanto a calibração não tiver sido concluída na TV física.
-
-Acesso técnico:
-
-```text
-?cal=1
-```
-
----
-
 ## 12. Como criar uma nova visão no PG-V2
 
 1. Criar fragmento em `visoes/`.
@@ -817,18 +754,6 @@ js/comissionamento.js
 dados/base_comissionamento.json
 ```
 
-### CAL-TV
-
-Preferir:
-
-```text
-visoes/calibracao-tv.html
-css/calibracao-tv.css
-js/calibracao-tv.js
-```
-
-O registro e o acesso técnico da CAL-TV dependem de `js/painel-config.js` e da regra `?cal=1` em `js/painel-player.js`; essas duas alterações são globais apenas para viabilizar o modo de calibração e não devem modificar a apresentação das visões produtivas.
-
 Não alterar PG-V2 para resolver um problema exclusivo de uma visão.
 
 ---
@@ -905,8 +830,8 @@ Nunca reconstruir arquivos vigentes com base apenas em versões históricas do c
 ---
 
 **Padrão vigente: PG-V2**  
-**Visões cadastradas: DC-V1, ME_EXEC-V1, ME_GER-V1, COM-V1 e CAL-TV**  
-**Estado atual em `painel-config.js`: DC-V1 e CAL-TV desativadas na rotação; ME_EXEC-V1, ME_GER-V1 e COM-V1 ativas. CAL-TV pode ser aberta isoladamente com `?cal=1`.**
+**Visões cadastradas: DC-V1, ME_EXEC-V1, ME_GER-V1 e COM-V1**  
+**Estado atual em `painel-config.js`: DC-V1 desativada; ME_EXEC-V1, ME_GER-V1 e COM-V1 ativas**
 
 
 ### Inicialização visual do PG-V2

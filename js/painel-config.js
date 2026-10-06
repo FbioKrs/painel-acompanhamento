@@ -68,16 +68,6 @@ window.PAINEL_CONFIG = {
             fragmento: "./visoes/comissionamento.html",
             css: "./css/comissionamento.css",
             modulo: "./js/comissionamento.js"
-        },
-        {
-            id: "CAL-TV",
-            ativo: false,
-            nome: "Calibração TV",
-            titulo: "Calibração TV",
-            subtitulo: "Teste de legibilidade e tipografia",
-            fragmento: "./visoes/calibracao-tv.html",
-            css: "./css/calibracao-tv.css",
-            modulo: "./js/calibracao-tv.js"
         }
     ]
 
