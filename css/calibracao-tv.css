@@ -1,0 +1,385 @@
+/* ================================================================
+   CAL-TV — Calibração tipográfica para TV
+   Visão técnica, fora da rotação normal.
+   ================================================================ */
+
+.visao-cal-tv {
+    --cal-azul: #1959b5;
+    --cal-azul-2: #3f8fe7;
+    --cal-fundo-card: #ffffff;
+    --cal-fundo-suave: #f5f8fb;
+    --cal-borda: #dce4ea;
+    --cal-texto: #27333d;
+    --cal-secundario: #74808a;
+    --cal-suave: #98a2aa;
+}
+
+.visao-cal-tv .cal-conteudo {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    display: grid;
+    grid-template-rows: 72px minmax(0, 1fr) 44px;
+    gap: 14px;
+    overflow: hidden;
+}
+
+.visao-cal-tv .cal-orientacao {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 28px;
+    padding: 12px 20px;
+    border: 1px solid #d7e2ec;
+    border-radius: 16px;
+    background: linear-gradient(90deg, #ffffff 0%, #f4f9ff 100%);
+    box-shadow: 0 6px 18px rgba(24, 38, 52, 0.06);
+}
+
+.visao-cal-tv .cal-orientacao-principal {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    color: var(--cal-texto);
+    font-size: 18px;
+}
+
+.visao-cal-tv .cal-orientacao-principal strong {
+    font-size: 20px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.visao-cal-tv .cal-orientacao-principal > span:last-child {
+    color: var(--cal-secundario);
+    font-weight: 600;
+}
+
+.visao-cal-tv .cal-badge,
+.visao-cal-tv .cal-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border-radius: 999px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+.visao-cal-tv .cal-badge {
+    min-width: 92px;
+    padding: 9px 14px;
+    background: #e4efff;
+    color: #174f9f;
+    font-size: 16px;
+}
+
+.visao-cal-tv .cal-orientacao-meta {
+    flex-shrink: 0;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    padding-left: 22px;
+    border-left: 1px solid #d8e1e8;
+}
+
+.visao-cal-tv .cal-orientacao-meta span {
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--cal-secundario);
+}
+
+.visao-cal-tv .cal-orientacao-meta strong {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--cal-texto);
+}
+
+.visao-cal-tv .cal-grid {
+    min-height: 0;
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.visao-cal-tv .cal-card {
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    padding: 16px 18px;
+    border-radius: 16px;
+    border: 1px solid var(--cal-borda);
+    background: var(--cal-fundo-card);
+    box-shadow: 0 7px 24px rgba(24, 38, 52, 0.07);
+}
+
+.visao-cal-tv .cal-card-header {
+    flex-shrink: 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 12px;
+}
+
+.visao-cal-tv .cal-card-header h2 {
+    margin: 0;
+    font-size: 24px;
+    line-height: 1.05;
+    font-weight: 800;
+    color: var(--cal-texto);
+}
+
+.visao-cal-tv .cal-card-header p {
+    margin: 5px 0 0;
+    font-size: 15px;
+    line-height: 1.2;
+    font-weight: 600;
+    color: var(--cal-secundario);
+}
+
+.visao-cal-tv .cal-chip {
+    padding: 7px 12px;
+    background: #edf3f8;
+    color: #5f6f7d;
+    font-size: 14px;
+}
+
+.visao-cal-tv .cal-lista-fontes {
+    flex: 1;
+    min-height: 0;
+    display: grid;
+    grid-template-rows: repeat(7, minmax(0, 1fr));
+    border-top: 1px solid #edf1f4;
+}
+
+.visao-cal-tv .cal-linha-fonte {
+    min-width: 0;
+    display: grid;
+    grid-template-columns: 78px minmax(0, 1fr);
+    align-items: center;
+    gap: 14px;
+    border-bottom: 1px solid #edf1f4;
+    color: var(--cal-texto);
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.visao-cal-tv .cal-linha-fonte:last-child {
+    border-bottom: 0;
+}
+
+.visao-cal-tv .cal-medida {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--cal-secundario);
+}
+
+.visao-cal-tv .cal-f14 > span:last-child { font-size: 14px; }
+.visao-cal-tv .cal-f16 > span:last-child { font-size: 16px; }
+.visao-cal-tv .cal-f18 > span:last-child { font-size: 18px; }
+.visao-cal-tv .cal-f20 > span:last-child { font-size: 20px; }
+.visao-cal-tv .cal-f22 > span:last-child { font-size: 22px; }
+.visao-cal-tv .cal-f24 > span:last-child { font-size: 24px; }
+.visao-cal-tv .cal-f28 > span:last-child { font-size: 28px; }
+
+.visao-cal-tv .cal-pesos-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.visao-cal-tv .cal-amostra-peso {
+    min-width: 0;
+    min-height: 58px;
+    display: grid;
+    grid-template-columns: 52px minmax(0, 1fr);
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border: 1px solid #e5eaee;
+    border-radius: 12px;
+    background: var(--cal-fundo-suave);
+    font-size: 18px;
+    color: var(--cal-texto);
+}
+
+.visao-cal-tv .cal-amostra-peso span {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--cal-secundario);
+}
+
+.visao-cal-tv .cal-p400 strong { font-weight: 400; }
+.visao-cal-tv .cal-p600 strong { font-weight: 600; }
+.visao-cal-tv .cal-p700 strong { font-weight: 700; }
+.visao-cal-tv .cal-p800 strong { font-weight: 800; }
+
+.visao-cal-tv .cal-contrastes {
+    flex: 1;
+    min-height: 0;
+    display: grid;
+    grid-template-rows: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.visao-cal-tv .cal-contraste {
+    min-width: 0;
+    display: grid;
+    grid-template-columns: 92px minmax(0, 1fr);
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: 11px;
+    background: #fafcfd;
+    border: 1px solid #edf1f4;
+    font-size: 18px;
+}
+
+.visao-cal-tv .cal-contraste span {
+    font-size: 13px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: var(--cal-secundario);
+}
+
+.visao-cal-tv .cal-contraste strong { font-weight: 700; }
+.visao-cal-tv .cal-contraste-principal strong { color: var(--cal-texto); }
+.visao-cal-tv .cal-contraste-secundario strong { color: var(--cal-secundario); }
+.visao-cal-tv .cal-contraste-suave strong { color: var(--cal-suave); }
+
+.visao-cal-tv .cal-hierarquia-grid {
+    flex: 1;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: 1.18fr 0.82fr;
+    gap: 18px;
+}
+
+.visao-cal-tv .cal-titulos-amostra {
+    min-height: 0;
+    display: grid;
+    grid-template-rows: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.visao-cal-tv .cal-titulo-amostra {
+    min-width: 0;
+    display: grid;
+    grid-template-columns: 58px minmax(0, 1fr);
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: 12px;
+    background: var(--cal-fundo-suave);
+    border: 1px solid #e7ecef;
+    color: var(--cal-texto);
+}
+
+.visao-cal-tv .cal-titulo-amostra span {
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--cal-secundario);
+}
+
+.visao-cal-tv .cal-titulo-amostra strong {
+    font-weight: 800;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.visao-cal-tv .cal-t28 strong { font-size: 28px; }
+.visao-cal-tv .cal-t32 strong { font-size: 32px; }
+.visao-cal-tv .cal-t36 strong { font-size: 36px; }
+
+.visao-cal-tv .cal-kpis-amostra {
+    min-height: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.visao-cal-tv .cal-kpi-amostra {
+    min-width: 0;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    border-radius: 12px;
+    border: 1px solid #dde7f0;
+    background: linear-gradient(180deg, #f8fbff 0%, #eef5fb 100%);
+}
+
+.visao-cal-tv .cal-kpi-amostra span {
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--cal-secundario);
+}
+
+.visao-cal-tv .cal-kpi-amostra strong {
+    color: var(--cal-azul);
+    font-weight: 800;
+    line-height: 0.95;
+    font-variant-numeric: tabular-nums;
+}
+
+.visao-cal-tv .cal-k40 { font-size: 40px; }
+.visao-cal-tv .cal-k48 { font-size: 48px; }
+.visao-cal-tv .cal-k56 { font-size: 56px; }
+.visao-cal-tv .cal-k60 { font-size: 60px; }
+
+.visao-cal-tv .cal-card-chart {
+    padding-bottom: 10px;
+}
+
+.visao-cal-tv .cal-chart-wrap {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+}
+
+.visao-cal-tv .cal-chart-wrap canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.visao-cal-tv .cal-rodape {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: center;
+    gap: 10px;
+    padding: 0 16px;
+    border-radius: 14px;
+    border: 1px solid #dce4ea;
+    background: #ffffff;
+    box-shadow: 0 4px 14px rgba(24, 38, 52, 0.05);
+    color: var(--cal-secundario);
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.visao-cal-tv .cal-rodape span {
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.visao-cal-tv .cal-rodape strong {
+    color: var(--cal-texto);
+    font-weight: 800;
+}
