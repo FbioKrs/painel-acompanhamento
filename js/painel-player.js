@@ -10,11 +10,19 @@
         ? config.visoes
         : [];
 
-    // Uma visão só é excluída quando `ativo` for explicitamente false.
-    // Assim, registros antigos sem essa propriedade continuam compatíveis.
-    const visoes = visoesConfiguradas.filter(
-        visao => visao?.ativo !== false
+    const parametrosUrl = new URLSearchParams(window.location.search);
+    const modoCalibracao = parametrosUrl.get("cal") === "1";
+    const visaoCalibracao = visoesConfiguradas.find(
+        visao => visao?.id === "CAL-TV"
     );
+
+    // CAL-TV permanece fora da rotação normal (ativo:false), mas pode ser
+    // aberta isoladamente com ?cal=1 para calibração física na TV.
+    const visoes = modoCalibracao && visaoCalibracao
+        ? [visaoCalibracao]
+        : visoesConfiguradas.filter(
+            visao => visao?.ativo !== false
+        );
 
     const slot = document.getElementById("conteudoVisao");
     const erroPlayer = document.getElementById("erroPlayer");
@@ -32,8 +40,7 @@
     let primeiraExibicao = true;
 
     const modoDesenvolvimento =
-        new URLSearchParams(window.location.search)
-            .get("dev") === "1";
+        parametrosUrl.get("dev") === "1";
 
     function tratarAtalhoDesenvolvimento(evento) {
         if (!modoDesenvolvimento || !moduloAtual) return;
@@ -233,14 +240,22 @@
             );
         }
 
+        const execucao = Promise.resolve(
+            moduloAtual.iniciar({
+                id: visao.id,
+                indice,
+                total: visoes.length,
+                modoCalibracao
+            })
+        );
+
+        if (modoCalibracao && visao.id === "CAL-TV") {
+            await execucao;
+            return;
+        }
+
         await comTimeout(
-            Promise.resolve(
-                moduloAtual.iniciar({
-                    id: visao.id,
-                    indice,
-                    total: visoes.length
-                })
-            ),
+            execucao,
             timeoutSegurancaMs,
             visao.id
         );
