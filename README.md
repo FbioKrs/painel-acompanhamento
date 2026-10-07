@@ -950,7 +950,6 @@ Nunca reconstruir arquivos vigentes com base apenas em versões históricas do c
 O player **não possui tela inicial de carregamento**. O `index.html` inicia com o shell visualmente oculto e carrega imediatamente a primeira visão configurada. Assim que o fragmento HTML e o CSS dessa visão estão disponíveis, o shell é revelado diretamente com a primeira visão. A transição de fade é aplicada apenas entre visões já em execução, nunca antes da primeira visão. Não usar textos como “Painel de Acompanhamento”, “Carregando visão...” ou “Preparando apresentação...” como estado visual inicial.
 
 
-- Na Tela 1 da COM-V1, os títulos das áreas gráficas “COMS x Faturado — Consolidado” e “Últimos 2 meses por parceira” ficam fora dos cards, acima e alinhados à esquerda.
-- Na Tela 1 da COM-V1, os cartões superiores de status (COMS, CONC e PEND) usam tipografia um pouco maior do que os demais cartões da visão.
-
-- Correção adicional: na Tela 1 da COM-V1, os títulos das áreas passam a ficar visualmente separados do card, como elemento independente acima do bloco branco.
+- Na Tela 1 da COM-V1, os títulos dos cartões de KPI (Comissionado, Projeção/Projeção de comissionamento e Faturado) ficam fora do respectivo cartão, acima e alinhados à esquerda, tanto no Consolidado quanto nos small multiples.
+- Os títulos dos quadrantes “COMS x Faturado — Consolidado” e “Últimos 2 meses por parceira” permanecem no cabeçalho dos respectivos quadrantes.
+- Os cartões superiores COMS/CONC/PEND usam tipografia de 24 px nos rótulos e 30 px nos valores, com hierarquia superior aos demais cartões da Tela 1.

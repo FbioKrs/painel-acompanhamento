@@ -775,12 +775,15 @@ function criarCartaoSmallMultiple(rotulo, valorAtual, variacao, detalhe, classeE
     const tendencia = classificarTendencia(variacao);
     const estilo = obterEstiloTendencia(tendencia);
 
-    const cartao = document.createElement("div");
-    cartao.className = `com-small-kpi ${tendencia} ${classeExtra}`.trim();
+    const wrapper = document.createElement("div");
+    wrapper.className = "com-small-kpi-wrapper";
 
     const label = document.createElement("div");
     label.className = "com-small-kpi-label";
     label.textContent = rotulo;
+
+    const cartao = document.createElement("div");
+    cartao.className = `com-small-kpi ${tendencia} ${classeExtra}`.trim();
 
     const valorLinha = document.createElement("div");
     valorLinha.className = "com-small-kpi-valor-linha";
@@ -799,11 +802,12 @@ function criarCartaoSmallMultiple(rotulo, valorAtual, variacao, detalhe, classeE
 
     valorLinha.appendChild(valor);
     valorLinha.appendChild(chip);
-    cartao.appendChild(label);
-    cartao.appendChild(valorLinha);
     cartao.appendChild(detalheElemento);
+    cartao.appendChild(valorLinha);
+    wrapper.appendChild(label);
+    wrapper.appendChild(cartao);
 
-    return cartao;
+    return wrapper;
 }
 
 function criarCardsSmallMultiple(meses, valores) {
