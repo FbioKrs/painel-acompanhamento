@@ -955,3 +955,5 @@ O player **não possui tela inicial de carregamento**. O `index.html` inicia com
 - Os cartões superiores COMS/CONC/PEND usam tipografia de 24 px nos rótulos e 30 px nos valores, com hierarquia superior aos demais cartões da Tela 1.
 
 - Na Tela 1 da COM-V1, os elementos de referência textual “vs. mês anterior” foram removidos dos cartões do consolidado e dos small multiples; o espaço foi redistribuído para valor e percentual.
+
+- Na Tela 2 da COM-V1, os cartões de médias foram harmonizados com a Tela 1: títulos fora do retângulo, mesma tipografia calibrada e mesmo tratamento visual de fundo, borda e sombra.
