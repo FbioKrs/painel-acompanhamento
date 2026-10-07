@@ -753,6 +753,10 @@ Acesso técnico:
 
 ---
 
+### Piso tipográfico aplicado às demais visões produtivas
+
+Em 07/10/2026, as visões **DC-V1**, **ME_EXEC-V1** e **ME_GER-V1** foram auditadas para o piso tipográfico calibrado. Todo `font-size` explícito abaixo de **22 px** no corpo dessas visões passou a usar `var(--tv-fonte-minima, 22px)`. Na DC-V1, os textos produzidos pelo Chart.js (eixos, legendas e data labels) também passaram a consumir `PAINEL_CONFIG.tipografia.grafico`, sempre respeitando `PAINEL_CONFIG.tipografia.textoMinimo`. A **CAL-TV** permanece como exceção técnica intencional, pois precisa exibir amostras abaixo do piso para fins de calibração. O shell global do PG-V2 não foi alterado nesta migração.
+
 ## 12. Como criar uma nova visão no PG-V2
 
 1. Criar fragmento em `visoes/`.

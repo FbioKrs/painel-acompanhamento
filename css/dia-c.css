@@ -56,7 +56,7 @@
 .cabecalho-visao p {
     margin-top: 4px;
 
-    font-size: 16px;
+    font-size: var(--tv-fonte-minima, 22px);
 
     color:
         #6670a8;
@@ -79,7 +79,7 @@
     color:
         #374376;
 
-    font-size: 15px;
+    font-size: var(--tv-fonte-minima, 22px);
 
     font-weight: 600;
 
@@ -197,7 +197,7 @@
 .kpi-label {
     margin-bottom: 7px;
 
-    font-size: 17px;
+    font-size: var(--tv-fonte-minima, 22px);
 
     font-weight: 700;
 
@@ -231,7 +231,7 @@
 .kpi-complemento {
     margin-top: 8px;
 
-    font-size: 15px;
+    font-size: var(--tv-fonte-minima, 22px);
 
     color:
         #6770a0;
@@ -345,7 +345,7 @@
 .painel-subtitulo {
     margin-top: 4px;
 
-    font-size: 16px;
+    font-size: var(--tv-fonte-minima, 22px);
 
     color:
         #6873a9;
@@ -362,7 +362,7 @@
         0
         2px;
 
-    font-size: 14px;
+    font-size: var(--tv-fonte-minima, 22px);
 
     color:
         #6f78a3;

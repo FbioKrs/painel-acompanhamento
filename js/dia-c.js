@@ -22,6 +22,36 @@ const DURACAO_TRANSICAO_CONTEUDO =
     || 230;
 
 
+const TIPOGRAFIA_GRAFICOS =
+    window.PAINEL_CONFIG
+        ?.tipografia
+        ?.grafico
+    || {};
+
+const FONTE_MINIMA_TV =
+    Number(
+        window.PAINEL_CONFIG
+            ?.tipografia
+            ?.textoMinimo
+    )
+    || 22;
+
+const FONTE_GRAFICO_EIXO = Math.max(
+    FONTE_MINIMA_TV,
+    Number(TIPOGRAFIA_GRAFICOS.eixo) || FONTE_MINIMA_TV
+);
+
+const FONTE_GRAFICO_LEGENDA = Math.max(
+    FONTE_MINIMA_TV,
+    Number(TIPOGRAFIA_GRAFICOS.legenda) || FONTE_MINIMA_TV
+);
+
+const FONTE_GRAFICO_VALOR = Math.max(
+    FONTE_MINIMA_TV,
+    Number(TIPOGRAFIA_GRAFICOS.valor) || FONTE_MINIMA_TV
+);
+
+
 const estilosRaiz =
     getComputedStyle(
         document.documentElement
@@ -1299,7 +1329,7 @@ function renderizarGraficoEvolucao(
                                 font: {
 
                                     size:
-                                        16
+                                        FONTE_GRAFICO_LEGENDA
 
                                 }
 
@@ -1336,7 +1366,7 @@ function renderizarGraficoEvolucao(
                             font: {
 
                                 size:
-                                    15,
+                                    FONTE_GRAFICO_VALOR,
 
                                 weight:
                                     "600"
@@ -1388,7 +1418,7 @@ function renderizarGraficoEvolucao(
                                 font: {
 
                                     size:
-                                        14
+                                        FONTE_GRAFICO_EIXO
 
                                 },
 
@@ -1433,7 +1463,7 @@ function renderizarGraficoEvolucao(
                                 font: {
 
                                     size:
-                                        14
+                                        FONTE_GRAFICO_EIXO
 
                                 }
 
@@ -1729,7 +1759,7 @@ function renderizarGraficoGeralParceiras() {
                                 font: {
 
                                     size:
-                                        14
+                                        FONTE_GRAFICO_LEGENDA
 
                                 }
 
@@ -1755,7 +1785,7 @@ function renderizarGraficoGeralParceiras() {
                             font: {
 
                                 size:
-                                    15,
+                                    FONTE_GRAFICO_VALOR,
 
                                 weight:
                                     "600"
@@ -1810,7 +1840,7 @@ function renderizarGraficoGeralParceiras() {
                                 font: {
 
                                     size:
-                                        14
+                                        FONTE_GRAFICO_EIXO
 
                                 }
 
@@ -1840,7 +1870,7 @@ function renderizarGraficoGeralParceiras() {
                                 font: {
 
                                     size:
-                                        16
+                                        FONTE_GRAFICO_EIXO
 
                                 }
 
@@ -2060,7 +2090,7 @@ function renderizarGraficoComposicaoParceira(
                             font: {
 
                                 size:
-                                    18,
+                                    FONTE_GRAFICO_VALOR,
 
                                 weight:
                                     "700"
@@ -2111,7 +2141,7 @@ function renderizarGraficoComposicaoParceira(
                                 font: {
 
                                     size:
-                                        14
+                                        FONTE_GRAFICO_EIXO
 
                                 }
 
@@ -2141,7 +2171,7 @@ function renderizarGraficoComposicaoParceira(
                                 font: {
 
                                     size:
-                                        18
+                                        FONTE_GRAFICO_EIXO
 
                                 }
 

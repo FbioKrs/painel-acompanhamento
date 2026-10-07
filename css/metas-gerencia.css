@@ -78,7 +78,7 @@
     padding: 7px 12px;
     border-radius: 16px;
     text-align: center;
-    font-size: 15px;
+    font-size: var(--tv-fonte-minima, 22px);
     font-weight: 700;
     color: #27333d;
     border: 1px solid rgba(39, 51, 61, 0.08);
@@ -111,7 +111,7 @@
 }
 
 .visao-me-ger .cartao-nota-geral-label {
-    font-size: 16px;
+    font-size: var(--tv-fonte-minima, 22px);
     font-weight: 800;
     color: var(--navy-metas);
     text-transform: uppercase;
@@ -212,7 +212,7 @@
     padding: 4px 12px;
     border-radius: 14px;
     text-align: center;
-    font-size: 14px;
+    font-size: var(--tv-fonte-minima, 22px);
     font-weight: 800;
     line-height: 1.2;
     border: 1px solid rgba(39, 51, 61, 0.08);
@@ -378,7 +378,7 @@
     display: inline-block;
     margin-right: 12px;
     color: #768cab;
-    font-size: 20px;
+    font-size: var(--tv-fonte-minima, 22px);
 }
 
 .visao-me-ger .meta-peso {
@@ -639,7 +639,7 @@
 .visao-me-ger .rodape {
     height: 31px;
     padding: 0 2px;
-    font-size: 14px;
+    font-size: var(--tv-fonte-minima, 22px);
     color: #6f78a3;
 }
 
