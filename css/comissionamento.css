@@ -943,7 +943,7 @@
     --com-tv-min: var(--tv-fonte-minima, 22px);
     --com-tv-card: var(--tv-fonte-card, 24px);
     --com-tv-secao: var(--tv-fonte-secao, 28px);
-    --com-tv-valor: var(--tv-fonte-valor-secundario, 26px);
+    --com-tv-valor: 26px;
     --com-tv-peso: var(--tv-peso-destaque, 700);
     --com-tv-peso-valor: var(--tv-peso-valor, 700);
 }
