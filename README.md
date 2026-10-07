@@ -671,12 +671,12 @@ A COM-V1 possui **duas Subvisões internas**, ambas dentro do mesmo fragmento e 
 Regras da visualização:
 
 - as duas Subvisões não exibem subtítulos internos nos painéis nem subtítulo no cabeçalho global da COM-V1;
-- na Tela 1, os três cartões de status acima do Consolidado exibem `COMS`, `CONC` e `PEND` do último mês disponível; o detalhe diagonal no canto superior esquerdo segue a cor da respectiva série;
+- na Tela 1, os três cartões de status acima do Consolidado exibem `COMS`, `CONC` e `PEND` do último mês disponível; o detalhe diagonal no canto superior esquerdo segue a cor da respectiva série; o nome do mês não é repetido dentro dos três cartões, pois o período é comum à faixa e já está representado pelos gráficos da Subvisão;
 - os cartões internos do painel lateral do Consolidado e dos *small multiples* usam superfície branca, borda e sombra discretas para se destacarem do fundo que os contém;
 - no consolidado, o mês anterior exibe somente `COMS`; o último mês empilha `COMS`, `CONC` e `PEND`;
 - no consolidado, `Projeção de Comissionamento = COMS + CONC + PEND` do mês atual e sua variação compara essa projeção contra o `COMS` do mês anterior;
 - no consolidado, `Faturado Comissionamento` usa linha em degrau (“malhete”), tracejada e sem marcadores;
-- no consolidado, a legenda do gráfico combinado é 30% maior que a legenda-base da visão, incluindo texto e amostras visuais;
+- no consolidado, a legenda do gráfico combinado segue a referência TV22 de **22 px / peso 700**; as amostras visuais foram redimensionadas para preservar equilíbrio com essa tipografia;
 - nos demais gráficos de barras, permanece a regra específica já documentada para cada composição;
 - `Faturado Comissionamento` é exibido como linha no consolidado, nos *small multiples* por parceira e nos históricos de 6 meses;
 - na Tela 1, o Consolidado e todos os *small multiples* utilizam os dois últimos meses existentes no JSON;
@@ -684,22 +684,26 @@ Regras da visualização:
 - nos *small multiples* por parceira, os cartões usam as mesmas regras do consolidado: Comissionado compara `COMS` atual versus `COMS` anterior; Projeção compara `COMS + CONC + PEND` atual versus `COMS` anterior; Faturado compara faturamento atual versus faturamento anterior;
 - nos *small multiples* da Tela 1, os rótulos quantitativos usam posicionamento dinâmico por elemento: quando o texto cabe, permanece centralizado dentro da barra; quando não cabe, o módulo tenta deslocá-lo para uma lateral ou para o topo, conforme o espaço real do `chartArea`; `CONC` prioriza a direita, `PEND` prioriza a esquerda e `COMS` escolhe automaticamente o lado mais adequado; o rótulo só é omitido quando nenhuma posição segura estiver disponível;
 - os três cartões de cada *small multiple* ficam na lateral direita do mini-gráfico, organizados verticalmente;
-- na Tela 1, a distribuição principal é de aproximadamente **44% para o Consolidado e 56% para Últimos 2 meses por parceira**; dentro de cada *small multiple*, a redução de largura é absorvida prioritariamente pelo gráfico combinado, enquanto a coluna de cartões permanece preservada e ligeiramente mais larga proporcionalmente; dentro de cada cartão, o valor financeiro e a variação percentual ficam alinhados horizontalmente na mesma linha, com a referência comparativa abaixo;
-- no painel lateral do Consolidado, os textos de referência (`vs. <mês>` / `vs. <mês> (COMS)`) recebem destaque tipográfico ampliado em **50%** em relação à configuração anterior;
+- na Tela 1, a distribuição principal é de aproximadamente **44% para o Consolidado e 56% para Últimos 2 meses por parceira**; dentro de cada *small multiple*, a redução de largura é absorvida prioritariamente pelo gráfico combinado, enquanto a coluna de cartões permanece preservada; após a migração TV22, cada cartão usa duas linhas visuais: rótulo + referência comparativa na primeira linha e valor financeiro + variação percentual na segunda, todos preservando o mínimo essencial de 22 px; o rótulo `Projeção de Comissionamento` é abreviado visualmente para `Projeção` apenas nesses cartões compactos; os títulos dos cartões da Tela 1 usam capitalização em frase, preservando siglas técnicas como `COMS`, `CONC` e `PEND`;
+- no painel lateral do Consolidado, os textos de referência (`vs. <mês>`) usam **22 px / peso 700**, alinhados ao piso tipográfico calibrado;
 - no painel lateral do Consolidado, cada cartão organiza verticalmente o valor principal e o percentual de variação: valor na primeira linha, chip percentual abaixo e referência comparativa na sequência;
-- nos cartões laterais dos *small multiples* da Tela 1, os percentuais de variação versus o mês anterior e os textos de referência (`vs. <mês>` / `vs. <mês> (COMS)`) recebem destaque tipográfico ampliado em **50%** em relação à configuração anterior; o espaçamento vertical desses cartões deve preservar a exibição integral da linha de referência, sem recorte inferior;
+- nos cartões laterais dos *small multiples* da Tela 1, os percentuais de variação versus o mês anterior e os textos de referência (`vs. <mês>`) usam **22 px / peso 700**; a composição em duas linhas visuais preserva a exibição integral dessas referências, sem recorte inferior; a indicação visual da Projeção também usa apenas `vs. <mês>`, embora a fórmula continue comparando a projeção atual com o `COMS` do mês anterior;
 - nos históricos de 6 meses, o painel lateral mantém somente Média de comissionamento e Média de faturamento, empilhadas verticalmente;
 - no comparativo por parceira, o mês anterior usa somente `COMS` e o mês atual representa a projeção com `COMS + CONC + PEND`;
 - nos históricos da Tela 2, as barras de `COMS` usam o mesmo gradiente, raio e proporções do Consolidado; a linha de Faturado usa o mesmo traçado em degrau, tracejado e sem marcadores; os rótulos das barras usam a mesma lógica dinâmica de posicionamento do Consolidado e os rótulos da linha alternam acima/abaixo conforme o espaço vertical disponível; as dimensões dos cards e dos gráficos permanecem inalteradas;
-- Média de comissionamento e Média de faturamento são calculadas sobre os seis meses exibidos no respectivo histórico e são os únicos indicadores mantidos no painel lateral dos históricos;
-- Tipografia dos gráficos da COM-V1 é centralizada em `TIPOGRAFIA_GRAFICOS`, dentro de `js/comissionamento.js`: rótulos quantitativos, rótulos do eixo X e anotações de variação desenhadas nos gráficos usam **14 px**; valores usam peso `800` e eixos/anotações auxiliares usam peso `700`. Não alterar `Chart.defaults`, para evitar efeito colateral nas demais visões do PG-V2;
+- Média de comissionamento e Média de faturamento são calculadas sobre os seis meses exibidos no respectivo histórico e são os únicos indicadores mantidos no painel lateral dos históricos; a repetição textual `últimos 6 meses` foi removida de dentro desses cartões, pois o período já aparece no título do histórico;
+- A COM-V1 foi migrada para a escala tipográfica calibrada do PG-V2: `TIPOGRAFIA_GRAFICOS`, dentro de `js/comissionamento.js`, consome `PAINEL_CONFIG.tipografia.grafico`; rótulos quantitativos e rótulos do eixo X usam **22 px / peso 700**. Não alterar `Chart.defaults`, para evitar efeito colateral nas demais visões do PG-V2;
 - os eixos Y não exibem régua ou rótulos;
-- valores das barras são mostrados diretamente no gráfico;
-- o consolidado também mostra os valores da linha de faturado; os rótulos da linha são posicionados dinamicamente acima ou abaixo do traçado conforme o espaço disponível, e os rótulos de barras habilitados seguem a mesma lógica de priorizar o interior da barra e usar posição externa quando necessário;
+- valores das barras são mostrados diretamente no gráfico; no Consolidado, `COMS`, `CONC` e `PEND` usam a mesma lógica dinâmica de posicionamento e contraste contextual (texto claro em barra escura, texto escuro em barra clara);
+- o consolidado também mostra os valores da linha de faturado; os rótulos da linha priorizam posição acima do traçado e migram para baixo quando necessário; valores nulos/zero da linha não recebem rótulo para evitar ruído visual; os rótulos de barras seguem a lógica de priorizar o interior da barra e usar posição externa quando necessário;
 - o painel lateral do consolidado não exibe Conversão e segue a ordem: Comissionado, Projeção de Comissionamento e Faturado;
 - variações mensais de COMS e faturado usam `(atual - anterior) / anterior × 100`; a projeção usa `(COMS + CONC + PEND do mês atual - COMS do mês anterior) / COMS do mês anterior × 100`;
 - meses são ordenados por `MES_ORDEM`;
 - parceiras são obtidas dinamicamente do JSON e não ficam hardcoded no módulo.
+
+### Migração tipográfica TV22
+
+Em 07/10/2026, a COM-V1 tornou-se a primeira visão produtiva explicitamente migrada para a referência tipográfica calibrada da TV. A composição utiliza **22 px / peso 700** como piso para informação essencial, **24 px** para títulos de cards/seções compactas e **32 px** para valores secundários. Onde a composição anterior não comportava essa escala, a informação foi reorganizada sem reduzir a fonte: referências comparativas dos cartões dos *small multiples* passaram para a mesma linha do rótulo, textos redundantes de período foram removidos e a coluna lateral dos históricos foi redistribuída internamente.
 
 A COM-V1 possui **2 Subvisões internas de 15 segundos cada**. A Tela 1 é exibida por 15 segundos, depois a Tela 2 por mais 15 segundos; somente após a segunda tela o módulo devolve o controle ao player. No modo `?dev=1`, `→` e `←` navegam entre essas duas Subvisões seguindo as regras globais do PG-V2.
 

@@ -514,7 +514,7 @@
     line-height: 1.08;
     font-weight: 800;
     color: #315074;
-    text-transform: uppercase;
+    text-transform: none;
 }
 
 .visao-comissionamento .com-small-kpi-valor-linha {
@@ -931,4 +931,294 @@
 
 .visao-comissionamento .com-subvisao-historico .com-kpi-nota {
     font-size: 11px;
+}
+
+/* ================================================================
+   MIGRAÇÃO TIPOGRÁFICA TV22 — COM-V1
+   Referência calibrada na TV real: mínimo essencial 22 px / peso 700.
+   A geometria abaixo adequa a composição sem reduzir a tipografia.
+   ================================================================ */
+
+.visao-comissionamento {
+    --com-tv-min: var(--tv-fonte-minima, 22px);
+    --com-tv-card: var(--tv-fonte-card, 24px);
+    --com-tv-secao: var(--tv-fonte-secao, 28px);
+    --com-tv-valor: var(--tv-fonte-valor-secundario, 32px);
+    --com-tv-peso: var(--tv-peso-destaque, 700);
+    --com-tv-peso-valor: var(--tv-peso-valor, 700);
+}
+
+/* Tela 1 — status do mês atual */
+.visao-comissionamento .com-tela1-coluna-consolidado {
+    grid-template-rows: 108px minmax(0, 1fr);
+}
+
+.visao-comissionamento .com-status-card {
+    padding: 14px 12px 12px 18px;
+}
+
+.visao-comissionamento .com-status-label {
+    padding-left: 20px;
+    font-size: var(--com-tv-min);
+    line-height: 1;
+    font-weight: var(--com-tv-peso);
+}
+
+.visao-comissionamento .com-status-valor {
+    margin-top: 10px;
+    font-size: var(--com-tv-valor);
+    line-height: 1;
+    font-weight: var(--com-tv-peso-valor);
+}
+
+/* O mês é comum aos três cartões e deixou de ser repetido em cada item. */
+.visao-comissionamento .com-status-mes {
+    display: none;
+}
+
+/* Títulos e legendas */
+.visao-comissionamento .painel-titulo,
+.visao-comissionamento .com-card-historico .painel-titulo,
+.visao-comissionamento .com-subvisao-historico .com-card-historico .painel-titulo {
+    font-size: var(--com-tv-card);
+    line-height: 1.08;
+    font-weight: var(--com-tv-peso);
+}
+
+.visao-comissionamento .com-legenda,
+.visao-comissionamento .com-card-consolidado .com-legenda,
+.visao-comissionamento .com-legenda-parceiras,
+.visao-comissionamento .com-subvisao-historico .com-legenda {
+    font-size: var(--com-tv-min);
+    line-height: 1;
+    font-weight: var(--com-tv-peso);
+}
+
+.visao-comissionamento .com-card-consolidado .com-legenda,
+.visao-comissionamento .com-legenda-consolidado {
+    gap: 13px;
+}
+
+.visao-comissionamento .com-legenda-parceiras {
+    gap: 10px;
+}
+
+.visao-comissionamento .com-legenda-item,
+.visao-comissionamento .com-legenda-parceiras .com-legenda-item {
+    gap: 6px;
+}
+
+.visao-comissionamento .com-legenda-barra,
+.visao-comissionamento .com-card-consolidado .com-legenda-barra,
+.visao-comissionamento .com-legenda-parceiras .com-legenda-barra {
+    width: 24px;
+    height: 16px;
+    border-radius: 4px;
+}
+
+.visao-comissionamento .com-legenda-linha,
+.visao-comissionamento .com-card-consolidado .com-legenda-linha,
+.visao-comissionamento .com-legenda-parceiras .com-legenda-linha {
+    width: 34px;
+    height: 16px;
+}
+
+/* Consolidado — amplia a coluna lateral para comportar 22/32 px. */
+.visao-comissionamento .com-card-consolidado {
+    grid-template-columns: minmax(0, 1fr) 286px;
+    gap: 14px;
+}
+
+.visao-comissionamento .com-card-consolidado .com-card-header {
+    gap: 8px;
+    margin-bottom: 6px;
+}
+
+.visao-comissionamento .com-variacao-panel {
+    padding: 10px;
+    gap: 8px;
+}
+
+.visao-comissionamento .com-variacao-bloco {
+    padding: 12px 12px 11px;
+}
+
+.visao-comissionamento .com-variacao-label {
+    font-size: var(--com-tv-min);
+    line-height: 1.08;
+    font-weight: var(--com-tv-peso);
+}
+
+.visao-comissionamento .com-resumo-atual {
+    font-size: var(--com-tv-valor);
+    line-height: 1;
+    font-weight: var(--com-tv-peso-valor);
+}
+
+.visao-comissionamento .com-resumo-variacao-chip {
+    min-height: 38px;
+    padding: 6px 10px;
+}
+
+.visao-comissionamento .com-resumo-variacao-chip strong {
+    font-size: var(--com-tv-min);
+    font-weight: var(--com-tv-peso);
+}
+
+.visao-comissionamento .com-resumo-seta {
+    font-size: 24px;
+    font-weight: var(--com-tv-peso);
+}
+
+.visao-comissionamento .com-variacao-detalhe {
+    margin-top: 7px;
+    font-size: var(--com-tv-min);
+    line-height: 1.08;
+    font-weight: var(--com-tv-peso);
+}
+
+/* Small multiples — título, cartões e comparações no piso calibrado. */
+.visao-comissionamento .com-card-header-parceiras {
+    margin-bottom: 10px;
+}
+
+.visao-comissionamento .com-small-multiples {
+    gap: 9px;
+}
+
+.visao-comissionamento .com-small-multiple {
+    grid-template-columns: minmax(0, 1.50fr) minmax(350px, 1fr);
+    grid-template-rows: 30px minmax(0, 1fr);
+    column-gap: 8px;
+    row-gap: 3px;
+    padding: 6px 9px 6px;
+}
+
+.visao-comissionamento .com-small-multiple-titulo {
+    padding: 0 2px;
+    font-size: var(--com-tv-min);
+    line-height: 1.08;
+    font-weight: var(--com-tv-peso);
+}
+
+.visao-comissionamento .com-small-multiple-kpis {
+    gap: 5px;
+}
+
+.visao-comissionamento .com-small-multiple-kpis .com-small-kpi {
+    padding: 6px 8px;
+    overflow: visible;
+}
+
+.visao-comissionamento .com-small-multiple-kpis .com-small-kpi-label,
+.visao-comissionamento .com-small-kpi-label {
+    min-height: 0;
+    font-size: var(--com-tv-min);
+    line-height: 1.02;
+    font-weight: var(--com-tv-peso);
+}
+
+.visao-comissionamento .com-small-multiple-kpis .com-small-kpi-valor-linha,
+.visao-comissionamento .com-small-kpi-valor-linha {
+    margin-top: 3px;
+    gap: 8px;
+}
+
+.visao-comissionamento .com-small-multiple-kpis .com-small-kpi-valor,
+.visao-comissionamento .com-small-kpi-valor {
+    font-size: var(--com-tv-valor);
+    font-weight: var(--com-tv-peso-valor);
+}
+
+.visao-comissionamento .com-small-multiple-kpis .com-small-kpi-chip {
+    min-height: 34px;
+    padding: 4px 7px;
+    gap: 3px;
+}
+
+.visao-comissionamento .com-small-multiple-kpis .com-small-kpi-chip strong {
+    font-size: var(--com-tv-min);
+    font-weight: var(--com-tv-peso);
+}
+
+.visao-comissionamento .com-small-multiple-kpis .com-small-kpi-seta {
+    font-size: 24px;
+    font-weight: var(--com-tv-peso);
+}
+
+.visao-comissionamento .com-small-multiple-kpis .com-small-kpi-detalhe {
+    margin-top: 4px;
+    font-size: var(--com-tv-min);
+    line-height: 1;
+    font-weight: var(--com-tv-peso);
+    white-space: nowrap;
+    overflow: visible;
+    text-overflow: clip;
+}
+
+/* Tela 2 — mantém os três cards na mesma dimensão externa; só redistribui o interior. */
+.visao-comissionamento .com-subvisao-historico .com-card-historico {
+    grid-template-columns: minmax(0, 1fr) 286px;
+    gap: 14px;
+}
+
+.visao-comissionamento .com-kpi-grid-medias {
+    gap: 8px;
+}
+
+.visao-comissionamento .com-kpi-grid-medias .com-kpi-item {
+    padding: 10px 11px;
+}
+
+.visao-comissionamento .com-kpi-grid-medias .com-kpi-label,
+.visao-comissionamento .com-subvisao-historico .com-kpi-grid-medias .com-kpi-label {
+    font-size: var(--com-tv-min);
+    line-height: 1.08;
+    font-weight: var(--com-tv-peso);
+}
+
+.visao-comissionamento .com-kpi-grid-medias .com-kpi-media,
+.visao-comissionamento .com-subvisao-historico .com-kpi-grid-medias .com-kpi-media {
+    margin-top: 8px;
+    font-size: var(--com-tv-valor);
+    line-height: 1;
+    font-weight: var(--com-tv-peso-valor);
+}
+
+/* A referência “últimos 6 meses” já está no título do histórico. */
+.visao-comissionamento .com-kpi-nota {
+    display: none;
+}
+
+/* TV22 — composição compacta dos cartões dos small multiples:
+   duas linhas visuais (rótulo + referência / valor + variação). */
+.visao-comissionamento .com-small-multiple-kpis .com-small-kpi {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: 24px 34px;
+    align-content: center;
+    column-gap: 8px;
+    row-gap: 2px;
+}
+
+.visao-comissionamento .com-small-multiple-kpis .com-small-kpi-label {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: center;
+    white-space: nowrap;
+}
+
+.visao-comissionamento .com-small-multiple-kpis .com-small-kpi-detalhe {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: center;
+    margin-top: 0;
+    text-align: right;
+}
+
+.visao-comissionamento .com-small-multiple-kpis .com-small-kpi-valor-linha {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    margin-top: 0;
+    min-width: 0;
 }

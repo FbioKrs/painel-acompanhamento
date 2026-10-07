@@ -27,11 +27,12 @@ const CORES = {
     neutroBg: "#eef2f5"
 };
 
+const TIPOGRAFIA_GLOBAL_GRAFICOS = window.PAINEL_CONFIG?.tipografia?.grafico || {};
 const TIPOGRAFIA_GRAFICOS = Object.freeze({
-    rotuloEixo: 14,
-    rotuloValor: 14,
-    pesoEixo: "700",
-    pesoValor: "800"
+    rotuloEixo: Number(TIPOGRAFIA_GLOBAL_GRAFICOS.eixo) || 22,
+    rotuloValor: Number(TIPOGRAFIA_GLOBAL_GRAFICOS.valor) || 22,
+    pesoEixo: String(TIPOGRAFIA_GLOBAL_GRAFICOS.peso || 700),
+    pesoValor: String(TIPOGRAFIA_GLOBAL_GRAFICOS.peso || 700)
 });
 
 let dadosGlobais = [];
@@ -340,7 +341,7 @@ function criarGradienteVertical(ctx, chartArea, corTopo, corBase) {
     return gradiente;
 }
 
-function opcoesBaseGrafico({ paddingTop = 22, paddingBottom = 2 } = {}) {
+function opcoesBaseGrafico({ paddingTop = 44, paddingBottom = 4 } = {}) {
     return {
         responsive: true,
         maintainAspectRatio: false,
@@ -348,9 +349,9 @@ function opcoesBaseGrafico({ paddingTop = 22, paddingBottom = 2 } = {}) {
         layout: {
             padding: {
                 top: paddingTop,
-                right: 8,
+                right: 14,
                 bottom: paddingBottom,
-                left: 0
+                left: 6
             }
         },
         interaction: {
@@ -375,7 +376,7 @@ function opcoesBaseGrafico({ paddingTop = 22, paddingBottom = 2 } = {}) {
                     autoSkip: false,
                     maxRotation: 0,
                     minRotation: 0,
-                    padding: 7
+                    padding: 10
                 }
             },
             y: {
@@ -536,18 +537,11 @@ function calcularPosicaoRotuloLinha(contexto) {
     }
 
     const alturaRotulo = TIPOGRAFIA_GRAFICOS.rotuloValor + 10;
-    const margem = 7;
+    const margem = 12;
     const y = numero(elemento.y);
     const espacoAcima = y - area.top;
     const espacoAbaixo = area.bottom - y;
-    const preferencia = contexto.dataIndex % 2 === 0 ? "top" : "bottom";
 
-    if (preferencia === "top" && espacoAcima >= alturaRotulo + margem) {
-        return { align: "top", offset: margem };
-    }
-    if (preferencia === "bottom" && espacoAbaixo >= alturaRotulo + margem) {
-        return { align: "bottom", offset: margem };
-    }
     if (espacoAcima >= alturaRotulo + margem) {
         return { align: "top", offset: margem };
     }
@@ -560,7 +554,9 @@ function calcularPosicaoRotuloLinha(contexto) {
 
 function criarDatalabelLinha({ offsetPadrao = 8 } = {}) {
     return {
-        display: pluginDataLabelsDisponivel,
+        display(contexto) {
+            return pluginDataLabelsDisponivel && numero(contexto?.dataset?.data?.[contexto.dataIndex]) > 0;
+        },
         color: CORES.linha,
         backgroundColor: "rgba(255,255,255,0.92)",
         borderRadius: 4,
@@ -588,7 +584,7 @@ function criarGraficoResumo(meses, valores) {
     if (!canvas || typeof Chart === "undefined") return;
 
     const indiceAtual = valores.length - 1;
-    const opcoes = opcoesBaseGrafico({ paddingTop: 38 });
+    const opcoes = opcoesBaseGrafico({ paddingTop: 62 });
     opcoes.scales.x.stacked = true;
     opcoes.scales.y.stacked = true;
 
@@ -627,7 +623,12 @@ function criarGraficoResumo(meses, valores) {
                     barPercentage: 0.64,
                     categoryPercentage: 0.72,
                     order: 1,
-                    datalabels: { display: false }
+                    datalabels: criarDatalabelBarra({
+                        corInterna: CORES.texto,
+                        corExterna: CORES.texto,
+                        preferenciaExterna: "right",
+                        permitirTopo: false
+                    })
                 },
                 {
                     type: "bar",
@@ -640,7 +641,12 @@ function criarGraficoResumo(meses, valores) {
                     barPercentage: 0.64,
                     categoryPercentage: 0.72,
                     order: 1,
-                    datalabels: { display: false }
+                    datalabels: criarDatalabelBarra({
+                        corInterna: "#5c470d",
+                        corExterna: "#5c470d",
+                        preferenciaExterna: "left",
+                        permitirTopo: true
+                    })
                 },
                 {
                     type: "line",
@@ -671,7 +677,7 @@ function criarGraficoSmallMultiple(canvas, meses, valores, limiteY) {
     if (!canvas || typeof Chart === "undefined") return;
 
     const indiceAtual = valores.length - 1;
-    const opcoes = opcoesBaseGrafico({ paddingTop: 34, paddingBottom: 0 });
+    const opcoes = opcoesBaseGrafico({ paddingTop: 52, paddingBottom: 2 });
     opcoes.scales.x.stacked = true;
     opcoes.scales.y.stacked = true;
     opcoes.scales.y.grace = "8%";
@@ -812,7 +818,7 @@ function criarCardsSmallMultiple(meses, valores) {
     const variacaoFaturado = variacaoPercentual(dadosAtual.faturado, dadosAnterior.faturado);
 
     const referenciaAnterior = `vs. ${formatarMesCompleto(mesAnterior?.mes || "")}`;
-    const referenciaProjecao = `vs. ${formatarMesCompleto(mesAnterior?.mes || "")} (COMS)`;
+    const referenciaProjecao = `vs. ${formatarMesCompleto(mesAnterior?.mes || "")}`;
 
     container.appendChild(
         criarCartaoSmallMultiple(
@@ -825,7 +831,7 @@ function criarCardsSmallMultiple(meses, valores) {
 
     container.appendChild(
         criarCartaoSmallMultiple(
-            "Projeção de Comissionamento",
+            "Projeção",
             dadosAtual.projecao,
             variacaoProjecao,
             referenciaProjecao,
@@ -885,7 +891,7 @@ function criarGraficoHistorico(canvasId, meses, valores) {
     const canvas = document.getElementById(canvasId);
     if (!canvas || typeof Chart === "undefined") return;
 
-    const opcoes = opcoesBaseGrafico({ paddingTop: 28 });
+    const opcoes = opcoesBaseGrafico({ paddingTop: 52 });
 
     const grafico = new Chart(canvas, {
         type: "bar",
@@ -950,20 +956,24 @@ function atualizarCabecalho() {
 
 function atualizarStatusAtual(mesAtual, dadosAtual) {
     const referencias = [
-        ["valorStatusComs", "mesStatusComs", dadosAtual.coms],
-        ["valorStatusConc", "mesStatusConc", dadosAtual.conc],
-        ["valorStatusPend", "mesStatusPend", dadosAtual.pend]
+        ["valorStatusComs", dadosAtual.coms],
+        ["valorStatusConc", dadosAtual.conc],
+        ["valorStatusPend", dadosAtual.pend]
     ];
 
-    const rotuloMes = formatarMesCompleto(mesAtual?.mes || "");
-
-    referencias.forEach(([valorId, mesId, valor]) => {
+    referencias.forEach(([valorId, valor]) => {
         const valorElemento = document.getElementById(valorId);
-        const mesElemento = document.getElementById(mesId);
-
         if (valorElemento) valorElemento.textContent = formatarFinanceiro(valor);
-        if (mesElemento) mesElemento.textContent = rotuloMes || "--";
     });
+
+    const faixaStatus = document.querySelector(".visao-comissionamento .com-status-atual");
+    if (faixaStatus) {
+        const rotuloMes = formatarMesCompleto(mesAtual?.mes || "");
+        faixaStatus.setAttribute(
+            "aria-label",
+            rotuloMes ? `Status financeiros de ${rotuloMes}` : "Status financeiros do mês atual"
+        );
+    }
 }
 
 function atualizarResumo(meses, valores) {
@@ -973,7 +983,7 @@ function atualizarResumo(meses, valores) {
     const variacaoFaturado = variacaoPercentual(dadosAtual.faturado, dadosAnterior.faturado);
     const variacaoProjecao = variacaoPercentual(dadosAtual.projecao, dadosAnterior.coms);
     const referenciaAnterior = `vs. ${formatarMesCompleto(meses[0].mes)}`;
-    const referenciaProjecao = `vs. ${formatarMesCompleto(meses[0].mes)} (COMS)`;
+    const referenciaProjecao = `vs. ${formatarMesCompleto(meses[0].mes)}`;
 
     atualizarVariacaoResumo(
         "valorComsAtualResumo",
