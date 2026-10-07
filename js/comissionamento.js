@@ -263,11 +263,10 @@ function aplicarTendenciaBloco(elemento, valor) {
     elemento.classList.add(classificarTendencia(valor));
 }
 
-function atualizarVariacaoResumo(idAtual, idValor, idIcone, idDetalhe, atualTexto, valor, detalhe) {
+function atualizarVariacaoResumo(idAtual, idValor, idIcone, atualTexto, valor) {
     const elementoAtual = document.getElementById(idAtual);
     const elementoValor = document.getElementById(idValor);
     const elementoIcone = document.getElementById(idIcone);
-    const elementoDetalhe = document.getElementById(idDetalhe);
     const bloco = elementoValor?.closest(".com-variacao-bloco");
     const tendencia = classificarTendencia(valor);
     const estilo = obterEstiloTendencia(tendencia);
@@ -278,7 +277,6 @@ function atualizarVariacaoResumo(idAtual, idValor, idIcone, idDetalhe, atualText
     }
 
     if (elementoIcone) elementoIcone.textContent = estilo.seta;
-    if (elementoDetalhe) elementoDetalhe.textContent = detalhe;
     aplicarTendenciaBloco(bloco, valor);
 }
 
@@ -771,7 +769,7 @@ function criarGraficoSmallMultiple(canvas, meses, valores, limiteY) {
     graficos.push(grafico);
 }
 
-function criarCartaoSmallMultiple(rotulo, valorAtual, variacao, detalhe, classeExtra = "") {
+function criarCartaoSmallMultiple(rotulo, valorAtual, variacao, classeExtra = "") {
     const tendencia = classificarTendencia(variacao);
     const estilo = obterEstiloTendencia(tendencia);
 
@@ -796,13 +794,8 @@ function criarCartaoSmallMultiple(rotulo, valorAtual, variacao, detalhe, classeE
     chip.className = "com-small-kpi-chip";
     chip.innerHTML = `<span class="com-small-kpi-seta">${estilo.seta}</span><strong>${formatarPercentualVariacao(variacao)}</strong>`;
 
-    const detalheElemento = document.createElement("div");
-    detalheElemento.className = "com-small-kpi-detalhe";
-    detalheElemento.textContent = detalhe;
-
     valorLinha.appendChild(valor);
     valorLinha.appendChild(chip);
-    cartao.appendChild(detalheElemento);
     cartao.appendChild(valorLinha);
     wrapper.appendChild(label);
     wrapper.appendChild(cartao);
@@ -821,15 +814,11 @@ function criarCardsSmallMultiple(meses, valores) {
     const variacaoProjecao = variacaoPercentual(dadosAtual.projecao, dadosAnterior.coms);
     const variacaoFaturado = variacaoPercentual(dadosAtual.faturado, dadosAnterior.faturado);
 
-    const referenciaAnterior = `vs. ${formatarMesCompleto(mesAnterior?.mes || "")}`;
-    const referenciaProjecao = `vs. ${formatarMesCompleto(mesAnterior?.mes || "")}`;
-
     container.appendChild(
         criarCartaoSmallMultiple(
             "Comissionado",
             dadosAtual.coms,
-            variacaoComs,
-            referenciaAnterior
+            variacaoComs
         )
     );
 
@@ -838,7 +827,6 @@ function criarCardsSmallMultiple(meses, valores) {
             "Projeção",
             dadosAtual.projecao,
             variacaoProjecao,
-            referenciaProjecao,
             "com-small-kpi-projecao"
         )
     );
@@ -847,8 +835,7 @@ function criarCardsSmallMultiple(meses, valores) {
         criarCartaoSmallMultiple(
             "Faturado",
             dadosAtual.faturado,
-            variacaoFaturado,
-            referenciaAnterior
+            variacaoFaturado
         )
     );
 
@@ -986,37 +973,28 @@ function atualizarResumo(meses, valores) {
     const variacaoComs = variacaoPercentual(dadosAtual.coms, dadosAnterior.coms);
     const variacaoFaturado = variacaoPercentual(dadosAtual.faturado, dadosAnterior.faturado);
     const variacaoProjecao = variacaoPercentual(dadosAtual.projecao, dadosAnterior.coms);
-    const referenciaAnterior = `vs. ${formatarMesCompleto(meses[0].mes)}`;
-    const referenciaProjecao = `vs. ${formatarMesCompleto(meses[0].mes)}`;
-
     atualizarVariacaoResumo(
         "valorComsAtualResumo",
         "variacaoComs",
         "iconeVarComs",
-        "detalheVarComs",
         formatarFinanceiro(dadosAtual.coms),
-        variacaoComs,
-        referenciaAnterior
+        variacaoComs
     );
 
     atualizarVariacaoResumo(
         "valorFaturadoAtualResumo",
         "variacaoFaturado",
         "iconeVarFaturado",
-        "detalheVarFaturado",
         formatarFinanceiro(dadosAtual.faturado),
-        variacaoFaturado,
-        referenciaAnterior
+        variacaoFaturado
     );
 
     atualizarVariacaoResumo(
         "valorProjecaoAtualResumo",
         "variacaoProjecao",
         "iconeVarProjecao",
-        "detalheVarProjecao",
         formatarFinanceiro(dadosAtual.projecao),
-        variacaoProjecao,
-        referenciaProjecao
+        variacaoProjecao
     );
 }
 

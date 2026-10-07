@@ -1283,3 +1283,45 @@
     grid-row: 2;
     margin-top: 0;
 }
+
+
+/* Tela 1 — remoção das referências “vs. mês anterior”.
+   Reorganiza os cartões para destacar apenas valor e variação. */
+.visao-comissionamento .com-variacao-detalhe,
+.visao-comissionamento .com-small-kpi-detalhe {
+    display: none !important;
+}
+
+.visao-comissionamento .com-variacao-item {
+    gap: 4px;
+}
+
+.visao-comissionamento .com-variacao-bloco {
+    display: flex;
+    align-items: center;
+}
+
+.visao-comissionamento .com-card-consolidado .com-resumo-atual-linha {
+    width: 100%;
+    min-height: 100%;
+    justify-content: center;
+    gap: 8px;
+}
+
+.visao-comissionamento .com-small-kpi-wrapper {
+    gap: 4px;
+}
+
+.visao-comissionamento .com-small-kpi-wrapper > .com-small-kpi {
+    display: flex;
+    align-items: center;
+    justify-content: stretch;
+    min-height: 0;
+}
+
+.visao-comissionamento .com-small-kpi-wrapper .com-small-kpi-valor-linha {
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}

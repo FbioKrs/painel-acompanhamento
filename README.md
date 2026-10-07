@@ -953,3 +953,5 @@ O player **não possui tela inicial de carregamento**. O `index.html` inicia com
 - Na Tela 1 da COM-V1, os títulos dos cartões de KPI (Comissionado, Projeção/Projeção de comissionamento e Faturado) ficam fora do respectivo cartão, acima e alinhados à esquerda, tanto no Consolidado quanto nos small multiples.
 - Os títulos dos quadrantes “COMS x Faturado — Consolidado” e “Últimos 2 meses por parceira” permanecem no cabeçalho dos respectivos quadrantes.
 - Os cartões superiores COMS/CONC/PEND usam tipografia de 24 px nos rótulos e 30 px nos valores, com hierarquia superior aos demais cartões da Tela 1.
+
+- Na Tela 1 da COM-V1, os elementos de referência textual “vs. mês anterior” foram removidos dos cartões do consolidado e dos small multiples; o espaço foi redistribuído para valor e percentual.
