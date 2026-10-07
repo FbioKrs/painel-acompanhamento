@@ -952,3 +952,5 @@ O player **não possui tela inicial de carregamento**. O `index.html` inicia com
 
 - Na Tela 1 da COM-V1, os títulos das áreas gráficas “COMS x Faturado — Consolidado” e “Últimos 2 meses por parceira” ficam fora dos cards, acima e alinhados à esquerda.
 - Na Tela 1 da COM-V1, os cartões superiores de status (COMS, CONC e PEND) usam tipografia um pouco maior do que os demais cartões da visão.
+
+- Correção adicional: na Tela 1 da COM-V1, os títulos das áreas passam a ficar visualmente separados do card, como elemento independente acima do bloco branco.
