@@ -14,6 +14,22 @@ window.PAINEL_CONFIG = {
         altura: 1080
     },
 
+    tipografia: {
+        textoMinimo: 22,
+        pesoPreferido: 700,
+        kpi: {
+            padrao: 48,
+            destaque: 52
+        },
+        grafico: {
+            eixo: 22,
+            legenda: 22,
+            valor: 22,
+            anotacao: 22,
+            peso: 700
+        }
+    },
+
     atualizacao: {
         intervaloPadraoMs: 60000
     },
@@ -74,7 +90,7 @@ window.PAINEL_CONFIG = {
             ativo: false,
             nome: "Calibração TV",
             titulo: "Calibração TV",
-            subtitulo: "Teste de legibilidade e tipografia",
+            subtitulo: "Referência tipográfica calibrada",
             fragmento: "./visoes/calibracao-tv.html",
             css: "./css/calibracao-tv.css",
             modulo: "./js/calibracao-tv.js"

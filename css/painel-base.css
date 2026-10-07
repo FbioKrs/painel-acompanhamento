@@ -26,6 +26,23 @@
         rgba(24, 38, 52, 0.08);
 
     --altura-topo: 96px;
+
+    /* Escala tipográfica calibrada para a TV de 55".
+       Estes tokens passam a ser a referência global do PG-V2.
+       As visões produtivas existentes serão adequadas progressivamente. */
+    --tv-fonte-minima: 22px;
+    --tv-fonte-rotulo: 22px;
+    --tv-fonte-auxiliar: 22px;
+    --tv-fonte-card: 24px;
+    --tv-fonte-secao: 28px;
+    --tv-fonte-titulo: 36px;
+    --tv-fonte-valor-secundario: 32px;
+    --tv-fonte-kpi: 48px;
+    --tv-fonte-kpi-destaque: 52px;
+
+    --tv-peso-normal: 600;
+    --tv-peso-destaque: 700;
+    --tv-peso-valor: 700;
 }
 
 

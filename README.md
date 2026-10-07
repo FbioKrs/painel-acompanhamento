@@ -323,7 +323,7 @@ Regras:
 
 ## 5.2. Modo técnico de calibração da TV
 
-A visão **CAL-TV** é uma ferramenta técnica para definir a escala tipográfica do painel na TV real. Ela permanece registrada com `ativo: false` e **não participa da rotação normal**.
+A visão **CAL-TV** é a referência técnica da escala tipográfica calibrada do painel na TV real. Ela permanece registrada com `ativo: false` e **não participa da rotação normal**.
 
 Para abri-la isoladamente, usar:
 
@@ -337,17 +337,19 @@ Exemplo:
 https://<host>/painel-acompanhamento/?cal=1
 ```
 
-Quando `?cal=1` está presente, o player seleciona exclusivamente a visão `CAL-TV`, mesmo com `ativo: false`, e suspende o timeout de segurança dessa visão para que a tela permaneça disponível durante todo o teste físico. Esse comportamento é exclusivo do modo de calibração; sem o parâmetro, o ciclo normal continua usando apenas as visões ativas.
+Quando `?cal=1` está presente, o player seleciona exclusivamente a visão `CAL-TV`, mesmo com `ativo: false`, e suspende o timeout de segurança dessa visão para que a tela permaneça disponível durante toda a inspeção. Esse comportamento é exclusivo do modo de calibração; sem o parâmetro, o ciclo normal continua usando apenas as visões ativas.
 
-A CAL-TV deve ser usada na distância habitual de observação da Samsung de 55" para identificar:
+A calibração presencial realizada na Samsung de 55" definiu como referências do PG-V2:
 
-- menor tamanho de texto confortável;
-- menor tamanho de rótulo de gráfico confortável;
-- peso tipográfico preferido;
-- contraste mínimo aceitável;
-- tamanho adequado para títulos e KPIs.
+- **22 px** como menor tamanho confortável para informação HTML essencial;
+- **22 px** como menor tamanho confortável para rótulos, eixos e legendas de Chart.js;
+- **700** como peso preferido para informação relevante;
+- o contraste de `--texto-secundario` como aceitável;
+- **48 px** como KPI padrão;
+- **52 px** como limite recomendado para KPI de destaque;
+- **60 px** deve ser evitado por ter sido considerado excessivo no teste físico.
 
-O resultado da calibração deve orientar uma futura escala tipográfica global do PG-V2; a criação da CAL-TV, por si só, **não altera a tipografia das visões produtivas**.
+A CAL-TV deixa de ser apenas uma tela de experimento e passa a funcionar como **referência visual calibrada**. Os tokens globais correspondentes foram registrados no PG-V2, porém as visões produtivas existentes serão adequadas progressivamente; a criação dos tokens, por si só, não deve alterar a apresentação vigente de uma visão até que ela seja explicitamente migrada.
 
 ---
 
@@ -388,6 +390,36 @@ Paleta estrutural:
 - Bordas: `#e2e7eb`
 
 Cabeçalho de referência: **96 px**.
+
+### 7.1. Escala tipográfica calibrada para TV
+
+A calibração presencial da Samsung de 55" definiu a seguinte escala como referência global do PG-V2:
+
+| Papel visual | Referência |
+|---|---:|
+| Informação essencial / rótulos | **22 px** |
+| Título de card | **24 px** |
+| Título de seção | **28 px** |
+| Título principal | **36 px** |
+| Valor secundário | **32 px** |
+| Valor de card | **40 px** |
+| KPI padrão | **48 px** |
+| KPI de destaque | **52 px** |
+| Peso preferido | **700** |
+
+Regras:
+
+- informação necessária para compreender a tela deve usar **22 px ou mais**;
+- se o conteúdo não couber mantendo 22 px, preferir abreviar, reorganizar, reduzir quantidade de elementos ou dividir a visão em Subvisões; não reduzir automaticamente a fonte para resolver densidade;
+- `60 px` não deve ser usado como KPI padrão, pois foi considerado excessivo na calibração física;
+- o texto secundário `#74808a` permanece aprovado para conteúdo complementar;
+- `--texto-suave` deve ser reservado para conteúdo não essencial;
+- em Chart.js, rótulos quantitativos, eixos e legendas devem ter como referência **22 px / peso 700**;
+- rótulos internos de barras devem usar **alto contraste em relação ao fundo da própria barra**: texto claro em barra escura e texto escuro em barra clara;
+- quando o rótulo não couber dentro da barra, priorizar reposicionamento externo antes de reduzir o tamanho da fonte;
+- não utilizar `Chart.defaults` para impor tipografia global em runtime, pois o painel é SPA e isso pode afetar visões carregadas posteriormente. Usar `PAINEL_CONFIG.tipografia` como fonte de referência e aplicar explicitamente nas opções de cada gráfico.
+
+Tokens CSS de referência ficam em `css/painel-base.css` com prefixo `--tv-`. A referência equivalente para JavaScript/Chart.js fica em `PAINEL_CONFIG.tipografia`. As visões existentes podem permanecer temporariamente com valores históricos até sua migração explícita para este padrão.
 
 ---
 
@@ -688,7 +720,7 @@ O JSON é carregado uma única vez na entrada da COM-V1, usando `no-store` e cac
 
 ---
 
-## 11.1. CAL-TV — Calibração tipográfica
+## 11.1. CAL-TV — Referência tipográfica calibrada
 
 ### Arquivos
 
@@ -698,16 +730,16 @@ css/calibracao-tv.css
 js/calibracao-tv.js
 ```
 
-A **CAL-TV** é uma visão técnica estática, sem fonte de dados externa e fora da rotação normal do painel. Seu objetivo é permitir calibração presencial da legibilidade antes de padronizar fontes nas visões produtivas.
+A **CAL-TV** é uma visão técnica estática, sem fonte de dados externa e fora da rotação normal do painel. Após a calibração física, ela passou a funcionar como **referência visual oficial da escala tipográfica do PG-V2**.
 
-A tela contém quatro grupos de teste:
+A tela apresenta quatro grupos de referência:
 
-1. escala HTML de **14, 16, 18, 20, 22, 24 e 28 px** usando exemplos reais do painel;
-2. comparação em **18 px** entre pesos `400`, `600`, `700` e `800`, além dos níveis de contraste principal, secundário e suave;
-3. amostras de títulos em **28, 32 e 36 px** e valores KPI em **40, 48, 56 e 60 px**;
-4. gráfico Chart.js real com rótulos em canvas de **14, 16, 18 e 20 px**.
+1. escala oficial com **22 px** para informação essencial, **24 px** para título de card, **28 px** para título de seção e **36 px** para título principal;
+2. peso **700** como padrão preferido e comparação dos contrastes principal, secundário e suave;
+3. hierarquia de valores com **32 px** para valor secundário, **40 px** para valor de card, **48 px** para KPI padrão e **52 px** como destaque máximo recomendado;
+4. gráfico Chart.js real com rótulos, eixo e texto em **22 px / peso 700**, demonstrando contraste adaptado à cor da barra: texto branco em barras escuras e texto escuro em barras claras.
 
-A visão deve permanecer integralmente dentro de 1920×1080, sem scroll, e não deve alterar tokens ou regras tipográficas globais enquanto a calibração não tiver sido concluída na TV física.
+A CAL-TV deve permanecer integralmente dentro de 1920×1080, sem scroll. Ela documenta o padrão calibrado, mas não deve forçar alterações automáticas nas visões produtivas já existentes; cada visão deve ser migrada explicitamente e validada em 1920×1080.
 
 Acesso técnico:
 

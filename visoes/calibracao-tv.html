@@ -1,14 +1,19 @@
 <main class="pagina visao-cal-tv">
     <div class="cal-conteudo">
-        <section class="cal-orientacao" aria-label="Orientação para calibração">
+        <section class="cal-orientacao" aria-label="Referência tipográfica calibrada">
             <div class="cal-orientacao-principal">
                 <span class="cal-badge">CAL-TV</span>
-                <strong>Faça a leitura na distância habitual da TV.</strong>
-                <span>Escolha o menor tamanho que você lê sem esforço e sem precisar se aproximar.</span>
+                <div>
+                    <strong>Referência tipográfica calibrada para a TV de 55&quot;</strong>
+                    <span>Resultado do teste presencial de legibilidade — referência para o PG-V2.</span>
+                </div>
             </div>
-            <div class="cal-orientacao-meta">
-                <span>Base lógica</span>
-                <strong>1920 × 1080</strong>
+
+            <div class="cal-resultados" aria-label="Resultados da calibração">
+                <span><strong>22 px</strong> HTML</span>
+                <span><strong>22 px</strong> Chart.js</span>
+                <span><strong>700</strong> peso</span>
+                <span><strong>Aprovado</strong> contraste secundário</span>
             </div>
         </section>
 
@@ -16,43 +21,66 @@
             <section class="cal-card cal-card-escala">
                 <header class="cal-card-header">
                     <div>
-                        <h2>Escala de leitura</h2>
-                        <p>Mesmo conteúdo em tamanhos diferentes</p>
+                        <h2>Escala oficial de leitura</h2>
+                        <p>22 px passa a ser a referência mínima para informação essencial.</p>
                     </div>
-                    <span class="cal-chip">HTML</span>
+                    <span class="cal-chip cal-chip-aprovado">PADRÃO</span>
                 </header>
 
-                <div class="cal-lista-fontes" aria-label="Amostras de tamanhos de fonte">
-                    <div class="cal-linha-fonte cal-f14"><span class="cal-medida">14 px</span><span>R$ 2,58 mi · +18,4% · vs. Agosto (COMS)</span></div>
-                    <div class="cal-linha-fonte cal-f16"><span class="cal-medida">16 px</span><span>R$ 2,58 mi · +18,4% · vs. Agosto (COMS)</span></div>
-                    <div class="cal-linha-fonte cal-f18"><span class="cal-medida">18 px</span><span>R$ 2,58 mi · +18,4% · vs. Agosto (COMS)</span></div>
-                    <div class="cal-linha-fonte cal-f20"><span class="cal-medida">20 px</span><span>R$ 2,58 mi · +18,4% · vs. Agosto (COMS)</span></div>
-                    <div class="cal-linha-fonte cal-f22"><span class="cal-medida">22 px</span><span>R$ 2,58 mi · +18,4% · vs. Agosto (COMS)</span></div>
-                    <div class="cal-linha-fonte cal-f24"><span class="cal-medida">24 px</span><span>R$ 2,58 mi · +18,4% · vs. Agosto (COMS)</span></div>
-                    <div class="cal-linha-fonte cal-f28"><span class="cal-medida">28 px</span><span>R$ 2,58 mi · +18,4% · vs. Agosto</span></div>
+                <div class="cal-escala-oficial" aria-label="Escala tipográfica oficial">
+                    <div class="cal-linha-oficial">
+                        <span class="cal-medida">22 px</span>
+                        <strong class="cal-exemplo-22">R$ 2,58 mi · +18,4% · vs. Agosto (COMS)</strong>
+                        <span class="cal-uso">Texto essencial / rótulo</span>
+                    </div>
+                    <div class="cal-linha-oficial">
+                        <span class="cal-medida">24 px</span>
+                        <strong class="cal-exemplo-24">Comissionamento atual</strong>
+                        <span class="cal-uso">Título de card</span>
+                    </div>
+                    <div class="cal-linha-oficial">
+                        <span class="cal-medida">28 px</span>
+                        <strong class="cal-exemplo-28">Apuração dos Indicadores</strong>
+                        <span class="cal-uso">Título de seção</span>
+                    </div>
+                    <div class="cal-linha-oficial">
+                        <span class="cal-medida">36 px</span>
+                        <strong class="cal-exemplo-36">Comissionamento</strong>
+                        <span class="cal-uso">Título principal</span>
+                    </div>
                 </div>
             </section>
 
-            <section class="cal-card cal-card-pesos">
+            <section class="cal-card cal-card-peso">
                 <header class="cal-card-header">
                     <div>
                         <h2>Peso e contraste</h2>
-                        <p>Todas as amostras abaixo usam 18 px</p>
+                        <p>O peso 700 foi o mais confortável; o cinza secundário foi considerado aceitável.</p>
                     </div>
-                    <span class="cal-chip">18 px</span>
+                    <span class="cal-chip">22 px</span>
                 </header>
 
-                <div class="cal-pesos-grid">
-                    <div class="cal-amostra-peso cal-p400"><span>400</span><strong>Texto de leitura</strong></div>
-                    <div class="cal-amostra-peso cal-p600"><span>600</span><strong>Texto de leitura</strong></div>
-                    <div class="cal-amostra-peso cal-p700"><span>700</span><strong>Texto de leitura</strong></div>
-                    <div class="cal-amostra-peso cal-p800"><span>800</span><strong>Texto de leitura</strong></div>
+                <div class="cal-peso-destaque">
+                    <span class="cal-peso-numero">700</span>
+                    <div>
+                        <strong>Texto de leitura aprovado</strong>
+                        <p>Usar como peso padrão para rótulos, eixos, legendas e informações relevantes.</p>
+                    </div>
                 </div>
 
-                <div class="cal-contrastes">
-                    <div class="cal-contraste cal-contraste-principal"><span>Principal</span><strong>Indicador dentro da meta</strong></div>
-                    <div class="cal-contraste cal-contraste-secundario"><span>Secundário</span><strong>Indicador dentro da meta</strong></div>
-                    <div class="cal-contraste cal-contraste-suave"><span>Suave</span><strong>Indicador dentro da meta</strong></div>
+                <div class="cal-contrastes-oficiais">
+                    <div class="cal-contraste-oficial cal-contraste-principal">
+                        <span>Principal</span>
+                        <strong>Indicador dentro da meta</strong>
+                    </div>
+                    <div class="cal-contraste-oficial cal-contraste-secundario">
+                        <span>Secundário</span>
+                        <strong>Informação complementar legível</strong>
+                    </div>
+                    <div class="cal-contraste-oficial cal-contraste-suave">
+                        <span>Suave</span>
+                        <strong>Reservar para conteúdo não essencial</strong>
+                    </div>
                 </div>
             </section>
 
@@ -60,23 +88,44 @@
                 <header class="cal-card-header">
                     <div>
                         <h2>Hierarquia de informação</h2>
-                        <p>Títulos, valores e percentuais usados no painel</p>
+                        <p>48 px é o KPI padrão; 52 px fica reservado para destaque excepcional.</p>
                     </div>
-                    <span class="cal-chip">TV</span>
+                    <span class="cal-chip cal-chip-aprovado">CALIBRADO</span>
                 </header>
 
                 <div class="cal-hierarquia-grid">
-                    <div class="cal-titulos-amostra">
-                        <div class="cal-titulo-amostra cal-t28"><span>28 px</span><strong>Título de seção</strong></div>
-                        <div class="cal-titulo-amostra cal-t32"><span>32 px</span><strong>Título de visão</strong></div>
-                        <div class="cal-titulo-amostra cal-t36"><span>36 px</span><strong>Título principal</strong></div>
+                    <div class="cal-hierarquia-textos">
+                        <div class="cal-hierarquia-item">
+                            <span>24 px</span>
+                            <strong class="cal-h24">Título de card</strong>
+                        </div>
+                        <div class="cal-hierarquia-item">
+                            <span>28 px</span>
+                            <strong class="cal-h28">Título de seção</strong>
+                        </div>
+                        <div class="cal-hierarquia-item">
+                            <span>36 px</span>
+                            <strong class="cal-h36">Título principal</strong>
+                        </div>
                     </div>
 
                     <div class="cal-kpis-amostra">
-                        <div class="cal-kpi-amostra"><span>40 px</span><strong class="cal-k40">2,58</strong></div>
-                        <div class="cal-kpi-amostra"><span>48 px</span><strong class="cal-k48">2,58</strong></div>
-                        <div class="cal-kpi-amostra"><span>56 px</span><strong class="cal-k56">2,58</strong></div>
-                        <div class="cal-kpi-amostra"><span>60 px</span><strong class="cal-k60">2,58</strong></div>
+                        <div class="cal-kpi-amostra">
+                            <span>32 px · valor secundário</span>
+                            <strong class="cal-k32">2,58</strong>
+                        </div>
+                        <div class="cal-kpi-amostra">
+                            <span>40 px · valor de card</span>
+                            <strong class="cal-k40">2,58</strong>
+                        </div>
+                        <div class="cal-kpi-amostra cal-kpi-padrao">
+                            <span>48 px · KPI padrão</span>
+                            <strong class="cal-k48">2,58</strong>
+                        </div>
+                        <div class="cal-kpi-amostra cal-kpi-destaque">
+                            <span>52 px · destaque máximo</span>
+                            <strong class="cal-k52">2,58</strong>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -84,22 +133,22 @@
             <section class="cal-card cal-card-chart">
                 <header class="cal-card-header">
                     <div>
-                        <h2>Chart.js — rótulos em canvas</h2>
-                        <p>Compare a leitura do gráfico com o texto HTML</p>
+                        <h2>Chart.js — contraste calibrado</h2>
+                        <p>Rótulos em 22 px / peso 700, com cor definida pelo fundo da barra.</p>
                     </div>
-                    <span class="cal-chip">Canvas</span>
+                    <span class="cal-chip">CANVAS</span>
                 </header>
 
                 <div class="cal-chart-wrap">
-                    <canvas id="calGraficoTipografia" aria-label="Gráfico para calibração de rótulos"></canvas>
+                    <canvas id="calGraficoTipografia" aria-label="Gráfico de referência para contraste de rótulos"></canvas>
                 </div>
             </section>
         </div>
 
         <footer class="cal-rodape">
-            <span><strong>Anote 1:</strong> menor texto confortável</span>
-            <span><strong>Anote 2:</strong> menor rótulo de gráfico confortável</span>
-            <span><strong>Anote 3:</strong> peso e contraste preferidos</span>
+            <span><strong>PG-V2:</strong> informação essencial ≥ 22 px</span>
+            <span><strong>Chart.js:</strong> rótulos/eixos/legendas em 22 px e peso 700</span>
+            <span><strong>KPI:</strong> 48 px padrão · 52 px máximo recomendado</span>
         </footer>
     </div>
 </main>

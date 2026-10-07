@@ -1,11 +1,13 @@
 /* ================================================================
-   CAL-TV — Calibração tipográfica para TV
+   CAL-TV — Referência tipográfica calibrada para TV
    Visão técnica, fora da rotação normal.
    ================================================================ */
 
 .visao-cal-tv {
     --cal-azul: #1959b5;
-    --cal-azul-2: #3f8fe7;
+    --cal-azul-claro: #88bdf3;
+    --cal-cinza-barra: #9db4c9;
+    --cal-amarelo: #f1b24b;
     --cal-fundo-card: #ffffff;
     --cal-fundo-suave: #f5f8fb;
     --cal-borda: #dce4ea;
@@ -19,18 +21,18 @@
     height: 100%;
     min-height: 0;
     display: grid;
-    grid-template-rows: 72px minmax(0, 1fr) 44px;
+    grid-template-rows: 86px minmax(0, 1fr) 52px;
     gap: 14px;
     overflow: hidden;
 }
 
 .visao-cal-tv .cal-orientacao {
     min-width: 0;
-    display: flex;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
-    justify-content: space-between;
-    gap: 28px;
-    padding: 12px 20px;
+    gap: 24px;
+    padding: 12px 18px;
     border: 1px solid #d7e2ec;
     border-radius: 16px;
     background: linear-gradient(90deg, #ffffff 0%, #f4f9ff 100%);
@@ -42,19 +44,28 @@
     display: flex;
     align-items: center;
     gap: 16px;
-    color: var(--cal-texto);
-    font-size: 18px;
+}
+
+.visao-cal-tv .cal-orientacao-principal > div {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
 .visao-cal-tv .cal-orientacao-principal strong {
-    font-size: 20px;
-    font-weight: 800;
+    color: var(--cal-texto);
+    font-size: 24px;
+    line-height: 1.05;
+    font-weight: 700;
     white-space: nowrap;
 }
 
-.visao-cal-tv .cal-orientacao-principal > span:last-child {
+.visao-cal-tv .cal-orientacao-principal div > span {
     color: var(--cal-secundario);
-    font-weight: 600;
+    font-size: 18px;
+    line-height: 1.15;
+    font-weight: 700;
 }
 
 .visao-cal-tv .cal-badge,
@@ -64,45 +75,53 @@
     justify-content: center;
     flex-shrink: 0;
     border-radius: 999px;
-    font-weight: 800;
+    font-weight: 700;
     letter-spacing: 0.5px;
 }
 
 .visao-cal-tv .cal-badge {
-    min-width: 92px;
-    padding: 9px 14px;
+    min-width: 94px;
+    padding: 10px 14px;
     background: #e4efff;
     color: #174f9f;
-    font-size: 16px;
+    font-size: 18px;
 }
 
-.visao-cal-tv .cal-orientacao-meta {
-    flex-shrink: 0;
+.visao-cal-tv .cal-resultados {
+    display: grid;
+    grid-template-columns: repeat(4, auto);
+    align-items: center;
+    gap: 8px;
+}
+
+.visao-cal-tv .cal-resultados span {
     display: flex;
-    align-items: baseline;
-    gap: 12px;
-    padding-left: 22px;
-    border-left: 1px solid #d8e1e8;
-}
-
-.visao-cal-tv .cal-orientacao-meta span {
-    font-size: 14px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 120px;
+    min-height: 54px;
+    padding: 6px 10px;
+    border: 1px solid #dce6ee;
+    border-radius: 12px;
+    background: #ffffff;
     color: var(--cal-secundario);
+    font-size: 14px;
+    line-height: 1.05;
+    font-weight: 700;
+    text-align: center;
 }
 
-.visao-cal-tv .cal-orientacao-meta strong {
-    font-size: 24px;
-    font-weight: 800;
+.visao-cal-tv .cal-resultados strong {
     color: var(--cal-texto);
+    font-size: 20px;
+    font-weight: 700;
 }
 
 .visao-cal-tv .cal-grid {
     min-height: 0;
     display: grid;
-    grid-template-columns: 1.15fr 0.85fr;
+    grid-template-columns: 1.08fr 0.92fr;
     grid-template-rows: repeat(2, minmax(0, 1fr));
     gap: 14px;
 }
@@ -131,128 +150,154 @@
 
 .visao-cal-tv .cal-card-header h2 {
     margin: 0;
-    font-size: 24px;
-    line-height: 1.05;
-    font-weight: 800;
     color: var(--cal-texto);
+    font-size: 28px;
+    line-height: 1.05;
+    font-weight: 700;
 }
 
 .visao-cal-tv .cal-card-header p {
-    margin: 5px 0 0;
-    font-size: 15px;
-    line-height: 1.2;
-    font-weight: 600;
+    margin: 6px 0 0;
     color: var(--cal-secundario);
+    font-size: 18px;
+    line-height: 1.2;
+    font-weight: 700;
 }
 
 .visao-cal-tv .cal-chip {
     padding: 7px 12px;
     background: #edf3f8;
     color: #5f6f7d;
-    font-size: 14px;
+    font-size: 16px;
 }
 
-.visao-cal-tv .cal-lista-fontes {
+.visao-cal-tv .cal-chip-aprovado {
+    background: #e7f4e9;
+    color: #356d3d;
+}
+
+.visao-cal-tv .cal-escala-oficial {
     flex: 1;
     min-height: 0;
     display: grid;
-    grid-template-rows: repeat(7, minmax(0, 1fr));
-    border-top: 1px solid #edf1f4;
+    grid-template-rows: repeat(4, minmax(0, 1fr));
+    gap: 8px;
 }
 
-.visao-cal-tv .cal-linha-fonte {
+.visao-cal-tv .cal-linha-oficial {
     min-width: 0;
     display: grid;
-    grid-template-columns: 78px minmax(0, 1fr);
+    grid-template-columns: 82px minmax(0, 1fr) 185px;
     align-items: center;
     gap: 14px;
-    border-bottom: 1px solid #edf1f4;
-    color: var(--cal-texto);
-    font-weight: 700;
-    white-space: nowrap;
-}
-
-.visao-cal-tv .cal-linha-fonte:last-child {
-    border-bottom: 0;
+    padding: 8px 12px;
+    border: 1px solid #e7ecef;
+    border-radius: 12px;
+    background: var(--cal-fundo-suave);
 }
 
 .visao-cal-tv .cal-medida {
-    font-size: 14px;
-    font-weight: 800;
     color: var(--cal-secundario);
-}
-
-.visao-cal-tv .cal-f14 > span:last-child { font-size: 14px; }
-.visao-cal-tv .cal-f16 > span:last-child { font-size: 16px; }
-.visao-cal-tv .cal-f18 > span:last-child { font-size: 18px; }
-.visao-cal-tv .cal-f20 > span:last-child { font-size: 20px; }
-.visao-cal-tv .cal-f22 > span:last-child { font-size: 22px; }
-.visao-cal-tv .cal-f24 > span:last-child { font-size: 24px; }
-.visao-cal-tv .cal-f28 > span:last-child { font-size: 28px; }
-
-.visao-cal-tv .cal-pesos-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
-}
-
-.visao-cal-tv .cal-amostra-peso {
-    min-width: 0;
-    min-height: 58px;
-    display: grid;
-    grid-template-columns: 52px minmax(0, 1fr);
-    align-items: center;
-    gap: 10px;
-    padding: 9px 12px;
-    border: 1px solid #e5eaee;
-    border-radius: 12px;
-    background: var(--cal-fundo-suave);
     font-size: 18px;
+    font-weight: 700;
+}
+
+.visao-cal-tv .cal-linha-oficial strong {
+    min-width: 0;
     color: var(--cal-texto);
+    font-weight: 700;
+    line-height: 1.05;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.visao-cal-tv .cal-amostra-peso span {
-    font-size: 14px;
-    font-weight: 800;
+.visao-cal-tv .cal-exemplo-22 { font-size: 22px; }
+.visao-cal-tv .cal-exemplo-24 { font-size: 24px; }
+.visao-cal-tv .cal-exemplo-28 { font-size: 28px; }
+.visao-cal-tv .cal-exemplo-36 { font-size: 36px; }
+
+.visao-cal-tv .cal-uso {
     color: var(--cal-secundario);
+    font-size: 16px;
+    font-weight: 700;
+    text-align: right;
 }
 
-.visao-cal-tv .cal-p400 strong { font-weight: 400; }
-.visao-cal-tv .cal-p600 strong { font-weight: 600; }
-.visao-cal-tv .cal-p700 strong { font-weight: 700; }
-.visao-cal-tv .cal-p800 strong { font-weight: 800; }
+.visao-cal-tv .cal-peso-destaque {
+    display: grid;
+    grid-template-columns: 92px minmax(0, 1fr);
+    align-items: center;
+    gap: 18px;
+    padding: 14px 16px;
+    border: 1px solid #dce6ee;
+    border-radius: 14px;
+    background: linear-gradient(90deg, #f3f8ff 0%, #ffffff 100%);
+}
 
-.visao-cal-tv .cal-contrastes {
+.visao-cal-tv .cal-peso-numero {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 82px;
+    height: 62px;
+    border-radius: 12px;
+    background: var(--cal-azul);
+    color: #ffffff;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.visao-cal-tv .cal-peso-destaque strong {
+    display: block;
+    color: var(--cal-texto);
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.visao-cal-tv .cal-peso-destaque p {
+    margin: 4px 0 0;
+    color: var(--cal-secundario);
+    font-size: 16px;
+    line-height: 1.2;
+    font-weight: 700;
+}
+
+.visao-cal-tv .cal-contrastes-oficiais {
     flex: 1;
     min-height: 0;
     display: grid;
     grid-template-rows: repeat(3, minmax(0, 1fr));
     gap: 8px;
-    margin-top: 12px;
+    margin-top: 10px;
 }
 
-.visao-cal-tv .cal-contraste {
+.visao-cal-tv .cal-contraste-oficial {
     min-width: 0;
     display: grid;
-    grid-template-columns: 92px minmax(0, 1fr);
+    grid-template-columns: 122px minmax(0, 1fr);
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     padding: 8px 12px;
     border-radius: 11px;
     background: #fafcfd;
     border: 1px solid #edf1f4;
-    font-size: 18px;
 }
 
-.visao-cal-tv .cal-contraste span {
-    font-size: 13px;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.4px;
+.visao-cal-tv .cal-contraste-oficial span {
     color: var(--cal-secundario);
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
 }
 
-.visao-cal-tv .cal-contraste strong { font-weight: 700; }
+.visao-cal-tv .cal-contraste-oficial strong {
+    font-size: 22px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
 .visao-cal-tv .cal-contraste-principal strong { color: var(--cal-texto); }
 .visao-cal-tv .cal-contraste-secundario strong { color: var(--cal-secundario); }
 .visao-cal-tv .cal-contraste-suave strong { color: var(--cal-suave); }
@@ -261,45 +306,45 @@
     flex: 1;
     min-height: 0;
     display: grid;
-    grid-template-columns: 1.18fr 0.82fr;
-    gap: 18px;
+    grid-template-columns: 0.92fr 1.08fr;
+    gap: 12px;
 }
 
-.visao-cal-tv .cal-titulos-amostra {
+.visao-cal-tv .cal-hierarquia-textos {
     min-height: 0;
     display: grid;
     grid-template-rows: repeat(3, minmax(0, 1fr));
     gap: 8px;
 }
 
-.visao-cal-tv .cal-titulo-amostra {
+.visao-cal-tv .cal-hierarquia-item {
     min-width: 0;
     display: grid;
-    grid-template-columns: 58px minmax(0, 1fr);
+    grid-template-columns: 68px minmax(0, 1fr);
     align-items: center;
     gap: 10px;
-    padding: 8px 12px;
+    padding: 8px 10px;
     border-radius: 12px;
-    background: var(--cal-fundo-suave);
     border: 1px solid #e7ecef;
-    color: var(--cal-texto);
+    background: var(--cal-fundo-suave);
 }
 
-.visao-cal-tv .cal-titulo-amostra span {
-    font-size: 13px;
-    font-weight: 800;
+.visao-cal-tv .cal-hierarquia-item span {
     color: var(--cal-secundario);
+    font-size: 16px;
+    font-weight: 700;
 }
 
-.visao-cal-tv .cal-titulo-amostra strong {
-    font-weight: 800;
+.visao-cal-tv .cal-hierarquia-item strong {
+    color: var(--cal-texto);
+    font-weight: 700;
     line-height: 1;
     white-space: nowrap;
 }
 
-.visao-cal-tv .cal-t28 strong { font-size: 28px; }
-.visao-cal-tv .cal-t32 strong { font-size: 32px; }
-.visao-cal-tv .cal-t36 strong { font-size: 36px; }
+.visao-cal-tv .cal-h24 { font-size: 24px; }
+.visao-cal-tv .cal-h28 { font-size: 28px; }
+.visao-cal-tv .cal-h36 { font-size: 36px; }
 
 .visao-cal-tv .cal-kpis-amostra {
     min-height: 0;
@@ -323,22 +368,32 @@
 }
 
 .visao-cal-tv .cal-kpi-amostra span {
-    font-size: 13px;
-    font-weight: 800;
     color: var(--cal-secundario);
+    font-size: 15px;
+    font-weight: 700;
+    text-align: center;
 }
 
 .visao-cal-tv .cal-kpi-amostra strong {
     color: var(--cal-azul);
-    font-weight: 800;
+    font-weight: 700;
     line-height: 0.95;
     font-variant-numeric: tabular-nums;
 }
 
+.visao-cal-tv .cal-k32 { font-size: 32px; }
 .visao-cal-tv .cal-k40 { font-size: 40px; }
 .visao-cal-tv .cal-k48 { font-size: 48px; }
-.visao-cal-tv .cal-k56 { font-size: 56px; }
-.visao-cal-tv .cal-k60 { font-size: 60px; }
+.visao-cal-tv .cal-k52 { font-size: 52px; }
+
+.visao-cal-tv .cal-kpi-padrao {
+    border-color: #9fc4ef;
+    box-shadow: inset 0 0 0 2px rgba(25, 89, 181, 0.08);
+}
+
+.visao-cal-tv .cal-kpi-destaque {
+    border-color: #c8d9ea;
+}
 
 .visao-cal-tv .cal-card-chart {
     padding-bottom: 10px;
@@ -368,8 +423,8 @@
     background: #ffffff;
     box-shadow: 0 4px 14px rgba(24, 38, 52, 0.05);
     color: var(--cal-secundario);
-    font-size: 15px;
-    font-weight: 600;
+    font-size: 16px;
+    font-weight: 700;
 }
 
 .visao-cal-tv .cal-rodape span {
@@ -381,5 +436,5 @@
 
 .visao-cal-tv .cal-rodape strong {
     color: var(--cal-texto);
-    font-weight: 800;
+    font-weight: 700;
 }

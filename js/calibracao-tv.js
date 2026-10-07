@@ -1,5 +1,5 @@
 /* ================================================================
-   CAL-TV — Calibração tipográfica para TV
+   CAL-TV — Referência tipográfica calibrada para TV
    Visão técnica estática, acessada com ?cal=1.
    ================================================================ */
 
@@ -22,24 +22,21 @@ function criarGraficoTipografia() {
 
     registrarDatalabels();
 
-    const tamanhos = [14, 16, 18, 20];
-    const ctx = canvas.getContext("2d");
-    const gradiente = ctx.createLinearGradient(0, 0, 0, 300);
-    gradiente.addColorStop(0, "#1959b5");
-    gradiente.addColorStop(1, "#3f8fe7");
+    const coresBarras = ["#1959b5", "#88bdf3", "#9db4c9", "#f1b24b"];
+    const coresRotulos = ["#ffffff", "#27333d", "#27333d", "#27333d"];
 
     graficoTipografia = new window.Chart(canvas, {
         type: "bar",
         data: {
-            labels: tamanhos.map(tamanho => `${tamanho} px`),
+            labels: ["Azul escuro", "Azul claro", "Cinza claro", "Amarelo"],
             datasets: [
                 {
                     label: "Rótulo financeiro",
-                    data: [68, 76, 84, 92],
-                    backgroundColor: gradiente,
+                    data: [82, 76, 70, 64],
+                    backgroundColor: coresBarras,
                     borderRadius: 8,
                     borderSkipped: false,
-                    barPercentage: 0.68,
+                    barPercentage: 0.66,
                     categoryPercentage: 0.78
                 }
             ]
@@ -68,14 +65,14 @@ function criarGraficoTipografia() {
                     display: true,
                     anchor: "center",
                     align: "center",
-                    color: "#ffffff",
+                    color(context) {
+                        return coresRotulos[context.dataIndex] || "#27333d";
+                    },
                     formatter: () => "R$ 2,58 mi",
-                    font(context) {
-                        return {
-                            family: '"Segoe UI", Arial, Helvetica, sans-serif',
-                            size: tamanhos[context.dataIndex],
-                            weight: "800"
-                        };
+                    font: {
+                        family: '"Segoe UI", Arial, Helvetica, sans-serif',
+                        size: 22,
+                        weight: "700"
                     }
                 }
             },
@@ -91,10 +88,12 @@ function criarGraficoTipografia() {
                         color: "#4c5b67",
                         font: {
                             family: '"Segoe UI", Arial, Helvetica, sans-serif',
-                            size: 16,
+                            size: 22,
                             weight: "700"
                         },
-                        padding: 8
+                        padding: 8,
+                        maxRotation: 0,
+                        minRotation: 0
                     }
                 },
                 y: {
@@ -110,14 +109,14 @@ function criarGraficoTipografia() {
 function prepararCabecalho() {
     window.PAINEL_BASE?.definirCabecalho({
         titulo: "Calibração TV",
-        subtitulo: "Teste de legibilidade e tipografia",
+        subtitulo: "Referência tipográfica calibrada",
         contexto: "CAL-TV"
     });
 
     const contador = document.getElementById("contador");
     const barra = document.getElementById("barraTempo");
 
-    if (contador) contador.textContent = "MODO DE CALIBRAÇÃO";
+    if (contador) contador.textContent = "PADRÃO CALIBRADO";
     if (barra) barra.style.width = "100%";
 }
 
