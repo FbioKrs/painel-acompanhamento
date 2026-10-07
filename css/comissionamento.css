@@ -59,6 +59,31 @@
     grid-template-columns: 11fr 14fr;
 }
 
+.visao-comissionamento .com-area-bloco {
+    min-width: 0;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.visao-comissionamento .com-area-titulo-externo {
+    color: #203247;
+    font-size: var(--com-tv-card);
+    line-height: 1.1;
+    font-weight: var(--com-tv-peso);
+    padding-left: 2px;
+}
+
+.visao-comissionamento .com-area-bloco > .com-card {
+    flex: 1 1 auto;
+}
+
+.visao-comissionamento .com-card-header-sem-titulo {
+    justify-content: flex-end;
+    gap: 12px;
+}
+
 .visao-comissionamento .com-tela1-coluna-consolidado {
     min-width: 0;
     min-height: 0;
@@ -959,14 +984,14 @@
 
 .visao-comissionamento .com-status-label {
     padding-left: 20px;
-    font-size: var(--com-tv-min);
+    font-size: 24px;
     line-height: 1;
     font-weight: var(--com-tv-peso);
 }
 
 .visao-comissionamento .com-status-valor {
     margin-top: 10px;
-    font-size: var(--com-tv-valor);
+    font-size: 30px;
     line-height: 1;
     font-weight: var(--com-tv-peso-valor);
 }

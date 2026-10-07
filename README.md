@@ -948,3 +948,7 @@ Nunca reconstruir arquivos vigentes com base apenas em versões históricas do c
 ### Inicialização visual do PG-V2
 
 O player **não possui tela inicial de carregamento**. O `index.html` inicia com o shell visualmente oculto e carrega imediatamente a primeira visão configurada. Assim que o fragmento HTML e o CSS dessa visão estão disponíveis, o shell é revelado diretamente com a primeira visão. A transição de fade é aplicada apenas entre visões já em execução, nunca antes da primeira visão. Não usar textos como “Painel de Acompanhamento”, “Carregando visão...” ou “Preparando apresentação...” como estado visual inicial.
+
+
+- Na Tela 1 da COM-V1, os títulos das áreas gráficas “COMS x Faturado — Consolidado” e “Últimos 2 meses por parceira” ficam fora dos cards, acima e alinhados à esquerda.
+- Na Tela 1 da COM-V1, os cartões superiores de status (COMS, CONC e PEND) usam tipografia um pouco maior do que os demais cartões da visão.
