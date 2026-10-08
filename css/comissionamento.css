@@ -1560,7 +1560,7 @@
 }
 
 .visao-comissionamento .com-small-kpi-wrapper .com-small-kpi-valor {
-    font-size: var(--com-tv-valor);
+    font-size: var(--com-tv-min);
     line-height: 1;
     font-weight: 500;
     color: #17345f;

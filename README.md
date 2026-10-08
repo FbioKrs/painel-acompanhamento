@@ -971,3 +971,5 @@ O player **não possui tela inicial de carregamento**. O `index.html` inicia com
 - COM-V1 Tela 1: reforçado o alinhamento à esquerda dos títulos na área analítica dos small multiples, ocupando toda a largura disponível para evitar centralização visual.
 
 - COM-V1 Tela 1: nos small multiples, os percentuais da área analítica passam a ocupar uma coluna fixa, mantendo alinhamento vertical entre Comissionamento, Proj. Comissionamento e Faturado.
+
+- COM-V1 Tela 1: os valores monetários da área lateral dos small multiples usam 22 px, mantendo percentuais em 22 px e o alinhamento em colunas.
