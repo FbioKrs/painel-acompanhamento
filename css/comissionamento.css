@@ -1473,3 +1473,121 @@
 .visao-comissionamento .com-small-kpi-wrapper > .com-small-kpi {
     padding-left: 0;
 }
+
+
+/* COM-V1 Tela 1 — composição final aprovada para os small multiples.
+   Gráfico e área analítica são separados por divisor vertical.
+   Títulos permanecem em destaque; valor e percentual usam peso normal. */
+.visao-comissionamento .com-small-multiple {
+    grid-template-columns: minmax(0, 1.62fr) minmax(360px, 0.98fr);
+    column-gap: 18px;
+}
+
+.visao-comissionamento .com-small-multiple-kpis {
+    position: relative;
+    padding-left: 18px;
+    gap: 8px;
+}
+
+.visao-comissionamento .com-small-multiple-kpis::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: #cbd5dd;
+}
+
+.visao-comissionamento .com-small-kpi-wrapper {
+    gap: 6px;
+}
+
+.visao-comissionamento .com-small-kpi-wrapper > .com-small-kpi-label {
+    padding-left: 0;
+    text-align: left;
+    font-weight: var(--com-tv-peso);
+}
+
+.visao-comissionamento .com-small-kpi-wrapper > .com-small-kpi {
+    display: block;
+    min-height: auto;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    overflow: visible;
+}
+
+.visao-comissionamento .com-small-kpi-wrapper .com-small-kpi-valor-linha {
+    width: 100%;
+    margin-top: 0;
+    padding-left: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 22px;
+}
+
+.visao-comissionamento .com-small-kpi-grupo {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+}
+
+.visao-comissionamento .com-small-kpi-grupo-valor {
+    color: #1a3760;
+}
+
+.visao-comissionamento .com-small-kpi-grupo-variacao {
+    justify-content: flex-start;
+}
+
+.visao-comissionamento .com-small-kpi-icone {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    font-size: 17px;
+    line-height: 1;
+    font-weight: 600;
+}
+
+.visao-comissionamento .com-small-kpi-icone-valor {
+    color: #2a4d79;
+}
+
+.visao-comissionamento .com-small-kpi-wrapper .com-small-kpi-valor {
+    font-size: var(--com-tv-valor);
+    line-height: 1;
+    font-weight: 500;
+    color: #17345f;
+}
+
+.visao-comissionamento .com-small-kpi-variacao-texto {
+    font-size: var(--com-tv-min);
+    line-height: 1;
+    font-weight: 500;
+}
+
+.visao-comissionamento .com-small-kpi.positivo .com-small-kpi-icone-variacao,
+.visao-comissionamento .com-small-kpi.positivo .com-small-kpi-variacao-texto {
+    color: #12a05c;
+}
+
+.visao-comissionamento .com-small-kpi.negativo .com-small-kpi-icone-variacao,
+.visao-comissionamento .com-small-kpi.negativo .com-small-kpi-variacao-texto {
+    color: #ef4444;
+}
+
+.visao-comissionamento .com-small-kpi.neutro .com-small-kpi-icone-variacao,
+.visao-comissionamento .com-small-kpi.neutro .com-small-kpi-variacao-texto {
+    color: #667085;
+}
+
+.visao-comissionamento .com-small-kpi-wrapper .com-small-kpi-chip,
+.visao-comissionamento .com-small-kpi-wrapper .com-small-kpi-seta {
+    display: none !important;
+}

@@ -965,3 +965,5 @@ O player **não possui tela inicial de carregamento**. O `index.html` inicia com
 - COM-V1 Tela 1: na área lateral dos small multiples, os cards de Comissionamento/Proj. Comissionamento/Faturado foram simplificados, sem frames, com títulos alinhados à esquerda e linha de valor/percentual logo abaixo com ícones precedendo as informações.
 
 - COM-V1 Tela 1: na área lateral dos small multiples, a linha com valor e percentual foi alinhada à esquerda e levemente recuada em relação ao título, seguindo o padrão “Título / >Valor Percentual”.
+
+- COM-V1 Tela 1: nos small multiples, gráfico e área analítica passam a ser separados por divisor vertical; títulos ficam à esquerda e a linha recuada de valor/percentual usa peso normal (sem negrito), mantendo os ícones de apoio.
