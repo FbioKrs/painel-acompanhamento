@@ -1591,3 +1591,26 @@
 .visao-comissionamento .com-small-kpi-wrapper .com-small-kpi-seta {
     display: none !important;
 }
+
+/* Correção de alinhamento — títulos da área analítica dos small multiples.
+   Força ocupação de toda a largura e alinhamento real à esquerda. */
+.visao-comissionamento .com-small-multiple-kpis {
+    justify-items: stretch;
+    text-align: left;
+}
+
+.visao-comissionamento .com-small-kpi-wrapper {
+    width: 100%;
+    align-items: stretch;
+    text-align: left;
+}
+
+.visao-comissionamento .com-small-kpi-wrapper > .com-small-kpi-label {
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding-left: 0;
+    align-self: stretch;
+    justify-self: stretch;
+    text-align: left !important;
+}
