@@ -786,16 +786,38 @@ function criarCartaoSmallMultiple(rotulo, valorAtual, variacao, classeExtra = ""
     const valorLinha = document.createElement("div");
     valorLinha.className = "com-small-kpi-valor-linha";
 
+    const grupoValor = document.createElement("span");
+    grupoValor.className = "com-small-kpi-grupo com-small-kpi-grupo-valor";
+
+    const iconeValor = document.createElement("span");
+    iconeValor.className = "com-small-kpi-icone com-small-kpi-icone-valor";
+    iconeValor.setAttribute("aria-hidden", "true");
+    iconeValor.textContent = "▸";
+
     const valor = document.createElement("strong");
     valor.className = "com-small-kpi-valor";
     valor.textContent = formatarFinanceiro(valorAtual);
 
-    const chip = document.createElement("span");
-    chip.className = "com-small-kpi-chip";
-    chip.innerHTML = `<span class="com-small-kpi-seta">${estilo.seta}</span><strong>${formatarPercentualVariacao(variacao)}</strong>`;
+    grupoValor.appendChild(iconeValor);
+    grupoValor.appendChild(valor);
 
-    valorLinha.appendChild(valor);
-    valorLinha.appendChild(chip);
+    const grupoVariacao = document.createElement("span");
+    grupoVariacao.className = "com-small-kpi-grupo com-small-kpi-grupo-variacao";
+
+    const iconeVariacao = document.createElement("span");
+    iconeVariacao.className = "com-small-kpi-icone com-small-kpi-icone-variacao";
+    iconeVariacao.setAttribute("aria-hidden", "true");
+    iconeVariacao.textContent = estilo.seta;
+
+    const variacaoTexto = document.createElement("strong");
+    variacaoTexto.className = "com-small-kpi-variacao-texto";
+    variacaoTexto.textContent = formatarPercentualVariacao(variacao);
+
+    grupoVariacao.appendChild(iconeVariacao);
+    grupoVariacao.appendChild(variacaoTexto);
+
+    valorLinha.appendChild(grupoValor);
+    valorLinha.appendChild(grupoVariacao);
     cartao.appendChild(valorLinha);
     wrapper.appendChild(label);
     wrapper.appendChild(cartao);
@@ -816,7 +838,7 @@ function criarCardsSmallMultiple(meses, valores) {
 
     container.appendChild(
         criarCartaoSmallMultiple(
-            "Comissionado",
+            "Comissionamento",
             dadosAtual.coms,
             variacaoComs
         )
@@ -824,7 +846,7 @@ function criarCardsSmallMultiple(meses, valores) {
 
     container.appendChild(
         criarCartaoSmallMultiple(
-            "Projeção",
+            "Proj. Comissionamento",
             dadosAtual.projecao,
             variacaoProjecao,
             "com-small-kpi-projecao"

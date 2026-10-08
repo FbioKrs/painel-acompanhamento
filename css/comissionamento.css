@@ -1374,3 +1374,90 @@
     font-weight: var(--com-tv-peso-valor);
     color: #17345f;
 }
+
+
+/* Ajuste da área lateral dos small multiples na Tela 1:
+   sem frames, títulos à esquerda e linha de valor/variação recuada. */
+.visao-comissionamento .com-small-kpi-wrapper {
+    gap: 6px;
+}
+
+.visao-comissionamento .com-small-kpi-wrapper > .com-small-kpi-label {
+    padding-left: 0;
+    text-align: left;
+}
+
+.visao-comissionamento .com-small-kpi-wrapper > .com-small-kpi {
+    display: block;
+    min-height: auto;
+    padding: 0 0 0 18px;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    overflow: visible;
+}
+
+.visao-comissionamento .com-small-kpi-wrapper .com-small-kpi-valor-linha {
+    width: 100%;
+    margin-top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+}
+
+.visao-comissionamento .com-small-kpi-grupo {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+}
+
+.visao-comissionamento .com-small-kpi-grupo-valor {
+    color: #1a3760;
+}
+
+.visao-comissionamento .com-small-kpi-grupo-variacao {
+    justify-content: flex-end;
+}
+
+.visao-comissionamento .com-small-kpi-icone {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    font-size: 18px;
+    line-height: 1;
+    font-weight: 700;
+}
+
+.visao-comissionamento .com-small-kpi-icone-valor {
+    color: #2a4d79;
+}
+
+.visao-comissionamento .com-small-kpi.positivo .com-small-kpi-icone-variacao,
+.visao-comissionamento .com-small-kpi.positivo .com-small-kpi-variacao-texto {
+    color: #12a05c;
+}
+
+.visao-comissionamento .com-small-kpi.negativo .com-small-kpi-icone-variacao,
+.visao-comissionamento .com-small-kpi.negativo .com-small-kpi-variacao-texto {
+    color: #f04438;
+}
+
+.visao-comissionamento .com-small-kpi.neutro .com-small-kpi-icone-variacao,
+.visao-comissionamento .com-small-kpi.neutro .com-small-kpi-variacao-texto {
+    color: #667085;
+}
+
+.visao-comissionamento .com-small-kpi-variacao-texto {
+    font-size: var(--com-tv-min);
+    line-height: 1;
+    font-weight: var(--com-tv-peso);
+}
+
+.visao-comissionamento .com-small-kpi-wrapper .com-small-kpi-chip,
+.visao-comissionamento .com-small-kpi-wrapper .com-small-kpi-seta {
+    display: none !important;
+}
