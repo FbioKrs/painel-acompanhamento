@@ -1403,8 +1403,9 @@
     margin-top: 0;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 18px;
+    justify-content: flex-start;
+    gap: 16px;
+    padding-left: 14px;
 }
 
 .visao-comissionamento .com-small-kpi-grupo {
@@ -1460,4 +1461,15 @@
 .visao-comissionamento .com-small-kpi-wrapper .com-small-kpi-chip,
 .visao-comissionamento .com-small-kpi-wrapper .com-small-kpi-seta {
     display: none !important;
+}
+
+
+/* Ajuste fino: títulos à esquerda e linha de valor/percentual também à esquerda,
+   levemente recuada em relação ao título. */
+.visao-comissionamento .com-small-kpi-wrapper > .com-small-kpi-label {
+    text-align: left;
+}
+
+.visao-comissionamento .com-small-kpi-wrapper > .com-small-kpi {
+    padding-left: 0;
 }

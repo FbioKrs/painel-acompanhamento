@@ -963,3 +963,5 @@ O player **não possui tela inicial de carregamento**. O `index.html` inicia com
 - Na Tela 2 da COM-V1, os cartões de médias foram harmonizados com a Tela 1: títulos fora do retângulo, mesma tipografia calibrada e mesmo tratamento visual de fundo, borda e sombra.
 
 - COM-V1 Tela 1: na área lateral dos small multiples, os cards de Comissionamento/Proj. Comissionamento/Faturado foram simplificados, sem frames, com títulos alinhados à esquerda e linha de valor/percentual logo abaixo com ícones precedendo as informações.
+
+- COM-V1 Tela 1: na área lateral dos small multiples, a linha com valor e percentual foi alinhada à esquerda e levemente recuada em relação ao título, seguindo o padrão “Título / >Valor Percentual”.
