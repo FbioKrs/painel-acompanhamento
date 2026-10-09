@@ -789,16 +789,10 @@ function criarCartaoSmallMultiple(rotulo, valorAtual, variacao, classeExtra = ""
     const grupoValor = document.createElement("span");
     grupoValor.className = "com-small-kpi-grupo com-small-kpi-grupo-valor";
 
-    const iconeValor = document.createElement("span");
-    iconeValor.className = "com-small-kpi-icone com-small-kpi-icone-valor";
-    iconeValor.setAttribute("aria-hidden", "true");
-    iconeValor.textContent = "▸";
-
     const valor = document.createElement("strong");
     valor.className = "com-small-kpi-valor";
     valor.textContent = formatarFinanceiro(valorAtual);
 
-    grupoValor.appendChild(iconeValor);
     grupoValor.appendChild(valor);
 
     const grupoVariacao = document.createElement("span");
