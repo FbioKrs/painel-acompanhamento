@@ -1,0 +1,83 @@
+<main class="pagina visao-pla">
+    <div id="plaErro" class="pla-erro" role="status" aria-live="polite"></div>
+
+    <div class="pla-layout">
+        <section class="painel pla-coluna pla-coluna-metropolitana" aria-label="Apuração do PLA da Regional Metropolitana">
+            <header class="pla-secao-cabecalho">
+                <h2>Metropolitana — apuração do PLA</h2>
+                <div class="pla-direcao-indicador" aria-label="Quanto menor o PLA, melhor">
+                    <span class="pla-direcao-seta">↘</span>
+                    <span>Quanto menor, melhor</span>
+                </div>
+            </header>
+
+            <div class="pla-comparativo-periodos">
+                <article class="pla-periodo-card pla-periodo-anterior">
+                    <div id="plaPeriodoAnterior" class="pla-periodo-titulo">--</div>
+                    <div id="plaValorAnterior" class="pla-periodo-pla">--</div>
+                    <div class="pla-periodo-contagens">
+                        <div class="pla-contagem pla-contagem-fora">
+                            <strong id="plaForaAnterior">--</strong>
+                            <span>Fora prazo</span>
+                        </div>
+                        <div class="pla-contagem pla-contagem-no-prazo">
+                            <strong id="plaNoPrazoAnterior">--</strong>
+                            <span>No prazo</span>
+                        </div>
+                    </div>
+                </article>
+
+                <div class="pla-variacao-central" aria-label="Variação do PLA entre os períodos">
+                    <div class="pla-variacao-linha"></div>
+                    <div id="plaVariacaoPontos" class="pla-variacao-pontos">--</div>
+                </div>
+
+                <article class="pla-periodo-card pla-periodo-atual">
+                    <div id="plaPeriodoAtual" class="pla-periodo-titulo">--</div>
+                    <div id="plaValorAtual" class="pla-periodo-pla">--</div>
+                    <div class="pla-periodo-contagens">
+                        <div class="pla-contagem pla-contagem-fora">
+                            <strong id="plaForaAtual">--</strong>
+                            <span>Fora prazo</span>
+                        </div>
+                        <div class="pla-contagem pla-contagem-no-prazo">
+                            <strong id="plaNoPrazoAtual">--</strong>
+                            <span>No prazo</span>
+                        </div>
+                    </div>
+                </article>
+            </div>
+
+            <section class="pla-movimento-card" aria-labelledby="plaTituloNoPrazo">
+                <h3 id="plaTituloNoPrazo">Movimentações do No Prazo</h3>
+                <div class="pla-grafico-movimento">
+                    <canvas id="plaGraficoNoPrazo"></canvas>
+                </div>
+            </section>
+
+            <section class="pla-movimento-card" aria-labelledby="plaTituloForaPrazo">
+                <h3 id="plaTituloForaPrazo">Movimentações do Fora Prazo</h3>
+                <div class="pla-grafico-movimento">
+                    <canvas id="plaGraficoForaPrazo"></canvas>
+                </div>
+            </section>
+        </section>
+
+        <section class="painel pla-coluna pla-coluna-regionais" aria-label="Comparativo do PLA entre regionais">
+            <header class="pla-secao-cabecalho pla-cabecalho-regionais">
+                <h2>Comparativo regional — evolução do PLA</h2>
+            </header>
+
+            <div id="plaLegendaRegionais" class="pla-legenda-regionais" aria-label="Legenda das regionais"></div>
+
+            <div class="pla-grafico-regionais">
+                <canvas id="plaGraficoRegionais"></canvas>
+            </div>
+        </section>
+    </div>
+
+    <footer class="pla-rodape">
+        <span id="plaFonteStatus">Fonte: JSON gerado pelo Power Automate</span>
+        <span id="plaStatusAtualizacao">Última atualização: --</span>
+    </footer>
+</main>

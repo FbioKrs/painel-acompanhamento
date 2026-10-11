@@ -1,0 +1,346 @@
+/* ================================================================
+   PLA-V1 — Percentual de Ligações Atrasadas
+   Corpo específico da visão. Não altera o shell PG-V2.
+   ================================================================ */
+
+.visao-pla {
+    --pla-azul: #2f73d9;
+    --pla-azul-escuro: #17345f;
+    --pla-azul-claro: #eaf3ff;
+    --pla-verde: #18a368;
+    --pla-verde-fundo: #e9f8f1;
+    --pla-vermelho: #e14343;
+    --pla-vermelho-fundo: #ffeded;
+    --pla-roxo: #7967c7;
+    --pla-ciano: #49a7df;
+    --pla-grade: #d8e2ea;
+
+    padding: 18px 28px 10px;
+    gap: 8px;
+}
+
+.visao-pla .pla-layout {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1.18fr) minmax(0, 1fr);
+    gap: 18px;
+}
+
+.visao-pla .pla-coluna {
+    min-width: 0;
+    min-height: 0;
+    padding: 18px 20px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.visao-pla .pla-secao-cabecalho {
+    flex: 0 0 auto;
+    min-height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.visao-pla .pla-secao-cabecalho h2,
+.visao-pla .pla-movimento-card h3 {
+    margin: 0;
+    color: var(--header-2);
+    font-size: var(--tv-fonte-secao, 28px);
+    line-height: 1.08;
+    font-weight: var(--tv-peso-destaque, 700);
+}
+
+.visao-pla .pla-direcao-indicador {
+    flex: 0 0 auto;
+    height: 48px;
+    padding: 0 18px;
+    border-radius: 24px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: #0f6b54;
+    background: var(--pla-verde-fundo);
+    border: 1px solid #d0eee0;
+    font-size: var(--tv-fonte-minima, 22px);
+    font-weight: var(--tv-peso-destaque, 700);
+    white-space: nowrap;
+}
+
+.visao-pla .pla-direcao-seta {
+    font-size: 28px;
+    line-height: 1;
+}
+
+.visao-pla .pla-comparativo-periodos {
+    flex: 0 0 242px;
+    min-height: 0;
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 142px minmax(0, 1fr);
+    gap: 12px;
+    align-items: stretch;
+}
+
+.visao-pla .pla-periodo-card {
+    min-width: 0;
+    min-height: 0;
+    padding: 18px 18px 16px;
+    border-radius: 16px;
+    background: #f8fbfd;
+    border: 1px solid var(--borda);
+    display: flex;
+    flex-direction: column;
+}
+
+.visao-pla .pla-periodo-titulo {
+    color: var(--header-2);
+    font-size: var(--tv-fonte-card, 24px);
+    line-height: 1;
+    font-weight: var(--tv-peso-destaque, 700);
+}
+
+.visao-pla .pla-periodo-pla {
+    margin-top: 18px;
+    color: #0d2652;
+    font-size: var(--tv-fonte-kpi, 48px);
+    line-height: 0.98;
+    font-weight: var(--tv-peso-valor, 700);
+    font-variant-numeric: tabular-nums;
+}
+
+.visao-pla .pla-periodo-contagens {
+    margin-top: auto;
+    display: grid;
+    grid-template-columns: 1fr 1.12fr;
+    gap: 12px;
+}
+
+.visao-pla .pla-contagem {
+    min-width: 0;
+    height: 80px;
+    padding: 10px 14px;
+    border-radius: 13px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.visao-pla .pla-contagem strong {
+    font-size: var(--tv-fonte-valor-secundario, 32px);
+    line-height: 1;
+    font-weight: var(--tv-peso-valor, 700);
+    font-variant-numeric: tabular-nums;
+}
+
+.visao-pla .pla-contagem span {
+    margin-top: 6px;
+    font-size: var(--tv-fonte-minima, 22px);
+    line-height: 1;
+    font-weight: var(--tv-peso-normal, 600);
+}
+
+.visao-pla .pla-contagem-fora {
+    color: var(--pla-vermelho);
+    background: var(--pla-vermelho-fundo);
+}
+
+.visao-pla .pla-contagem-no-prazo {
+    color: var(--pla-azul-escuro);
+    background: var(--pla-azul-claro);
+}
+
+.visao-pla .pla-contagem-no-prazo strong {
+    color: var(--pla-azul);
+}
+
+.visao-pla .pla-variacao-central {
+    position: relative;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.visao-pla .pla-variacao-linha {
+    position: absolute;
+    left: 50%;
+    top: 20px;
+    bottom: 20px;
+    width: 2px;
+    transform: translateX(-50%);
+    background: #cad6df;
+}
+
+.visao-pla .pla-variacao-pontos {
+    position: relative;
+    z-index: 1;
+    min-width: 132px;
+    min-height: 48px;
+    padding: 8px 10px;
+    border-radius: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: #f1f5f8;
+    color: var(--texto-secundario);
+    border: 1px solid var(--borda);
+    font-size: var(--tv-fonte-card, 24px);
+    line-height: 1;
+    font-weight: var(--tv-peso-destaque, 700);
+    white-space: nowrap;
+}
+
+.visao-pla .pla-variacao-pontos.melhora {
+    color: #0f7f58;
+    background: var(--pla-verde-fundo);
+    border-color: #ccebdc;
+}
+
+.visao-pla .pla-variacao-pontos.piora {
+    color: var(--pla-vermelho);
+    background: var(--pla-vermelho-fundo);
+    border-color: #f4d0d0;
+}
+
+.visao-pla .pla-movimento-card {
+    flex: 1 1 0;
+    min-height: 0;
+    margin-top: 14px;
+    padding: 14px 16px 10px;
+    border-radius: 16px;
+    background: #f8fbfd;
+    border: 1px solid var(--borda);
+    display: flex;
+    flex-direction: column;
+}
+
+.visao-pla .pla-movimento-card h3 {
+    flex: 0 0 auto;
+    font-size: var(--tv-fonte-card, 24px);
+}
+
+.visao-pla .pla-grafico-movimento {
+    position: relative;
+    flex: 1 1 auto;
+    min-height: 0;
+    margin-top: 6px;
+}
+
+.visao-pla .pla-cabecalho-regionais {
+    justify-content: flex-start;
+}
+
+.visao-pla .pla-legenda-regionais {
+    flex: 0 0 auto;
+    min-height: 42px;
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px 22px;
+}
+
+.visao-pla .pla-legenda-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #43596d;
+    font-size: var(--tv-fonte-minima, 22px);
+    line-height: 1;
+    font-weight: var(--tv-peso-normal, 600);
+    white-space: nowrap;
+}
+
+.visao-pla .pla-legenda-marcador {
+    width: 16px;
+    height: 16px;
+    flex: 0 0 16px;
+    background: currentColor;
+}
+
+.visao-pla .pla-legenda-marcador.circulo {
+    border-radius: 50%;
+}
+
+.visao-pla .pla-legenda-marcador.quadrado {
+    border-radius: 2px;
+}
+
+.visao-pla .pla-legenda-marcador.triangulo {
+    width: 0;
+    height: 0;
+    flex-basis: 0;
+    border-left: 9px solid transparent;
+    border-right: 9px solid transparent;
+    border-bottom: 17px solid currentColor;
+    background: transparent;
+}
+
+.visao-pla .pla-legenda-marcador.losango {
+    width: 14px;
+    height: 14px;
+    margin: 0 2px;
+    transform: rotate(45deg);
+    border-radius: 2px;
+}
+
+.visao-pla .pla-grafico-regionais {
+    position: relative;
+    flex: 1 1 auto;
+    min-height: 0;
+    margin-top: 8px;
+    padding: 8px 4px 0;
+    border-radius: 14px;
+    background: #f8fbfd;
+    border: 1px solid var(--borda);
+}
+
+.visao-pla canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.visao-pla .pla-rodape {
+    flex: 0 0 30px;
+    min-height: 30px;
+    padding: 0 4px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 18px;
+    color: var(--texto-secundario);
+    font-size: var(--tv-fonte-minima, 22px);
+    line-height: 1;
+    font-weight: var(--tv-peso-normal, 600);
+    white-space: nowrap;
+}
+
+.visao-pla .pla-fonte-exemplo {
+    color: #9a6b16;
+}
+
+.visao-pla .pla-erro {
+    position: absolute;
+    left: 50%;
+    top: 112px;
+    z-index: 20;
+    transform: translateX(-50%);
+    max-width: 900px;
+    padding: 9px 16px;
+    border-radius: 12px;
+    background: #fff0f0;
+    color: #a32929;
+    font-size: var(--tv-fonte-minima, 22px);
+    font-weight: var(--tv-peso-destaque, 700);
+    box-shadow: 0 6px 18px rgba(120, 30, 30, 0.12);
+    display: none;
+}
+
+.visao-pla .pla-erro.ativo {
+    display: block;
+}

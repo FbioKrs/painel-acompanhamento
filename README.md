@@ -52,6 +52,7 @@ Não utilizar `iframe` para a circulação das visões do PG-V2.
 | **ME_EXEC-V1** | Metas da Executiva | Em produção | `visoes/metas-executiva.html` |
 | **ME_GER-V1** | Metas da Gerência | Em produção | `visoes/metas-gerencia.html` |
 | **COM-V1** | Comissionamento de Obras | Em produção | `visoes/comissionamento.html` |
+| **PLA-V1** | PLA — Percentual de Ligações Atrasadas | Em produção | `visoes/pla.html` |
 | **CAL-TV** | Calibração tipográfica para TV | Técnica / fora da rotação | `visoes/calibracao-tv.html` |
 | **OA-V1** | Obras Ágeis | Convenção reservada | Pode não existir ainda |
 | **IND-V1** | Indicadores | Convenção reservada | Pode não existir ainda |
@@ -75,6 +76,7 @@ painel-acompanhamento/
 │   ├── metas-executiva.html
 │   ├── metas-gerencia.html
 │   ├── comissionamento.html
+│   ├── pla.html
 │   └── calibracao-tv.html
 │
 ├── css/
@@ -83,6 +85,7 @@ painel-acompanhamento/
 │   ├── metas-executiva.css
 │   ├── metas-gerencia.css
 │   ├── comissionamento.css
+│   ├── pla.css
 │   └── calibracao-tv.css
 │
 ├── js/
@@ -95,12 +98,14 @@ painel-acompanhamento/
 │   ├── metas-executiva.js
 │   ├── metas-gerencia.js
 │   ├── comissionamento.js
+│   ├── pla.js
 │   └── calibracao-tv.js
 │
 ├── dados/
 │   ├── metas-executiva.json
 │   ├── metas-gerencia.json
-│   └── base_comissionamento.json
+│   ├── base_comissionamento.json
+│   └── pla.json
 │
 ├── dados.json
 │
@@ -724,7 +729,138 @@ O JSON é carregado uma única vez na entrada da COM-V1, usando `no-store` e cac
 
 ---
 
-## 11.1. CAL-TV — Referência tipográfica calibrada
+## 11.1. PLA-V1 — Percentual de Ligações Atrasadas
+
+### Arquivos
+
+```text
+visoes/pla.html
+css/pla.css
+js/pla.js
+dados/pla.json
+```
+
+A **PLA-V1** acompanha a apuração do indicador **PLA — Percentual de Ligações Atrasadas** da Regional Metropolitana e compara sua evolução com as regionais Parnaíba, Picos e Floriano.
+
+Fórmula do indicador:
+
+```text
+PLA = FORA PRAZO / (NO PRAZO + FORA PRAZO)
+```
+
+Como o indicador representa atraso, **quanto menor o PLA, melhor**.
+
+### Composição da visão
+
+A PLA-V1 possui **uma única tela de 15 segundos** e utiliza duas colunas principais.
+
+**Coluna esquerda — Metropolitana**
+
+- mantém dois cartões de período: apuração anterior e apuração atual;
+- cada cartão exibe período, PLA calculado a partir das quantidades, `FORA PRAZO` e `NO PRAZO`;
+- entre os cartões aparece somente a **seta + variação em pontos percentuais**, sem textos adicionais de “melhora/piora do indicador”;
+- abaixo dos cartões existem dois gráficos de linha independentes:
+  - `Movimentações do No Prazo`;
+  - `Movimentações do Fora Prazo`;
+- os pontos intermediários dos gráficos representam o estoque acumulado após cada movimentação, mas seus **rótulos exibem somente a quantidade movimentada, preservando o sinal** (`+` / `-` / `0`);
+- somente os rótulos quantitativos de **Anterior** e **Atual** usam fundo; os rótulos de movimentação são exibidos sem fundo;
+- os gráficos não exibem rótulos do eixo Y;
+- os frames de movimentações não exibem subtítulo;
+- se a soma das movimentações não conciliar exatamente com a apuração atual, o módulo inclui automaticamente um ponto `Ajuste` com o residual antes do ponto `Atual`.
+
+**Coluna direita — comparativo regional**
+
+- gráfico de linhas com Metropolitana, Parnaíba, Picos e Floriano;
+- a linha da **Metropolitana** é mais grossa do que as demais;
+- cada regional utiliza marcador distinto:
+  - Metropolitana: círculo;
+  - Parnaíba: quadrado;
+  - Picos: triângulo;
+  - Floriano: losango;
+- existe somente uma legenda compacta junto ao cabeçalho do painel, contendo o marcador e o nome de cada regional;
+- não existem os antigos resumos/legendas adicionais na parte superior ou inferior do gráfico;
+- os rótulos do eixo Y são ocultos;
+- o último ponto da Metropolitana recebe rótulo percentual para facilitar a leitura da posição atual.
+
+### Tipografia e gráficos
+
+A PLA-V1 nasce já aderente à referência TV22 do PG-V2:
+
+- informação essencial: **22 px ou mais**;
+- títulos de cards: **24 px**;
+- títulos de seção: **28 px**;
+- KPI do PLA: **48 px**;
+- Chart.js consome explicitamente `PAINEL_CONFIG.tipografia.grafico`;
+- não utiliza `Chart.defaults`, evitando efeitos colaterais nas demais visões da SPA.
+
+### Dados
+
+O arquivo canônico inicial é:
+
+```text
+dados/pla.json
+```
+
+Ele será substituído pelo JSON gerado pelo Power Automate a partir da planilha Excel. Enquanto o campo raiz abaixo existir, a visão identifica o arquivo como demonstrativo:
+
+```json
+"fonte": "exemplo"
+```
+
+Estrutura esperada:
+
+```json
+{
+  "versao": "PLA-V1",
+  "fonte": "powerautomate",
+  "atualizadoEm": "2026-10-10T22:00:00-03:00",
+  "regionalFoco": "Metropolitana",
+  "apuracoes": [
+    {
+      "ordem": 1,
+      "periodo": "2026-09",
+      "rotulo": "Setembro/24",
+      "foraPrazo": 1500,
+      "noPrazo": 300
+    }
+  ],
+  "movimentacoes": [
+    {
+      "ordem": 1,
+      "evento": "Vencimento",
+      "rotulo": "Venc.",
+      "noPrazo": -40,
+      "foraPrazo": 40
+    }
+  ],
+  "regionais": ["Metropolitana", "Parnaíba", "Picos", "Floriano"],
+  "historicoRegional": [
+    {
+      "data": "2026-10-01",
+      "valores": {
+        "Metropolitana": 84.2,
+        "Parnaíba": 81.7,
+        "Picos": 86.5,
+        "Floriano": 79.8
+      }
+    }
+  ]
+}
+```
+
+Regras de dados:
+
+- `apuracoes` deve possuir pelo menos duas posições; as duas últimas, após ordenação por `ordem`/`periodo`, formam Anterior e Atual;
+- o PLA dos cartões é sempre recalculado pelo módulo a partir de `foraPrazo` e `noPrazo`;
+- `movimentacoes` traz **deltas**, não estoques acumulados;
+- `historicoRegional` traz a apuração percentual ao longo do tempo para cada regional;
+- o JSON é carregado com `no-store` e cache-buster;
+- em falha de atualização, a última informação válida permanece exibida;
+- atualização usa o intervalo global padrão de 60 segundos quando a visão permanece aberta por tempo suficiente.
+
+---
+
+## 11.2. CAL-TV — Referência tipográfica calibrada
 
 ### Arquivos
 
@@ -857,6 +993,17 @@ js/comissionamento.js
 dados/base_comissionamento.json
 ```
 
+### PLA-V1
+
+Preferir:
+
+```text
+visoes/pla.html
+css/pla.css
+js/pla.js
+dados/pla.json
+```
+
 ### CAL-TV
 
 Preferir:
@@ -945,8 +1092,8 @@ Nunca reconstruir arquivos vigentes com base apenas em versões históricas do c
 ---
 
 **Padrão vigente: PG-V2**  
-**Visões cadastradas: DC-V1, ME_EXEC-V1, ME_GER-V1, COM-V1 e CAL-TV**  
-**Estado atual em `painel-config.js`: DC-V1 e CAL-TV desativadas na rotação; ME_EXEC-V1, ME_GER-V1 e COM-V1 ativas. CAL-TV pode ser aberta isoladamente com `?cal=1`.**
+**Visões cadastradas: DC-V1, ME_EXEC-V1, ME_GER-V1, COM-V1, PLA-V1 e CAL-TV**  
+**Estado atual em `painel-config.js`: DC-V1 e CAL-TV desativadas na rotação; ME_EXEC-V1, ME_GER-V1, COM-V1 e PLA-V1 ativas. CAL-TV pode ser aberta isoladamente com `?cal=1`.**
 
 
 ### Inicialização visual do PG-V2
@@ -975,3 +1122,6 @@ O player **não possui tela inicial de carregamento**. O `index.html` inicia com
 - COM-V1 Tela 1: os valores monetários da área lateral dos small multiples usam 22 px, mantendo percentuais em 22 px e o alinhamento em colunas.
 
 - COM-V1 Tela 1: a área analítica à direita de cada small multiple passou a usar um card único com três indicadores empilhados, separadores horizontais, valor à esquerda e seta/percentual em coluna fixa à direita; o ícone anterior ao valor foi removido.
+
+- PLA-V1: nos dois gráficos de movimentações da coluna esquerda, as linhas de grade do eixo Y ficam ocultas; permanecem apenas linha, pontos, rótulos de movimentação e referências do eixo X.
+- PLA-V1: no comparativo regional, o último ponto de cada regional recebe rótulo percentual. A Metropolitana mantém o rótulo visualmente destacado, enquanto Parnaíba, Picos e Floriano usam rótulos brancos contornados pela cor da própria série.

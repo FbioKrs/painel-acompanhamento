@@ -86,6 +86,16 @@ window.PAINEL_CONFIG = {
             modulo: "./js/comissionamento.js"
         },
         {
+            id: "PLA-V1",
+            ativo: true,
+            nome: "PLA",
+            titulo: "PLA",
+            subtitulo: "Percentual de ligações atrasadas",
+            fragmento: "./visoes/pla.html",
+            css: "./css/pla.css",
+            modulo: "./js/pla.js"
+        },
+        {
             id: "CAL-TV",
             ativo: false,
             nome: "Calibração TV",
