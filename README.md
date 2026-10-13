@@ -742,13 +742,13 @@ dados/pla.json
 
 A **PLA-V1** acompanha a apuração do indicador **PLA — Percentual de Ligações Atrasadas** da Regional Metropolitana e compara sua evolução com as regionais Parnaíba, Picos e Floriano.
 
-Fórmula do indicador:
+Fórmula de negócio do indicador:
 
 ```text
 PLA = FORA PRAZO / (NO PRAZO + FORA PRAZO)
 ```
 
-Como o indicador representa atraso, **quanto menor o PLA, melhor**.
+Como o indicador representa atraso, **quanto menor o PLA, melhor**. O cálculo e toda a apuração permanecem no **Excel**, que é a fonte de verdade da PLA-V1. O Power Automate apenas lê três tabelas já consolidadas, monta/grava `dados/pla.json` e não executa regras de negócio. O módulo `js/pla.js` não recalcula PLA nem saldos; ele apenas organiza os registros para apresentação e deriva visualmente a diferença em pontos percentuais entre os dois valores de PLA já fornecidos no bloco `comparativo`.
 
 ### Composição da visão
 
@@ -757,20 +757,26 @@ A PLA-V1 possui **uma única tela de 15 segundos** e utiliza duas colunas princi
 **Coluna esquerda — Metropolitana**
 
 - mantém dois cartões de período: apuração anterior e apuração atual;
-- cada cartão exibe período, PLA calculado a partir das quantidades, `FORA PRAZO` e `NO PRAZO`;
-- entre os cartões aparece somente a **seta + variação em pontos percentuais**, sem textos adicionais de “melhora/piora do indicador”;
+- cada cartão exibe `ROTULO`, `PLA`, `FORA PRAZO` e `NO PRAZO` exatamente como fornecidos no JSON gerado a partir do Excel;
+- `PLA` é recebido como fração decimal (`0.8822`) e apenas formatado visualmente como percentual (`88,22%`);
+- entre os cartões aparece somente a **seta + diferença em pontos percentuais**, sem textos adicionais de “melhora/piora do indicador”; a diferença é derivada para apresentação por `(PLA atual - PLA anterior) × 100`;
 - abaixo dos cartões existem dois gráficos de linha independentes:
   - `Movimentações do No Prazo`;
   - `Movimentações do Fora Prazo`;
-- os pontos intermediários dos gráficos representam o estoque acumulado após cada movimentação, mas seus **rótulos exibem somente a quantidade movimentada, preservando o sinal** (`+` / `-` / `0`);
+- a tabela de movimentações já traz **Anterior**, **Vencimento**, **Entrante**, **Exec/Sane** e **Atual** em linhas, ordenadas por `ORDEM`;
+- `SALDO_NO_PRAZO` e `SALDO_FORA_PRAZO` posicionam os pontos das linhas;
+- `MOV_NO_PRAZO` e `MOV_FORA_PRAZO` fornecem diretamente os rótulos intermediários, preservando sinal (`+` / `-` / `0`);
+- nos extremos Anterior/Atual, os campos `MOV_*` podem ser `null`; isso significa que não existe movimentação naquele ponto;
 - somente os rótulos quantitativos de **Anterior** e **Atual** usam fundo; os rótulos de movimentação são exibidos sem fundo;
-- os gráficos não exibem rótulos do eixo Y;
+- os gráficos não exibem linhas nem rótulos do eixo Y;
 - os frames de movimentações não exibem subtítulo;
-- se a soma das movimentações não conciliar exatamente com a apuração atual, o módulo inclui automaticamente um ponto `Ajuste` com o residual antes do ponto `Atual`.
+- a visão não soma movimentações, não reconstrói saldos e não cria ponto automático de ajuste; qualquer conciliação deve estar concluída no Excel antes da geração do JSON.
 
 **Coluna direita — comparativo regional**
 
-- gráfico de linhas com Metropolitana, Parnaíba, Picos e Floriano;
+- `historicoRegional` usa formato longo: uma linha por `REFERENCIA` + `REGIONAL`;
+- o gráfico aceita referências ausentes para determinada regional; nesse caso não inventa nem repete valores;
+- com o conjunto de dados atual, Metropolitana possui histórico de junho a outubro e Floriano, Parnaíba e Picos possuem somente a referência de 13/10/2026;
 - a linha da **Metropolitana** é mais grossa do que as demais;
 - cada regional utiliza marcador distinto:
   - Metropolitana: círculo;
@@ -778,9 +784,9 @@ A PLA-V1 possui **uma única tela de 15 segundos** e utiliza duas colunas princi
   - Picos: triângulo;
   - Floriano: losango;
 - existe somente uma legenda compacta junto ao cabeçalho do painel, contendo o marcador e o nome de cada regional;
-- não existem os antigos resumos/legendas adicionais na parte superior ou inferior do gráfico;
+- não existem resumos/legendas adicionais na parte superior ou inferior do gráfico;
 - os rótulos do eixo Y são ocultos;
-- o último ponto da Metropolitana recebe rótulo percentual para facilitar a leitura da posição atual.
+- o último ponto disponível de cada regional recebe rótulo percentual; a Metropolitana permanece visualmente destacada em relação às demais.
 
 ### Tipografia e gráficos
 
@@ -795,54 +801,94 @@ A PLA-V1 nasce já aderente à referência TV22 do PG-V2:
 
 ### Dados
 
-O arquivo canônico inicial é:
+O arquivo canônico é:
 
 ```text
 dados/pla.json
 ```
 
-Ele será substituído pelo JSON gerado pelo Power Automate a partir da planilha Excel. Enquanto o campo raiz abaixo existir, a visão identifica o arquivo como demonstrativo:
+O contrato foi desenhado para espelhar diretamente as **três tabelas que o Power Query consegue fornecer**, reduzindo a transformação necessária no Power Automate. O Power Automate apenas lê as três tabelas e as posiciona nos arrays `comparativo`, `movimentacoes` e `historicoRegional`.
 
-```json
-"fonte": "exemplo"
-```
+A PLA-V1 não exibe rodapé de fonte nem horário de última atualização. Por isso, `fonte` e `atualizadoEm` não fazem parte do contrato canônico do JSON.
 
-Estrutura esperada:
+Estrutura canônica:
 
 ```json
 {
-  "versao": "PLA-V1",
-  "fonte": "powerautomate",
-  "atualizadoEm": "2026-10-10T22:00:00-03:00",
-  "regionalFoco": "Metropolitana",
-  "apuracoes": [
+  "comparativo": [
     {
-      "ordem": 1,
-      "periodo": "2026-09",
-      "rotulo": "Setembro/24",
-      "foraPrazo": 1500,
-      "noPrazo": 300
+      "REFERENCIA": "06/10/2026",
+      "FORA PRAZO": 2657,
+      "NO PRAZO": 359,
+      "PLA": 0.881,
+      "ORDEM": 1,
+      "ROTULO": "06/out"
+    },
+    {
+      "REFERENCIA": "08/10/2026",
+      "FORA PRAZO": 2620,
+      "NO PRAZO": 350,
+      "PLA": 0.8822,
+      "ORDEM": 2,
+      "ROTULO": "08/out"
     }
   ],
   "movimentacoes": [
     {
-      "ordem": 1,
-      "evento": "Vencimento",
-      "rotulo": "Venc.",
-      "noPrazo": -40,
-      "foraPrazo": 40
+      "ORDEM": 0,
+      "EVENTO": "Anterior",
+      "MOV_NO_PRAZO": null,
+      "SALDO_NO_PRAZO": 359,
+      "MOV_FORA_PRAZO": null,
+      "SALDO_FORA_PRAZO": 2657
+    },
+    {
+      "ORDEM": 1,
+      "EVENTO": "Vencimento",
+      "MOV_NO_PRAZO": -4,
+      "SALDO_NO_PRAZO": 355,
+      "MOV_FORA_PRAZO": 4,
+      "SALDO_FORA_PRAZO": 2661
+    },
+    {
+      "ORDEM": 2,
+      "EVENTO": "Entrante",
+      "MOV_NO_PRAZO": 6,
+      "SALDO_NO_PRAZO": 361,
+      "MOV_FORA_PRAZO": 0,
+      "SALDO_FORA_PRAZO": 2661
+    },
+    {
+      "ORDEM": 3,
+      "EVENTO": "Exec/Sane",
+      "MOV_NO_PRAZO": -11,
+      "SALDO_NO_PRAZO": 350,
+      "MOV_FORA_PRAZO": -41,
+      "SALDO_FORA_PRAZO": 2620
+    },
+    {
+      "ORDEM": 4,
+      "EVENTO": "Atual",
+      "MOV_NO_PRAZO": null,
+      "SALDO_NO_PRAZO": 350,
+      "MOV_FORA_PRAZO": null,
+      "SALDO_FORA_PRAZO": 2620
     }
   ],
-  "regionais": ["Metropolitana", "Parnaíba", "Picos", "Floriano"],
   "historicoRegional": [
     {
-      "data": "2026-10-01",
-      "valores": {
-        "Metropolitana": 84.2,
-        "Parnaíba": 81.7,
-        "Picos": 86.5,
-        "Floriano": 79.8
-      }
+      "REFERENCIA": "30/06/2026",
+      "REGIONAL": "METROPOLITANA",
+      "FORA PRAZO": 3450,
+      "NO PRAZO": 553,
+      "PLA": 0.86185361
+    },
+    {
+      "REFERENCIA": "13/10/2026",
+      "REGIONAL": "FLORIANO",
+      "FORA PRAZO": 4167,
+      "NO PRAZO": 434,
+      "PLA": 0.90567268
     }
   ]
 }
@@ -850,10 +896,16 @@ Estrutura esperada:
 
 Regras de dados:
 
-- `apuracoes` deve possuir pelo menos duas posições; as duas últimas, após ordenação por `ordem`/`periodo`, formam Anterior e Atual;
-- o PLA dos cartões é sempre recalculado pelo módulo a partir de `foraPrazo` e `noPrazo`;
-- `movimentacoes` traz **deltas**, não estoques acumulados;
-- `historicoRegional` traz a apuração percentual ao longo do tempo para cada regional;
+- `comparativo` é ordenado por `ORDEM`; a primeira linha alimenta o cartão Anterior e a última alimenta o cartão Atual;
+- `PLA` é fornecido pelo Excel como fração decimal (`0.881` = `88,10%`); o JavaScript apenas aplica a formatação percentual;
+- `FORA PRAZO`, `NO PRAZO` e os saldos são números, não textos formatados;
+- a diferença em pontos percentuais exibida entre os cartões é derivada somente para apresentação a partir dos dois PLAs já fornecidos;
+- `movimentacoes` é ordenado por `ORDEM` e cada linha representa um ponto/evento do gráfico;
+- `MOV_NO_PRAZO` e `MOV_FORA_PRAZO` podem ser `null` somente nos extremos Anterior/Atual; valor `0` significa evento existente sem alteração;
+- `SALDO_NO_PRAZO` e `SALDO_FORA_PRAZO` precisam existir em todas as linhas de movimentação;
+- `historicoRegional` contém uma linha por referência e regional, podendo haver referências em que algumas regionais não tenham registro;
+- os nomes `METROPOLITANA`, `PARNAIBA`, `PICOS` e `FLORIANO` são normalizados apenas para exibição com capitalização/acentuação adequada;
+- nenhuma linha histórica ausente é preenchida artificialmente;
 - o JSON é carregado com `no-store` e cache-buster;
 - em falha de atualização, a última informação válida permanece exibida;
 - atualização usa o intervalo global padrão de 60 segundos quando a visão permanece aberta por tempo suficiente.
@@ -1125,3 +1177,8 @@ O player **não possui tela inicial de carregamento**. O `index.html` inicia com
 
 - PLA-V1: nos dois gráficos de movimentações da coluna esquerda, as linhas de grade do eixo Y ficam ocultas; permanecem apenas linha, pontos, rótulos de movimentação e referências do eixo X.
 - PLA-V1: no comparativo regional, o último ponto de cada regional recebe rótulo percentual. A Metropolitana mantém o rótulo visualmente destacado, enquanto Parnaíba, Picos e Floriano usam rótulos brancos contornados pela cor da própria série.
+
+- PLA-V1: os eventos intermediários dos gráficos de movimentações foram consolidados em **Vencimento → Entrante → Exec/Sane**, preservando os saldos inicial e final.
+- PLA-V1: o contrato de dados foi simplificado para espelhar três tabelas do Power Query: `comparativo` em linhas por referência, `movimentacoes` em linhas por evento e `historicoRegional` em formato longo por referência + regional. O Power Automate apenas estrutura/grava o JSON; o JavaScript não recalcula PLA ou saldos e deriva somente a diferença visual em pontos percentuais entre os dois PLAs fornecidos.
+
+- PLA-V1: removidos do corpo da visão os textos de fonte/dados ilustrativos e última atualização; os campos `fonte` e `atualizadoEm` também foram retirados do contrato canônico por não terem mais referência visual.

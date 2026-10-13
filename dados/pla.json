@@ -1,72 +1,120 @@
 {
-  "versao": "PLA-V1",
-  "fonte": "exemplo",
-  "atualizadoEm": "2026-10-10T22:00:00-03:00",
-  "regionalFoco": "Metropolitana",
-  "apuracoes": [
+  "comparativo": [
     {
-      "ordem": 1,
-      "periodo": "2026-09",
-      "rotulo": "Setembro/24",
-      "foraPrazo": 1500,
-      "noPrazo": 300
+      "REFERENCIA": "06/10/2026",
+      "FORA PRAZO": 2657,
+      "NO PRAZO": 359,
+      "PLA": 0.881,
+      "ORDEM": 1,
+      "ROTULO": "06/out"
     },
     {
-      "ordem": 2,
-      "periodo": "2026-10",
-      "rotulo": "Outubro/24",
-      "foraPrazo": 1540,
-      "noPrazo": 327
+      "REFERENCIA": "08/10/2026",
+      "FORA PRAZO": 2620,
+      "NO PRAZO": 350,
+      "PLA": 0.8822,
+      "ORDEM": 2,
+      "ROTULO": "08/out"
     }
   ],
   "movimentacoes": [
     {
-      "ordem": 1,
-      "evento": "Vencimento",
-      "rotulo": "Venc.",
-      "noPrazo": -40,
-      "foraPrazo": 40
+      "ORDEM": 0,
+      "EVENTO": "Anterior",
+      "MOV_NO_PRAZO": null,
+      "SALDO_NO_PRAZO": 359,
+      "MOV_FORA_PRAZO": null,
+      "SALDO_FORA_PRAZO": 2657
     },
     {
-      "ordem": 2,
-      "evento": "Entrante",
-      "rotulo": "Entrante",
-      "noPrazo": 15,
-      "foraPrazo": 0
+      "ORDEM": 1,
+      "EVENTO": "Vencimento",
+      "MOV_NO_PRAZO": -4,
+      "SALDO_NO_PRAZO": 355,
+      "MOV_FORA_PRAZO": 4,
+      "SALDO_FORA_PRAZO": 2661
     },
     {
-      "ordem": 3,
-      "evento": "Exec./Saneamento 1",
-      "rotulo": "Exec. 1",
-      "noPrazo": 12,
-      "foraPrazo": -12
+      "ORDEM": 2,
+      "EVENTO": "Entrante",
+      "MOV_NO_PRAZO": 6,
+      "SALDO_NO_PRAZO": 361,
+      "MOV_FORA_PRAZO": 0,
+      "SALDO_FORA_PRAZO": 2661
     },
     {
-      "ordem": 4,
-      "evento": "Exec./Saneamento 2",
-      "rotulo": "Exec. 2",
-      "noPrazo": 40,
-      "foraPrazo": 12
+      "ORDEM": 3,
+      "EVENTO": "Exec/Sane",
+      "MOV_NO_PRAZO": -11,
+      "SALDO_NO_PRAZO": 350,
+      "MOV_FORA_PRAZO": -41,
+      "SALDO_FORA_PRAZO": 2620
+    },
+    {
+      "ORDEM": 4,
+      "EVENTO": "Atual",
+      "MOV_NO_PRAZO": null,
+      "SALDO_NO_PRAZO": 350,
+      "MOV_FORA_PRAZO": null,
+      "SALDO_FORA_PRAZO": 2620
     }
   ],
-  "regionais": [
-    "Metropolitana",
-    "Parnaíba",
-    "Picos",
-    "Floriano"
-  ],
   "historicoRegional": [
-    {"data": "2026-10-01", "valores": {"Metropolitana": 84.20, "Parnaíba": 81.70, "Picos": 86.50, "Floriano": 79.80}},
-    {"data": "2026-10-03", "valores": {"Metropolitana": 84.00, "Parnaíba": 81.50, "Picos": 86.10, "Floriano": 80.10}},
-    {"data": "2026-10-05", "valores": {"Metropolitana": 83.70, "Parnaíba": 81.60, "Picos": 85.90, "Floriano": 80.40}},
-    {"data": "2026-10-07", "valores": {"Metropolitana": 83.50, "Parnaíba": 81.20, "Picos": 85.70, "Floriano": 80.00}},
-    {"data": "2026-10-09", "valores": {"Metropolitana": 83.10, "Parnaíba": 81.40, "Picos": 85.20, "Floriano": 79.90}},
-    {"data": "2026-10-11", "valores": {"Metropolitana": 82.90, "Parnaíba": 81.00, "Picos": 84.90, "Floriano": 80.30}},
-    {"data": "2026-10-13", "valores": {"Metropolitana": 82.70, "Parnaíba": 80.80, "Picos": 85.00, "Floriano": 80.50}},
-    {"data": "2026-10-15", "valores": {"Metropolitana": 82.50, "Parnaíba": 80.90, "Picos": 84.60, "Floriano": 80.70}},
-    {"data": "2026-10-17", "valores": {"Metropolitana": 82.40, "Parnaíba": 80.50, "Picos": 84.30, "Floriano": 80.40}},
-    {"data": "2026-10-19", "valores": {"Metropolitana": 82.20, "Parnaíba": 80.30, "Picos": 84.00, "Floriano": 80.80}},
-    {"data": "2026-10-21", "valores": {"Metropolitana": 82.40, "Parnaíba": 80.10, "Picos": 83.80, "Floriano": 81.00}},
-    {"data": "2026-10-23", "valores": {"Metropolitana": 82.49, "Parnaíba": 80.20, "Picos": 83.70, "Floriano": 80.90}}
+    {
+      "REFERENCIA": "30/06/2026",
+      "REGIONAL": "METROPOLITANA",
+      "FORA PRAZO": 3450,
+      "NO PRAZO": 553,
+      "PLA": 0.86185361
+    },
+    {
+      "REFERENCIA": "29/07/2026",
+      "REGIONAL": "METROPOLITANA",
+      "FORA PRAZO": 3284,
+      "NO PRAZO": 515,
+      "PLA": 0.86443801
+    },
+    {
+      "REFERENCIA": "31/08/2026",
+      "REGIONAL": "METROPOLITANA",
+      "FORA PRAZO": 3008,
+      "NO PRAZO": 457,
+      "PLA": 0.868109668
+    },
+    {
+      "REFERENCIA": "30/09/2026",
+      "REGIONAL": "METROPOLITANA",
+      "FORA PRAZO": 2728,
+      "NO PRAZO": 350,
+      "PLA": 0.886289799
+    },
+    {
+      "REFERENCIA": "13/10/2026",
+      "REGIONAL": "FLORIANO",
+      "FORA PRAZO": 4167,
+      "NO PRAZO": 434,
+      "PLA": 0.90567268
+    },
+    {
+      "REFERENCIA": "13/10/2026",
+      "REGIONAL": "METROPOLITANA",
+      "FORA PRAZO": 2571,
+      "NO PRAZO": 336,
+      "PLA": 0.884416925
+    },
+    {
+      "REFERENCIA": "13/10/2026",
+      "REGIONAL": "PARNAIBA",
+      "FORA PRAZO": 2330,
+      "NO PRAZO": 249,
+      "PLA": 0.90345095
+    },
+    {
+      "REFERENCIA": "13/10/2026",
+      "REGIONAL": "PICOS",
+      "FORA PRAZO": 3227,
+      "NO PRAZO": 451,
+      "PLA": 0.87737901
+    }
   ]
 }

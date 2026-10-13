@@ -305,24 +305,6 @@
     height: 100% !important;
 }
 
-.visao-pla .pla-rodape {
-    flex: 0 0 30px;
-    min-height: 30px;
-    padding: 0 4px;
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 18px;
-    color: var(--texto-secundario);
-    font-size: var(--tv-fonte-minima, 22px);
-    line-height: 1;
-    font-weight: var(--tv-peso-normal, 600);
-    white-space: nowrap;
-}
-
-.visao-pla .pla-fonte-exemplo {
-    color: #9a6b16;
-}
 
 .visao-pla .pla-erro {
     position: absolute;

@@ -35,6 +35,20 @@ const ESTILOS_REGIONAIS = Object.freeze([
     { cor: CORES.roxo, pointStyle: "rectRot", classe: "losango" }
 ]);
 
+const REGIONAIS_PREFERENCIA = Object.freeze([
+    "METROPOLITANA",
+    "PARNAIBA",
+    "PICOS",
+    "FLORIANO"
+]);
+
+const NOMES_REGIONAIS = Object.freeze({
+    METROPOLITANA: "Metropolitana",
+    PARNAIBA: "Parnaíba",
+    PICOS: "Picos",
+    FLORIANO: "Floriano"
+});
+
 let dadosValidos = null;
 let graficoNoPrazo = null;
 let graficoForaPrazo = null;
@@ -58,12 +72,88 @@ function numero(valor) {
     return Number.isFinite(resultado) ? resultado : 0;
 }
 
+function numeroValido(valor) {
+    if (valor === null || valor === undefined || valor === "") return false;
+    if (typeof valor === "number") return Number.isFinite(valor);
+
+    const texto = String(valor).trim();
+    const normalizado = texto.includes(",")
+        ? texto.replace(/\./g, "").replace(",", ".")
+        : texto;
+    return Number.isFinite(Number(normalizado));
+}
+
+function validarDados(dados) {
+    const comparativo = Array.isArray(dados?.comparativo) ? dados.comparativo : [];
+    if (comparativo.length < 2) {
+        return "comparativo precisa conter pelo menos as referências Anterior e Atual";
+    }
+
+    for (const item of comparativo) {
+        for (const campo of ["PLA", "FORA PRAZO", "NO PRAZO", "ORDEM"]) {
+            if (!numeroValido(item?.[campo])) {
+                return `comparativo.${campo} precisa ser numérico`;
+            }
+        }
+        if (!String(item?.ROTULO || item?.REFERENCIA || "").trim()) {
+            return "comparativo precisa informar ROTULO ou REFERENCIA";
+        }
+    }
+
+    const movimentacoes = Array.isArray(dados?.movimentacoes) ? dados.movimentacoes : [];
+    if (movimentacoes.length < 2) {
+        return "movimentacoes precisa conter os pontos Anterior, eventos e Atual";
+    }
+
+    const movimentacoesOrdenadas = ordenarMovimentacoes(movimentacoes);
+    const ultimoIndice = movimentacoesOrdenadas.length - 1;
+
+    for (const [indice, item] of movimentacoesOrdenadas.entries()) {
+        if (!numeroValido(item?.ORDEM) || !String(item?.EVENTO || "").trim()) {
+            return "cada movimentação precisa informar ORDEM e EVENTO";
+        }
+        for (const campo of ["SALDO_NO_PRAZO", "SALDO_FORA_PRAZO"]) {
+            if (!numeroValido(item?.[campo])) {
+                return `movimentacoes.${item?.EVENTO || item?.ORDEM}.${campo} precisa ser numérico`;
+            }
+        }
+        const extremo = indice === 0 || indice === ultimoIndice;
+        for (const campo of ["MOV_NO_PRAZO", "MOV_FORA_PRAZO"]) {
+            const valor = item?.[campo];
+            if (!extremo && !numeroValido(valor)) {
+                return `movimentacoes.${item?.EVENTO || item?.ORDEM}.${campo} precisa ser numérico`;
+            }
+            if (extremo && valor !== null && valor !== undefined && valor !== "" && !numeroValido(valor)) {
+                return `movimentacoes.${item?.EVENTO || item?.ORDEM}.${campo} precisa ser nulo ou numérico`;
+            }
+        }
+    }
+
+    const historico = Array.isArray(dados?.historicoRegional) ? dados.historicoRegional : [];
+    if (!historico.length) {
+        return "historicoRegional precisa conter dados";
+    }
+
+    for (const item of historico) {
+        if (!String(item?.REFERENCIA || "").trim() || !String(item?.REGIONAL || "").trim()) {
+            return "historicoRegional precisa informar REFERENCIA e REGIONAL";
+        }
+        for (const campo of ["FORA PRAZO", "NO PRAZO", "PLA"]) {
+            if (!numeroValido(item?.[campo])) {
+                return `historicoRegional.${campo} precisa ser numérico`;
+            }
+        }
+    }
+
+    return "";
+}
+
 function formatarInteiro(valor) {
     return Math.round(numero(valor)).toLocaleString("pt-BR");
 }
 
 function formatarPercentual(valor) {
-    return `${numero(valor).toLocaleString("pt-BR", {
+    return `${(numero(valor) * 100).toLocaleString("pt-BR", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
     })}%`;
@@ -79,57 +169,62 @@ function formatarPontosPercentuais(valor) {
     return `• ${absoluto} p.p.`;
 }
 
-function calcularPla(apuracao) {
-    const fora = numero(apuracao?.foraPrazo);
-    const noPrazo = numero(apuracao?.noPrazo);
-    const total = fora + noPrazo;
-    return total > 0 ? (fora / total) * 100 : 0;
-}
-
-function ordenarApuracoes(apuracoes) {
-    return [...(Array.isArray(apuracoes) ? apuracoes : [])].sort((a, b) => {
-        const ordemA = numero(a?.ordem);
-        const ordemB = numero(b?.ordem);
-        if (ordemA !== ordemB) return ordemA - ordemB;
-        return String(a?.periodo || "").localeCompare(String(b?.periodo || ""));
-    });
-}
 
 function ordenarMovimentacoes(movimentacoes) {
     return [...(Array.isArray(movimentacoes) ? movimentacoes : [])].sort(
-        (a, b) => numero(a?.ordem) - numero(b?.ordem)
+        (a, b) => numero(a?.ORDEM) - numero(b?.ORDEM)
     );
 }
 
 function rotuloPeriodo(apuracao) {
-    if (apuracao?.rotulo) return String(apuracao.rotulo);
-    const periodo = String(apuracao?.periodo || "");
-    const match = periodo.match(/^(\d{4})-(\d{2})$/);
-    if (!match) return periodo || "--";
-
-    const nomes = [
-        "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
-        "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
-    ];
-    return `${nomes[Number(match[2]) - 1]}/${match[1].slice(-2)}`;
+    if (apuracao?.ROTULO) return String(apuracao.ROTULO);
+    if (apuracao?.REFERENCIA) return rotuloData(apuracao.REFERENCIA);
+    return "--";
 }
 
 function rotuloData(valor) {
-    const texto = String(valor || "");
-    const match = texto.match(/^(\d{4})-(\d{2})-(\d{2})/);
-    return match ? `${match[3]}/${match[2]}` : texto;
+    const texto = String(valor || "").trim();
+
+    let match = texto.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+    if (match) return `${match[1]}/${match[2]}`;
+
+    match = texto.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (match) return `${match[3]}/${match[2]}`;
+
+    return texto;
 }
 
-function formatarDataHora(valor) {
-    if (!valor) return "--";
-    const data = new Date(valor);
-    if (Number.isNaN(data.getTime())) return String(valor);
-    return data.toLocaleString("pt-BR", {
-        day: "2-digit",
-        month: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit"
-    });
+function chaveRegional(valor) {
+    return String(valor || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .trim()
+        .toUpperCase();
+}
+
+function nomeRegional(chave) {
+    return NOMES_REGIONAIS[chave] || String(chave || "");
+}
+
+function timestampReferencia(valor) {
+    const texto = String(valor || "").trim();
+    let match = texto.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+    if (match) return Date.UTC(Number(match[3]), Number(match[2]) - 1, Number(match[1]));
+
+    match = texto.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (match) return Date.UTC(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
+
+    return Number.POSITIVE_INFINITY;
+}
+
+function ordenarComparativo(comparativo) {
+    return [...(Array.isArray(comparativo) ? comparativo : [])].sort(
+        (a, b) => numero(a?.ORDEM) - numero(b?.ORDEM)
+    );
+}
+
+function numeroOuNull(valor) {
+    return valor === null || valor === undefined || valor === "" ? null : numero(valor);
 }
 
 function registrarDatalabels() {
@@ -161,51 +256,33 @@ function limparGraficos() {
     graficoRegionais = null;
 }
 
-function prepararMovimentacoes(dados, anterior, atual) {
-    const movimentacoes = ordenarMovimentacoes(dados?.movimentacoes).map(item => ({
-        ordem: numero(item?.ordem),
-        evento: String(item?.evento || "Movimentação"),
-        rotulo: String(item?.rotulo || item?.evento || "Mov."),
-        noPrazo: numero(item?.noPrazo),
-        foraPrazo: numero(item?.foraPrazo)
+function prepararMovimentacoes(dados) {
+    return ordenarMovimentacoes(dados?.movimentacoes).map(item => ({
+        ordem: numero(item?.ORDEM),
+        evento: String(item?.EVENTO || "Movimentação"),
+        rotulo: String(item?.EVENTO || "Mov."),
+        noPrazo: {
+            movimentacao: numeroOuNull(item?.MOV_NO_PRAZO),
+            saldo: numero(item?.SALDO_NO_PRAZO)
+        },
+        foraPrazo: {
+            movimentacao: numeroOuNull(item?.MOV_FORA_PRAZO),
+            saldo: numero(item?.SALDO_FORA_PRAZO)
+        }
     }));
-
-    const somaNoPrazo = movimentacoes.reduce((total, item) => total + item.noPrazo, 0);
-    const somaForaPrazo = movimentacoes.reduce((total, item) => total + item.foraPrazo, 0);
-
-    const residualNoPrazo = numero(atual?.noPrazo) - (numero(anterior?.noPrazo) + somaNoPrazo);
-    const residualForaPrazo = numero(atual?.foraPrazo) - (numero(anterior?.foraPrazo) + somaForaPrazo);
-
-    if (Math.abs(residualNoPrazo) > 0.0001 || Math.abs(residualForaPrazo) > 0.0001) {
-        movimentacoes.push({
-            ordem: movimentacoes.length + 1,
-            evento: "Ajuste de conciliação",
-            rotulo: "Ajuste",
-            noPrazo: residualNoPrazo,
-            foraPrazo: residualForaPrazo
-        });
-    }
-
-    return movimentacoes;
 }
 
-function construirSerieMovimentos(anterior, atual, movimentacoes, campo) {
-    const labels = ["Anterior"];
-    const valores = [numero(anterior?.[campo])];
-    const deltas = [null];
-    let acumulado = numero(anterior?.[campo]);
+function construirSerieMovimentos(movimentacoes, campo) {
+    const labels = [];
+    const valores = [];
+    const deltas = [];
 
     movimentacoes.forEach(item => {
-        const delta = numero(item?.[campo]);
-        acumulado += delta;
+        const detalhe = item?.[campo] || {};
         labels.push(item.rotulo);
-        valores.push(acumulado);
-        deltas.push(delta);
+        valores.push(numero(detalhe.saldo));
+        deltas.push(detalhe.movimentacao === null ? null : numero(detalhe.movimentacao));
     });
-
-    labels.push("Atual");
-    valores.push(numero(atual?.[campo]));
-    deltas.push(null);
 
     return { labels, valores, deltas };
 }
@@ -359,22 +436,53 @@ function criarGraficoRegional(dados) {
     if (!canvas || !window.Chart) return null;
 
     const historico = Array.isArray(dados?.historicoRegional) ? dados.historicoRegional : [];
-    const regionaisOriginais = Array.isArray(dados?.regionais) ? dados.regionais.map(String) : [];
-    const foco = String(dados?.regionalFoco || regionaisOriginais[0] || "Metropolitana");
-    const regionais = regionaisOriginais.length ? regionaisOriginais : [foco];
+    const referencias = [...new Set(historico.map(item => String(item?.REFERENCIA || "").trim()).filter(Boolean))]
+        .sort((a, b) => {
+            const ta = timestampReferencia(a);
+            const tb = timestampReferencia(b);
+            if (ta !== tb) return ta - tb;
+            return a.localeCompare(b, "pt-BR");
+        });
+
+    const chavesEncontradas = [...new Set(historico.map(item => chaveRegional(item?.REGIONAL)).filter(Boolean))];
+    const chavesOrdenadas = [
+        ...REGIONAIS_PREFERENCIA.filter(chave => chavesEncontradas.includes(chave)),
+        ...chavesEncontradas.filter(chave => !REGIONAIS_PREFERENCIA.includes(chave))
+    ];
+
+    const focoChave = chavesOrdenadas.includes("METROPOLITANA")
+        ? "METROPOLITANA"
+        : chavesOrdenadas[0];
+    const regionais = chavesOrdenadas.map(chave => nomeRegional(chave));
+    const foco = nomeRegional(focoChave);
 
     criarLegendaRegionais(regionais, foco);
 
-    const labels = historico.map(item => rotuloData(item?.data || item?.rotulo));
+    const mapa = new Map();
+    historico.forEach(item => {
+        const referencia = String(item?.REFERENCIA || "").trim();
+        const regional = chaveRegional(item?.REGIONAL);
+        if (!referencia || !regional) return;
+        mapa.set(`${referencia}||${regional}`, numero(item?.PLA));
+    });
+
+    const labels = referencias.map(rotuloData);
     const ordenadas = [
-        ...regionais.filter(nome => nome === foco),
-        ...regionais.filter(nome => nome !== foco)
+        ...chavesOrdenadas.filter(chave => chave === focoChave),
+        ...chavesOrdenadas.filter(chave => chave !== focoChave)
     ];
 
-    const datasets = ordenadas.map((nome, indice) => {
+    const datasets = ordenadas.map((chave, indice) => {
+        const nome = nomeRegional(chave);
         const estilo = obterEstiloRegional(nome, Math.max(0, indice - 1), foco);
-        const valores = historico.map(item => numero(item?.valores?.[nome] ?? item?.[nome]));
-        const ultimoIndice = valores.length - 1;
+        const valores = referencias.map(referencia => {
+            const valor = mapa.get(`${referencia}||${chave}`);
+            return valor === undefined ? null : valor;
+        });
+        const ultimoIndice = valores.reduce(
+            (ultimo, valor, indiceValor) => valor === null ? ultimo : indiceValor,
+            -1
+        );
 
         return {
             label: nome,
@@ -384,13 +492,16 @@ function criarGraficoRegional(dados) {
             borderWidth: nome === foco ? 5 : 3,
             tension: 0.18,
             fill: false,
+            spanGaps: false,
             pointStyle: estilo.pointStyle,
-            pointRadius: nome === foco ? 6 : 5,
+            pointRadius(contexto) {
+                return contexto.raw === null ? 0 : (nome === foco ? 6 : 5);
+            },
             pointHoverRadius: nome === foco ? 6 : 5,
             pointBorderWidth: 0,
             datalabels: {
                 display(contexto) {
-                    return contexto.dataIndex === ultimoIndice;
+                    return ultimoIndice >= 0 && contexto.dataIndex === ultimoIndice && contexto.dataset.data[contexto.dataIndex] !== null;
                 },
                 formatter(valor) {
                     return formatarPercentual(valor);
@@ -463,20 +574,19 @@ function criarGraficoRegional(dados) {
     });
 }
 
-function atualizarCartoes(dados, anterior, atual) {
-    const plaAnterior = calcularPla(anterior);
-    const plaAtual = calcularPla(atual);
-    const variacao = plaAtual - plaAnterior;
+function atualizarCartoes(anterior, atual, variacao) {
+    const plaAnterior = numero(anterior?.PLA);
+    const plaAtual = numero(atual?.PLA);
 
     const campos = [
         ["plaPeriodoAnterior", rotuloPeriodo(anterior)],
         ["plaValorAnterior", formatarPercentual(plaAnterior)],
-        ["plaForaAnterior", formatarInteiro(anterior?.foraPrazo)],
-        ["plaNoPrazoAnterior", formatarInteiro(anterior?.noPrazo)],
+        ["plaForaAnterior", formatarInteiro(anterior?.["FORA PRAZO"])],
+        ["plaNoPrazoAnterior", formatarInteiro(anterior?.["NO PRAZO"])],
         ["plaPeriodoAtual", rotuloPeriodo(atual)],
         ["plaValorAtual", formatarPercentual(plaAtual)],
-        ["plaForaAtual", formatarInteiro(atual?.foraPrazo)],
-        ["plaNoPrazoAtual", formatarInteiro(atual?.noPrazo)]
+        ["plaForaAtual", formatarInteiro(atual?.["FORA PRAZO"])],
+        ["plaNoPrazoAtual", formatarInteiro(atual?.["NO PRAZO"])]
     ];
 
     campos.forEach(([id, valor]) => {
@@ -491,39 +601,27 @@ function atualizarCartoes(dados, anterior, atual) {
         if (variacao < 0) variacaoEl.classList.add("melhora");
         if (variacao > 0) variacaoEl.classList.add("piora");
     }
-
-    const fonteEl = document.getElementById("plaFonteStatus");
-    if (fonteEl) {
-        const exemplo = String(dados?.fonte || "").toLowerCase() === "exemplo";
-        fonteEl.textContent = exemplo
-            ? "Dados ilustrativos — substituir pelo JSON do Power Automate"
-            : "Fonte: JSON gerado pelo Power Automate";
-        fonteEl.classList.toggle("pla-fonte-exemplo", exemplo);
-    }
-
-    const statusEl = document.getElementById("plaStatusAtualizacao");
-    if (statusEl) {
-        statusEl.textContent = `Última atualização: ${formatarDataHora(dados?.atualizadoEm)}`;
-    }
 }
 
 function renderizar(dados) {
-    const apuracoes = ordenarApuracoes(dados?.apuracoes);
-    if (apuracoes.length < 2) {
-        exibirErro("PLA-V1: o JSON precisa conter pelo menos duas apurações.");
+    const comparativo = ordenarComparativo(dados?.comparativo);
+    const anterior = comparativo[0];
+    const atual = comparativo[comparativo.length - 1];
+
+    if (!anterior || !atual) {
+        exibirErro("PLA-V1: estrutura de comparativo inválida.");
         return;
     }
 
-    const anterior = apuracoes[apuracoes.length - 2];
-    const atual = apuracoes[apuracoes.length - 1];
-    const movimentacoes = prepararMovimentacoes(dados, anterior, atual);
+    const movimentacoes = prepararMovimentacoes(dados);
+    const variacao = (numero(atual?.PLA) - numero(anterior?.PLA)) * 100;
 
-    atualizarCartoes(dados, anterior, atual);
+    atualizarCartoes(anterior, atual, variacao);
     limparGraficos();
     registrarDatalabels();
 
     try {
-        const serieNoPrazo = construirSerieMovimentos(anterior, atual, movimentacoes, "noPrazo");
+        const serieNoPrazo = construirSerieMovimentos(movimentacoes, "noPrazo");
         graficoNoPrazo = criarGraficoMovimentacao(
             "plaGraficoNoPrazo",
             serieNoPrazo,
@@ -535,7 +633,7 @@ function renderizar(dados) {
     }
 
     try {
-        const serieForaPrazo = construirSerieMovimentos(anterior, atual, movimentacoes, "foraPrazo");
+        const serieForaPrazo = construirSerieMovimentos(movimentacoes, "foraPrazo");
         graficoForaPrazo = criarGraficoMovimentacao(
             "plaGraficoForaPrazo",
             serieForaPrazo,
@@ -563,6 +661,8 @@ async function carregarDados() {
         const resposta = await fetch(url, { cache: "no-store" });
         if (!resposta.ok) throw new Error(`HTTP ${resposta.status}`);
         const dados = await resposta.json();
+        const erroEstrutura = validarDados(dados);
+        if (erroEstrutura) throw new Error(`Estrutura inválida: ${erroEstrutura}`);
         dadosValidos = dados;
         renderizar(dadosValidos);
     } catch (erro) {
