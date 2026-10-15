@@ -27,6 +27,21 @@
     gap: 18px;
 }
 
+
+.visao-pla .pla-coluna-direita {
+    min-width: 0;
+    min-height: 0;
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) 320px;
+    gap: 14px;
+    overflow: hidden;
+}
+
+.visao-pla .pla-coluna-direita > .painel {
+    min-width: 0;
+    min-height: 0;
+}
+
 .visao-pla .pla-coluna {
     min-width: 0;
     min-height: 0;
@@ -298,6 +313,165 @@
     border-radius: 14px;
     background: #f8fbfd;
     border: 1px solid var(--borda);
+}
+
+
+.visao-pla .pla-ranking-regionais {
+    min-width: 0;
+    min-height: 0;
+    padding: 14px 16px 12px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.visao-pla .pla-ranking-cabecalho {
+    flex: 0 0 auto;
+    min-height: 36px;
+    display: flex;
+    align-items: center;
+}
+
+.visao-pla .pla-ranking-cabecalho h2 {
+    margin: 0;
+    color: var(--header-2);
+    font-size: var(--tv-fonte-secao, 28px);
+    line-height: 1.08;
+    font-weight: var(--tv-peso-destaque, 700);
+}
+
+.visao-pla .pla-ranking-tabela-wrap {
+    flex: 1 1 auto;
+    min-height: 0;
+    margin-top: 8px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--borda);
+    background: #ffffff;
+}
+
+.visao-pla .pla-ranking-tabela {
+    width: 100%;
+    height: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    color: var(--texto-principal);
+    font-size: var(--tv-fonte-minima, 22px);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+}
+
+.visao-pla .pla-ranking-col-posicao { width: 10%; }
+.visao-pla .pla-ranking-col-regional { width: 31%; }
+.visao-pla .pla-ranking-col-pla { width: 18%; }
+.visao-pla .pla-ranking-col-diferenca { width: 24%; }
+.visao-pla .pla-ranking-col-tendencia { width: 17%; }
+
+.visao-pla .pla-ranking-tabela thead {
+    background: #f1f5f8;
+}
+
+.visao-pla .pla-ranking-tabela th,
+.visao-pla .pla-ranking-tabela td {
+    height: 44px;
+    padding: 0 10px;
+    text-align: left;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--borda);
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.visao-pla .pla-ranking-tabela th {
+    color: #43596d;
+    font-weight: var(--tv-peso-destaque, 700);
+}
+
+.visao-pla .pla-ranking-tabela tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.visao-pla .pla-ranking-tabela tbody tr.pla-ranking-foco {
+    background: var(--pla-azul-claro);
+}
+
+.visao-pla .pla-ranking-posicao,
+.visao-pla .pla-ranking-pla {
+    font-weight: var(--tv-peso-destaque, 700);
+}
+
+.visao-pla .pla-ranking-regional {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.visao-pla .pla-ranking-regional-nome {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.visao-pla .pla-ranking-foco .pla-ranking-regional-nome,
+.visao-pla .pla-ranking-foco .pla-ranking-pla {
+    color: var(--pla-azul-escuro);
+    font-weight: var(--tv-peso-destaque, 700);
+}
+
+.visao-pla .pla-ranking-marcador {
+    width: 16px;
+    height: 16px;
+    flex: 0 0 16px;
+    background: currentColor;
+}
+
+.visao-pla .pla-ranking-marcador.circulo { border-radius: 50%; }
+.visao-pla .pla-ranking-marcador.quadrado { border-radius: 2px; }
+.visao-pla .pla-ranking-marcador.triangulo {
+    width: 0;
+    height: 0;
+    flex-basis: 0;
+    border-left: 9px solid transparent;
+    border-right: 9px solid transparent;
+    border-bottom: 17px solid currentColor;
+    background: transparent;
+}
+.visao-pla .pla-ranking-marcador.losango {
+    width: 14px;
+    height: 14px;
+    margin: 0 2px;
+    transform: rotate(45deg);
+    border-radius: 2px;
+}
+
+.visao-pla .pla-ranking-diferenca {
+    font-weight: var(--tv-peso-destaque, 700);
+}
+
+.visao-pla .pla-ranking-diferenca.melhora { color: #0f8f61; }
+.visao-pla .pla-ranking-diferenca.piora { color: var(--pla-vermelho); }
+.visao-pla .pla-ranking-diferenca.neutra,
+.visao-pla .pla-ranking-sem-historico { color: var(--texto-secundario); }
+
+.visao-pla .pla-ranking-tendencia {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    overflow: visible !important;
+}
+
+.visao-pla .pla-ranking-sparkline {
+    width: 104px;
+    height: 30px;
+    display: block;
+    overflow: visible;
+}
+
+.visao-pla .pla-ranking-ordem {
+    margin-left: 4px;
+    color: var(--texto-secundario);
+    font-size: 16px;
+    vertical-align: 2px;
 }
 
 .visao-pla canvas {

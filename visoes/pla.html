@@ -63,16 +63,46 @@
             </section>
         </section>
 
-        <section class="painel pla-coluna pla-coluna-regionais" aria-label="Comparativo do PLA entre regionais">
-            <header class="pla-secao-cabecalho pla-cabecalho-regionais">
-                <h2>Comparativo regional — evolução do PLA</h2>
-            </header>
+        <div class="pla-coluna-direita">
+            <section class="painel pla-coluna pla-coluna-regionais" aria-label="Comparativo do PLA entre regionais">
+                <header class="pla-secao-cabecalho pla-cabecalho-regionais">
+                    <h2>Comparativo regional — evolução do PLA</h2>
+                </header>
 
-            <div id="plaLegendaRegionais" class="pla-legenda-regionais" aria-label="Legenda das regionais"></div>
+                <div id="plaLegendaRegionais" class="pla-legenda-regionais" aria-label="Legenda das regionais"></div>
 
-            <div class="pla-grafico-regionais">
-                <canvas id="plaGraficoRegionais"></canvas>
-            </div>
-        </section>
+                <div class="pla-grafico-regionais">
+                    <canvas id="plaGraficoRegionais"></canvas>
+                </div>
+            </section>
+
+            <section class="painel pla-ranking-regionais" aria-labelledby="plaTituloRanking">
+                <header class="pla-ranking-cabecalho">
+                    <h2 id="plaTituloRanking">Ranking das regionais</h2>
+                </header>
+
+                <div class="pla-ranking-tabela-wrap">
+                    <table class="pla-ranking-tabela">
+                        <colgroup>
+                            <col class="pla-ranking-col-posicao">
+                            <col class="pla-ranking-col-regional">
+                            <col class="pla-ranking-col-pla">
+                            <col class="pla-ranking-col-diferenca">
+                            <col class="pla-ranking-col-tendencia">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th scope="col">Pos.</th>
+                                <th scope="col">Regional</th>
+                                <th scope="col">PLA atual <span class="pla-ranking-ordem" aria-hidden="true">▲</span></th>
+                                <th scope="col">Dif. vs ant.</th>
+                                <th scope="col">Tendência</th>
+                            </tr>
+                        </thead>
+                        <tbody id="plaRankingCorpo"></tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
     </div>
 </main>

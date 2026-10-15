@@ -752,7 +752,7 @@ Como o indicador representa atraso, **quanto menor o PLA, melhor**. O cálculo e
 
 ### Composição da visão
 
-A PLA-V1 possui **uma única tela de 15 segundos** e utiliza duas colunas principais.
+A PLA-V1 possui **uma única tela de 15 segundos** e utiliza duas colunas principais. A coluna direita é subdividida verticalmente em dois frames: evolução regional acima e ranking das regionais abaixo.
 
 **Coluna esquerda — Metropolitana**
 
@@ -776,17 +776,22 @@ A PLA-V1 possui **uma única tela de 15 segundos** e utiliza duas colunas princi
 
 - `historicoRegional` usa formato longo: uma linha por `REFERENCIA` + `REGIONAL`;
 - o gráfico aceita referências ausentes para determinada regional; nesse caso não inventa nem repete valores;
-- com o conjunto de dados atual, Metropolitana possui histórico de junho a outubro e Floriano, Parnaíba e Picos possuem somente a referência de 13/10/2026;
+- referências ausentes por regional são aceitas; o gráfico e o ranking nunca inventam valores para preencher lacunas;
 - a linha da **Metropolitana** é mais grossa do que as demais;
 - cada regional utiliza marcador distinto:
   - Metropolitana: círculo;
   - Parnaíba: quadrado;
   - Picos: triângulo;
   - Floriano: losango;
-- existe somente uma legenda compacta junto ao cabeçalho do painel, contendo o marcador e o nome de cada regional;
-- não existem resumos/legendas adicionais na parte superior ou inferior do gráfico;
+- existe somente uma legenda compacta junto ao cabeçalho do frame de evolução, contendo o marcador e o nome de cada regional;
 - os rótulos do eixo Y são ocultos;
-- o último ponto disponível de cada regional recebe rótulo percentual; a Metropolitana permanece visualmente destacada em relação às demais.
+- o último ponto disponível de cada regional recebe rótulo percentual; a Metropolitana permanece visualmente destacada em relação às demais;
+- abaixo do gráfico existe o frame **Ranking das regionais**, calculado exclusivamente a partir de `historicoRegional`;
+- o ranking usa a referência mais recente com a maior cobertura simultânea de regionais, evitando comparar datas diferentes na mesma classificação;
+- como **quanto menor o PLA, melhor**, a posição é ordenada em ordem crescente de `PLA`;
+- `PLA atual` usa o valor da referência do ranking; `Dif. vs ant.` compara com a referência anterior disponível da mesma regional e é exibida em pontos percentuais; quando não existe referência anterior, exibe `—`;
+- `Tendência` usa até os cinco últimos valores disponíveis da regional até a referência do ranking; com menos de dois pontos, exibe `—`;
+- Metropolitana permanece visualmente destacada na tabela e os marcadores do ranking preservam a mesma semântica de formas e cores do gráfico.
 
 ### Tipografia e gráficos
 
@@ -1182,3 +1187,5 @@ O player **não possui tela inicial de carregamento**. O `index.html` inicia com
 - PLA-V1: o contrato de dados foi simplificado para espelhar três tabelas do Power Query: `comparativo` em linhas por referência, `movimentacoes` em linhas por evento e `historicoRegional` em formato longo por referência + regional. O Power Automate apenas estrutura/grava o JSON; o JavaScript não recalcula PLA ou saldos e deriva somente a diferença visual em pontos percentuais entre os dois PLAs fornecidos.
 
 - PLA-V1: removidos do corpo da visão os textos de fonte/dados ilustrativos e última atualização; os campos `fonte` e `atualizadoEm` também foram retirados do contrato canônico por não terem mais referência visual.
+
+- PLA-V1: a coluna direita passou a ser dividida verticalmente em dois frames. O comparativo regional foi reduzido em altura e ganhou, abaixo, o frame **Ranking das regionais**, sem alteração no contrato de `dados/pla.json`. O ranking usa `historicoRegional` para calcular posição (menor PLA = melhor), PLA atual, diferença versus a referência anterior disponível da mesma regional e uma mini tendência com até cinco pontos. Campos sem histórico suficiente exibem `—`.

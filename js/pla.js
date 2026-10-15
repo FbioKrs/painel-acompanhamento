@@ -431,6 +431,210 @@ function criarLegendaRegionais(regionais, foco) {
     });
 }
 
+function obterEstiloRegionalPorChave(chave, focoChave = "METROPOLITANA") {
+    if (chave === focoChave) return ESTILOS_REGIONAIS[0];
+
+    const alternativas = ESTILOS_REGIONAIS.slice(1);
+    const preferenciaSemFoco = REGIONAIS_PREFERENCIA.filter(item => item !== focoChave);
+    let indice = preferenciaSemFoco.indexOf(chave);
+
+    if (indice < 0) {
+        indice = Math.abs([...String(chave || "")].reduce((total, caractere) => total + caractere.charCodeAt(0), 0));
+    }
+
+    return alternativas[indice % alternativas.length];
+}
+
+function formatarDiferencaRanking(valor) {
+    if (valor === null || valor === undefined || !Number.isFinite(valor)) return "—";
+
+    const absoluto = Math.abs(valor).toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
+
+    if (valor < 0) return `▼ -${absoluto} p.p.`;
+    if (valor > 0) return `▲ +${absoluto} p.p.`;
+    return `• ${absoluto} p.p.`;
+}
+
+function classeDiferencaRanking(valor) {
+    if (valor === null || valor === undefined || !Number.isFinite(valor) || valor === 0) return "neutra";
+    return valor < 0 ? "melhora" : "piora";
+}
+
+function criarSparklineRanking(valores, cor) {
+    if (!Array.isArray(valores) || valores.length < 2) {
+        const vazio = document.createElement("span");
+        vazio.className = "pla-ranking-sem-historico";
+        vazio.textContent = "—";
+        return vazio;
+    }
+
+    const largura = 104;
+    const altura = 30;
+    const margem = 3;
+    const minimo = Math.min(...valores);
+    const maximo = Math.max(...valores);
+    const amplitude = Math.max(maximo - minimo, 0.0001);
+    const passo = (largura - margem * 2) / Math.max(1, valores.length - 1);
+
+    const pontos = valores.map((valor, indice) => {
+        const x = margem + indice * passo;
+        const y = margem + ((maximo - valor) / amplitude) * (altura - margem * 2);
+        return `${x.toFixed(1)},${y.toFixed(1)}`;
+    }).join(" ");
+
+    const namespace = "http://www.w3.org/2000/svg";
+    const svg = document.createElementNS(namespace, "svg");
+    svg.setAttribute("viewBox", `0 0 ${largura} ${altura}`);
+    svg.setAttribute("class", "pla-ranking-sparkline");
+    svg.setAttribute("aria-hidden", "true");
+
+    const linha = document.createElementNS(namespace, "polyline");
+    linha.setAttribute("points", pontos);
+    linha.setAttribute("fill", "none");
+    linha.setAttribute("stroke", cor);
+    linha.setAttribute("stroke-width", "2.4");
+    linha.setAttribute("stroke-linecap", "round");
+    linha.setAttribute("stroke-linejoin", "round");
+
+    const listaPontos = pontos.split(" ");
+    const ultimo = listaPontos[listaPontos.length - 1].split(",");
+    const pontoFinal = document.createElementNS(namespace, "circle");
+    pontoFinal.setAttribute("cx", ultimo[0]);
+    pontoFinal.setAttribute("cy", ultimo[1]);
+    pontoFinal.setAttribute("r", "2.8");
+    pontoFinal.setAttribute("fill", cor);
+
+    svg.appendChild(linha);
+    svg.appendChild(pontoFinal);
+    return svg;
+}
+
+function prepararRankingRegional(dados) {
+    const historico = Array.isArray(dados?.historicoRegional) ? dados.historicoRegional : [];
+    const validos = historico
+        .map(item => ({
+            ...item,
+            chave: chaveRegional(item?.REGIONAL),
+            referencia: String(item?.REFERENCIA || "").trim(),
+            timestamp: timestampReferencia(item?.REFERENCIA),
+            pla: numero(item?.PLA)
+        }))
+        .filter(item => item.chave && item.referencia && Number.isFinite(item.timestamp));
+
+    if (!validos.length) return { referencia: "", itens: [] };
+
+    const porReferencia = new Map();
+    validos.forEach(item => {
+        if (!porReferencia.has(item.referencia)) {
+            porReferencia.set(item.referencia, {
+                referencia: item.referencia,
+                timestamp: item.timestamp,
+                regionais: new Set()
+            });
+        }
+        porReferencia.get(item.referencia).regionais.add(item.chave);
+    });
+
+    const referencias = [...porReferencia.values()].sort((a, b) => {
+        const diferencaCobertura = b.regionais.size - a.regionais.size;
+        if (diferencaCobertura !== 0) return diferencaCobertura;
+        return b.timestamp - a.timestamp;
+    });
+
+    const referenciaRanking = referencias[0];
+    const atuaisPorRegional = new Map();
+
+    validos
+        .filter(item => item.referencia === referenciaRanking.referencia)
+        .forEach(item => atuaisPorRegional.set(item.chave, item));
+
+    const focoChave = atuaisPorRegional.has("METROPOLITANA")
+        ? "METROPOLITANA"
+        : [...atuaisPorRegional.keys()][0];
+
+    const itens = [...atuaisPorRegional.values()].map(atual => {
+        const serie = validos
+            .filter(item => item.chave === atual.chave && item.timestamp <= referenciaRanking.timestamp)
+            .sort((a, b) => a.timestamp - b.timestamp);
+
+        const anteriores = serie.filter(item => item.timestamp < referenciaRanking.timestamp);
+        const anterior = anteriores.length ? anteriores[anteriores.length - 1] : null;
+        const diferencaPp = anterior ? (atual.pla - anterior.pla) * 100 : null;
+        const tendencia = serie.slice(-5).map(item => item.pla);
+
+        return {
+            chave: atual.chave,
+            nome: nomeRegional(atual.chave),
+            pla: atual.pla,
+            diferencaPp,
+            tendencia,
+            foco: atual.chave === focoChave,
+            estilo: obterEstiloRegionalPorChave(atual.chave, focoChave)
+        };
+    });
+
+    itens.sort((a, b) => {
+        if (a.pla !== b.pla) return a.pla - b.pla;
+        return a.nome.localeCompare(b.nome, "pt-BR");
+    });
+
+    return { referencia: referenciaRanking.referencia, itens };
+}
+
+function renderizarRankingRegional(dados) {
+    const corpo = document.getElementById("plaRankingCorpo");
+    if (!corpo) return;
+    corpo.innerHTML = "";
+
+    const ranking = prepararRankingRegional(dados);
+    const limite = Math.min(6, ranking.itens.length);
+
+    ranking.itens.slice(0, limite).forEach((item, indice) => {
+        const linha = document.createElement("tr");
+        if (item.foco) linha.classList.add("pla-ranking-foco");
+        linha.title = ranking.referencia ? `Referência: ${ranking.referencia}` : "";
+
+        const posicao = document.createElement("td");
+        posicao.className = "pla-ranking-posicao";
+        posicao.textContent = `${indice + 1}º`;
+
+        const regional = document.createElement("td");
+        const regionalConteudo = document.createElement("div");
+        regionalConteudo.className = "pla-ranking-regional";
+        const marcador = document.createElement("span");
+        marcador.className = `pla-ranking-marcador ${item.estilo.classe}`;
+        marcador.style.color = item.estilo.cor;
+        const nome = document.createElement("span");
+        nome.className = "pla-ranking-regional-nome";
+        nome.textContent = item.nome;
+        regionalConteudo.appendChild(marcador);
+        regionalConteudo.appendChild(nome);
+        regional.appendChild(regionalConteudo);
+
+        const pla = document.createElement("td");
+        pla.className = "pla-ranking-pla";
+        pla.textContent = formatarPercentual(item.pla);
+
+        const diferenca = document.createElement("td");
+        diferenca.className = `pla-ranking-diferenca ${classeDiferencaRanking(item.diferencaPp)}`;
+        diferenca.textContent = formatarDiferencaRanking(item.diferencaPp);
+
+        const tendencia = document.createElement("td");
+        tendencia.className = "pla-ranking-tendencia";
+        tendencia.appendChild(criarSparklineRanking(item.tendencia, item.estilo.cor));
+
+        linha.appendChild(posicao);
+        linha.appendChild(regional);
+        linha.appendChild(pla);
+        linha.appendChild(diferenca);
+        linha.appendChild(tendencia);
+        corpo.appendChild(linha);
+    });
+}
+
 function criarGraficoRegional(dados) {
     const canvas = document.getElementById("plaGraficoRegionais");
     if (!canvas || !window.Chart) return null;
@@ -617,6 +821,7 @@ function renderizar(dados) {
     const variacao = (numero(atual?.PLA) - numero(anterior?.PLA)) * 100;
 
     atualizarCartoes(anterior, atual, variacao);
+    renderizarRankingRegional(dados);
     limparGraficos();
     registrarDatalabels();
 
