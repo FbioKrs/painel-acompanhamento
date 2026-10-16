@@ -2197,7 +2197,7 @@
 .visao-comissionamento .com-icone-2 { --com-icone-src: url("../img/comissionamento/2.svg"); }
 .visao-comissionamento .com-icone-3 { --com-icone-src: url("../img/comissionamento/3.svg"); }
 .visao-comissionamento .com-icone-4 { --com-icone-src: url("../img/comissionamento/4.svg"); }
-.visao-comissionamento .com-icone-4::before { transform: scale(1.15); transform-origin: center; }
+.visao-comissionamento .com-icone-4::before { transform: scale(1.30); transform-origin: center; }
 .visao-comissionamento .com-icone-5 { --com-icone-src: url("../img/comissionamento/5.svg"); }
 
 /* KPIs superiores: substitui somente o pictograma interno. */
