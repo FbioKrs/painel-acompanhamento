@@ -769,12 +769,16 @@ function criarGraficoSmallMultiple(canvas, meses, valores, limiteY) {
     graficos.push(grafico);
 }
 
-function criarCartaoSmallMultiple(rotulo, valorAtual, variacao, classeExtra = "") {
+function criarCartaoSmallMultiple(rotulo, valorAtual, variacao, classeExtra = "", classeIcone = "") {
     const tendencia = classificarTendencia(variacao);
     const estilo = obterEstiloTendencia(tendencia);
 
     const wrapper = document.createElement("div");
     wrapper.className = "com-small-kpi-wrapper";
+
+    const icone = document.createElement("span");
+    icone.className = `com-small-kpi-icone-tipo com-icone-circulo ${classeIcone}`.trim();
+    icone.setAttribute("aria-hidden", "true");
 
     const label = document.createElement("div");
     label.className = "com-small-kpi-label";
@@ -813,6 +817,7 @@ function criarCartaoSmallMultiple(rotulo, valorAtual, variacao, classeExtra = ""
     valorLinha.appendChild(grupoValor);
     valorLinha.appendChild(grupoVariacao);
     cartao.appendChild(valorLinha);
+    wrapper.appendChild(icone);
     wrapper.appendChild(label);
     wrapper.appendChild(cartao);
 
@@ -834,7 +839,9 @@ function criarCardsSmallMultiple(meses, valores) {
         criarCartaoSmallMultiple(
             "Comissionamento",
             dadosAtual.coms,
-            variacaoComs
+            variacaoComs,
+            "",
+            "com-icone-1"
         )
     );
 
@@ -843,7 +850,8 @@ function criarCardsSmallMultiple(meses, valores) {
             "Proj. Comissionamento",
             dadosAtual.projecao,
             variacaoProjecao,
-            "com-small-kpi-projecao"
+            "com-small-kpi-projecao",
+            "com-icone-2"
         )
     );
 
@@ -851,7 +859,9 @@ function criarCardsSmallMultiple(meses, valores) {
         criarCartaoSmallMultiple(
             "Faturado",
             dadosAtual.faturado,
-            variacaoFaturado
+            variacaoFaturado,
+            "",
+            "com-icone-3"
         )
     );
 

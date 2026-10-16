@@ -2171,3 +2171,117 @@
     font-weight: var(--com-tv-peso);
 }
 
+
+/* ================================================================
+   COM-V1 — pictogramas SVG fornecidos (16/10/2026)
+   Mantém tamanho, cor e superfícies circulares da modernização vigente.
+   ================================================================ */
+.visao-comissionamento .com-icone-circulo {
+    --com-icone-src: none;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+}
+
+.visao-comissionamento .com-icone-circulo::before {
+    content: "";
+    display: block;
+    width: 58%;
+    height: 58%;
+    background: currentColor;
+    -webkit-mask: var(--com-icone-src) center / contain no-repeat;
+    mask: var(--com-icone-src) center / contain no-repeat;
+}
+
+.visao-comissionamento .com-icone-1 { --com-icone-src: url("../img/comissionamento/1.svg"); }
+.visao-comissionamento .com-icone-2 { --com-icone-src: url("../img/comissionamento/2.svg"); }
+.visao-comissionamento .com-icone-3 { --com-icone-src: url("../img/comissionamento/3.svg"); }
+.visao-comissionamento .com-icone-4 { --com-icone-src: url("../img/comissionamento/4.svg"); }
+.visao-comissionamento .com-icone-5 { --com-icone-src: url("../img/comissionamento/5.svg"); }
+
+/* KPIs superiores: substitui somente o pictograma interno. */
+.visao-comissionamento .com-subvisao-resumo .com-status-card::after {
+    display: none;
+}
+
+.visao-comissionamento .com-subvisao-resumo .com-status-icone {
+    position: absolute;
+    z-index: 2;
+    left: 28px;
+    top: 50%;
+    width: 52px;
+    height: 52px;
+    transform: translateY(-50%);
+    border-radius: 50%;
+    color: #ffffff;
+    background: linear-gradient(145deg, var(--com-status-cor-clara) 0%, var(--com-status-cor) 78%);
+    box-shadow:
+        0 8px 16px rgba(43, 119, 206, 0.16),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.28);
+    pointer-events: none;
+}
+
+.visao-comissionamento .com-subvisao-resumo .com-status-icone::before {
+    width: 29px;
+    height: 29px;
+}
+
+/* Resumo executivo do consolidado. */
+.visao-comissionamento .com-subvisao-resumo .com-variacao-item::before {
+    display: none;
+}
+
+.visao-comissionamento .com-subvisao-resumo .com-variacao-icone {
+    grid-column: 1;
+    grid-row: 1 / 3;
+    align-self: center;
+    justify-self: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    color: #0877e8;
+    background: linear-gradient(145deg, #eef7ff 0%, #dceeff 100%);
+    box-shadow: inset 0 0 0 1px rgba(13, 111, 232, 0.06);
+    pointer-events: none;
+}
+
+.visao-comissionamento .com-subvisao-resumo .com-variacao-icone::before {
+    width: 27px;
+    height: 27px;
+}
+
+.visao-comissionamento .com-subvisao-resumo .com-variacao-item:nth-child(3) .com-variacao-icone {
+    color: #f3a20f;
+    background: linear-gradient(145deg, #fff8e9 0%, #ffedc7 100%);
+    box-shadow: inset 0 0 0 1px rgba(243, 162, 15, 0.08);
+}
+
+/* Small multiples: ícone real no espaço circular já reservado. */
+.visao-comissionamento .com-subvisao-resumo .com-small-kpi-wrapper::before {
+    display: none;
+}
+
+.visao-comissionamento .com-subvisao-resumo .com-small-kpi-icone-tipo {
+    grid-column: 1;
+    grid-row: 1 / 3;
+    align-self: center;
+    justify-self: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    color: #0877e8;
+    background: linear-gradient(145deg, #eef7ff 0%, #dceeff 100%);
+    box-shadow: inset 0 0 0 1px rgba(13, 111, 232, 0.06);
+    pointer-events: none;
+}
+
+.visao-comissionamento .com-subvisao-resumo .com-small-kpi-icone-tipo::before {
+    width: 24px;
+    height: 24px;
+}
+
+.visao-comissionamento .com-subvisao-resumo .com-small-kpi-icone-tipo.com-icone-3 {
+    color: #f3a20f;
+    background: linear-gradient(145deg, #fff8e9 0%, #ffedc7 100%);
+    box-shadow: inset 0 0 0 1px rgba(243, 162, 15, 0.08);
+}
