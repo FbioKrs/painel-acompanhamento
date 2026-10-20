@@ -3,7 +3,8 @@
    Lógica específica da visão.
    ================================================================ */
 
-const TEMPO_VISAO = 15;
+const TEMPO_PADRAO_VISAO =
+    Number(window.PAINEL_CONFIG?.player?.tempoPadraoSegundos) || 15;
 
 const ESCALA_MAXIMA = 15;
 
@@ -39,8 +40,10 @@ let visoes = [
 
 let indiceVisaoAtual = 0;
 
+let duracaoTelaAtual = TEMPO_PADRAO_VISAO;
+
 let segundosRestantes =
-    TEMPO_VISAO;
+    duracaoTelaAtual;
 
 let temporizadorRotacao =
     null;
@@ -609,6 +612,36 @@ function obterVisaoAtual() {
 }
 
 
+function obterTempoVisaoAtual() {
+
+    const visao =
+        obterVisaoAtual();
+
+    return (
+        window.PAINEL_BASE
+            ?.obterTempoTela?.(
+                "ME_GER-V1",
+                visao?.chave,
+                visao?.tipo,
+                "principal"
+            )
+        || TEMPO_PADRAO_VISAO
+    );
+
+}
+
+
+function reiniciarContagemVisaoAtual() {
+
+    duracaoTelaAtual =
+        obterTempoVisaoAtual();
+
+    segundosRestantes =
+        duracaoTelaAtual;
+
+}
+
+
 function obterItensVisaoAtual() {
 
     const visao =
@@ -689,7 +722,7 @@ function avancarVisao() {
     }
 
     indiceVisaoAtual = proximoIndice;
-    segundosRestantes = TEMPO_VISAO;
+    reiniciarContagemVisaoAtual();
     trocarVisaoComTransicao();
 
 }
@@ -719,7 +752,7 @@ function iniciarRotacao() {
 
     pararRotacao();
     cicloAtivo = true;
-    segundosRestantes = TEMPO_VISAO;
+    reiniciarContagemVisaoAtual();
     atualizarContador();
 
     temporizadorRotacao = setInterval(() => {
@@ -751,7 +784,7 @@ function atualizarContador() {
 
     const percentual = Math.max(
         0,
-        (segundosRestantes / TEMPO_VISAO) * 100
+        (segundosRestantes / duracaoTelaAtual) * 100
     );
 
     barra.style.width = percentual + "%";
@@ -1365,7 +1398,7 @@ async function carregarDados() {
 export async function iniciar() {
 
     indiceVisaoAtual = 0;
-    segundosRestantes = TEMPO_VISAO;
+    reiniciarContagemVisaoAtual();
     cicloAtivo = true;
     pausado = false;
 
@@ -1374,7 +1407,7 @@ export async function iniciar() {
 
     // Garante que o ciclo sempre começa pela visão geral.
     indiceVisaoAtual = 0;
-    segundosRestantes = TEMPO_VISAO;
+    reiniciarContagemVisaoAtual();
     renderizarVisao();
 
     if (temporizadorAtualizacao) {
@@ -1416,7 +1449,7 @@ export function voltarSubvisao() {
     }
 
     indiceVisaoAtual--;
-    segundosRestantes = TEMPO_VISAO;
+    reiniciarContagemVisaoAtual();
 
     trocarVisaoComTransicao();
     atualizarContador();

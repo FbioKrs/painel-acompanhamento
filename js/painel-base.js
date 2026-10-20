@@ -37,6 +37,39 @@
         if (contextoEl && contexto) contextoEl.textContent = contexto;
     }
 
+
+    function numeroPositivo(valor) {
+        const numero = Number(valor);
+        return Number.isFinite(numero) && numero > 0
+            ? numero
+            : null;
+    }
+
+    function obterTempoTela(idVisao, ...chaves) {
+        const tempoGlobal =
+            numeroPositivo(config.player?.tempoPadraoSegundos)
+            || 15;
+
+        const visao = Array.isArray(config.visoes)
+            ? config.visoes.find(item => item?.id === idVisao)
+            : null;
+
+        const tempos = visao?.tempos;
+
+        if (!tempos || typeof tempos !== "object") {
+            return tempoGlobal;
+        }
+
+        for (const chave of chaves) {
+            if (!chave) continue;
+
+            const tempo = numeroPositivo(tempos[chave]);
+            if (tempo) return tempo;
+        }
+
+        return numeroPositivo(tempos.padrao) || tempoGlobal;
+    }
+
     function iniciar() {
         ajustarTela();
         window.addEventListener("resize", ajustarTela);
@@ -51,7 +84,8 @@
     window.PAINEL_BASE = {
         ajustarTela,
         esperar,
-        definirCabecalho
+        definirCabecalho,
+        obterTempoTela
     };
 
 })();

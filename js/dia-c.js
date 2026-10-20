@@ -2,7 +2,8 @@
    DIA C — DC-V1 / PG-V2
    ================================================================ */
 
-const TEMPO_VISAO = 15;
+const TEMPO_PADRAO_VISAO =
+    Number(window.PAINEL_CONFIG?.player?.tempoPadraoSegundos) || 15;
 
 const TEMPO_ATUALIZACAO_DADOS =
     Number(
@@ -175,6 +176,7 @@ let visoes = [
 
     {
         tipo: "geral",
+        chave: "geral",
         nome: "VISÃO GERAL"
     }
 
@@ -183,8 +185,10 @@ let visoes = [
 
 let indiceVisaoAtual = 0;
 
+let duracaoTelaAtual = TEMPO_PADRAO_VISAO;
+
 let segundosRestantes =
-    TEMPO_VISAO;
+    duracaoTelaAtual;
 
 let temporizadorRotacao =
     null;
@@ -705,6 +709,7 @@ function atualizarListaVisoes() {
 
         {
             tipo: "geral",
+            chave: "geral",
             nome: "VISÃO GERAL"
         },
 
@@ -713,6 +718,8 @@ function atualizarListaVisoes() {
             parceira => ({
 
                 tipo: "parceira",
+
+                chave: `parceira:${parceira}`,
 
                 nome: parceira,
 
@@ -756,6 +763,36 @@ function obterVisaoAtual() {
 
 }
 
+
+
+function obterTempoVisaoAtual() {
+
+    const visao =
+        obterVisaoAtual();
+
+    return (
+        window.PAINEL_BASE
+            ?.obterTempoTela?.(
+                "DC-V1",
+                visao?.chave,
+                visao?.tipo,
+                "principal"
+            )
+        || TEMPO_PADRAO_VISAO
+    );
+
+}
+
+
+function reiniciarContagemVisaoAtual() {
+
+    duracaoTelaAtual =
+        obterTempoVisaoAtual();
+
+    segundosRestantes =
+        duracaoTelaAtual;
+
+}
 
 
 function obterDadosVisaoAtual() {
@@ -846,7 +883,7 @@ function avancarVisao() {
     }
 
     indiceVisaoAtual = proximoIndice;
-    segundosRestantes = TEMPO_VISAO;
+    reiniciarContagemVisaoAtual();
     trocarVisaoComTransicao();
 
 }
@@ -876,7 +913,7 @@ function iniciarRotacao() {
 
     pararRotacao();
     cicloAtivo = true;
-    segundosRestantes = TEMPO_VISAO;
+    reiniciarContagemVisaoAtual();
     atualizarContador();
 
     temporizadorRotacao = setInterval(() => {
@@ -908,7 +945,7 @@ function atualizarContador() {
 
     const percentual = Math.max(
         0,
-        (segundosRestantes / TEMPO_VISAO) * 100
+        (segundosRestantes / duracaoTelaAtual) * 100
     );
 
     barra.style.width = percentual + "%";
@@ -2533,7 +2570,7 @@ async function carregarDados() {
 export async function iniciar() {
 
     indiceVisaoAtual = 0;
-    segundosRestantes = TEMPO_VISAO;
+    reiniciarContagemVisaoAtual();
     cicloAtivo = true;
     pausado = false;
 
@@ -2541,7 +2578,7 @@ export async function iniciar() {
 
     // Garante que o ciclo sempre começa pela visão geral.
     indiceVisaoAtual = 0;
-    segundosRestantes = TEMPO_VISAO;
+    reiniciarContagemVisaoAtual();
     renderizarVisao();
 
     if (temporizadorAtualizacao) {
@@ -2583,7 +2620,7 @@ export function voltarSubvisao() {
     }
 
     indiceVisaoAtual--;
-    segundosRestantes = TEMPO_VISAO;
+    reiniciarContagemVisaoAtual();
 
     trocarVisaoComTransicao();
     atualizarContador();

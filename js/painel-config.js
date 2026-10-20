@@ -41,7 +41,8 @@ window.PAINEL_CONFIG = {
 
     player: {
         recarregarAoFimDoCiclo: true,
-        timeoutSegurancaMs: 300000
+        timeoutSegurancaMs: 300000,
+        tempoPadraoSegundos: 15
     },
 
     visoes: [
@@ -53,7 +54,11 @@ window.PAINEL_CONFIG = {
             subtitulo: "Acompanhamento de mobilização e execução",
             fragmento: "./visoes/dia-c.html",
             css: "./css/dia-c.css",
-            modulo: "./js/dia-c.js"
+            modulo: "./js/dia-c.js",
+            tempos: {
+                geral: 15,
+                parceira: 15
+            }
         },
         {
             id: "ME_EXEC-V1",
@@ -63,7 +68,11 @@ window.PAINEL_CONFIG = {
             subtitulo: "Acompanhamento das notas por Categoria",
             fragmento: "./visoes/metas-executiva.html",
             css: "./css/metas-executiva.css",
-            modulo: "./js/metas-executiva.js"
+            modulo: "./js/metas-executiva.js",
+            tempos: {
+                geral: 15,
+                detalhe: 15
+            }
         },
         {
             id: "ME_GER-V1",
@@ -73,7 +82,11 @@ window.PAINEL_CONFIG = {
             subtitulo: "Acompanhamento das notas por Categoria",
             fragmento: "./visoes/metas-gerencia.html",
             css: "./css/metas-gerencia.css",
-            modulo: "./js/metas-gerencia.js"
+            modulo: "./js/metas-gerencia.js",
+            tempos: {
+                geral: 15,
+                detalhe: 15
+            }
         },
         {
             id: "COM-V1",
@@ -83,7 +96,11 @@ window.PAINEL_CONFIG = {
             subtitulo: "",
             fragmento: "./visoes/comissionamento.html",
             css: "./css/comissionamento.css",
-            modulo: "./js/comissionamento.js"
+            modulo: "./js/comissionamento.js",
+            tempos: {
+                resumo: 15,
+                historico: 15
+            }
         },
         {
             id: "PLA-V1",
@@ -93,7 +110,10 @@ window.PAINEL_CONFIG = {
             subtitulo: "Percentual de ligações atrasadas",
             fragmento: "./visoes/pla.html",
             css: "./css/pla.css",
-            modulo: "./js/pla.js"
+            modulo: "./js/pla.js",
+            tempos: {
+                principal: 15
+            }
         },
         {
             id: "CAL-TV",

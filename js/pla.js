@@ -2,7 +2,17 @@
    PLA-V1 — Percentual de Ligações Atrasadas
    ================================================================ */
 
-const TEMPO_VISAO = 15;
+const TEMPO_PADRAO_VISAO =
+    Number(window.PAINEL_CONFIG?.player?.tempoPadraoSegundos) || 15;
+const TEMPO_VISAO =
+    Number(
+        window.PAINEL_BASE
+            ?.obterTempoTela?.(
+                "PLA-V1",
+                "principal"
+            )
+    )
+    || TEMPO_PADRAO_VISAO;
 const URL_DADOS = "./dados/pla.json";
 const TEMPO_ATUALIZACAO_DADOS =
     Number(window.PAINEL_CONFIG?.atualizacao?.intervaloPadraoMs) || 60000;

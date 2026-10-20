@@ -195,7 +195,8 @@ Registro central das visões:
 - fragmento;
 - CSS;
 - módulo JS;
-- parâmetros globais do player.
+- duração configurável de cada tela/Subvisão por meio de `tempos`;
+- parâmetros globais do player, incluindo o fallback `tempoPadraoSegundos`.
 
 A propriedade `ativo` controla a participação da visão no ciclo principal:
 
@@ -212,6 +213,7 @@ Utilidades compartilhadas:
 
 - escala do `#stage`;
 - atualização do cabeçalho;
+- resolução central de duração por tela com `obterTempoTela()`;
 - helpers genéricos.
 
 ### `js/painel-player.js`
@@ -286,11 +288,54 @@ novo ciclo
 
 O player **não calcula a duração normal** de visões com Subvisões.
 
-Cada módulo controla seu próprio tempo interno.
+Cada módulo continua controlando seu próprio timer, barra de progresso, pausa e avanço, porém os valores de duração são lidos centralmente de `js/painel-config.js`. Assim, alterar o tempo de uma tela não exige editar o módulo específico da visão.
 
 ### Timeout de segurança
 
 O player possui um limite máximo de segurança por visão (configurado em `painel-config.js`). Esse tempo não é a duração normal da visão; serve apenas para impedir que um erro deixe a TV presa indefinidamente.
+
+### Configuração central de tempos por tela
+
+As durações da rotação ficam centralizadas em `js/painel-config.js`. O fallback global é:
+
+```js
+player: {
+    recarregarAoFimDoCiclo: true,
+    timeoutSegurancaMs: 300000,
+    tempoPadraoSegundos: 15
+}
+```
+
+Cada visão produtiva pode declarar um objeto `tempos`. Exemplo da COM-V1:
+
+```js
+{
+    id: "COM-V1",
+    // ...
+    tempos: {
+        resumo: 15,
+        historico: 15
+    }
+}
+```
+
+Ordem de resolução usada pelos módulos:
+
+```text
+chave exata da tela → tipo da tela → tempos.padrao → player.tempoPadraoSegundos → 15 s
+```
+
+Isso permite tanto configurar um tipo de tela quanto criar uma exceção específica sem espalhar constantes pelos módulos. Exemplos de chaves vigentes:
+
+```text
+DC-V1       → geral | parceira | opcionalmente parceira:<nome>
+ME_EXEC-V1  → geral | detalhe | opcionalmente detalhe:<chave-da-categoria>
+ME_GER-V1   → geral | detalhe | opcionalmente detalhe:<chave-da-categoria>
+COM-V1      → resumo | historico
+PLA-V1      → principal
+```
+
+Os valores entregues nesta versão permanecem em **15 segundos**, preservando o comportamento anterior. Para mudar apenas uma tela, alterar somente o número correspondente em `PAINEL_CONFIG.visoes`. A CAL-TV continua sem rotação automática quando aberta com `?cal=1`.
 
 ---
 
@@ -455,7 +500,7 @@ Parceira 2
 fim do ciclo DC-V1
 ```
 
-Cada Subvisão permanece **15 segundos**.
+A duração é lida de `PAINEL_CONFIG.visoes[DC-V1].tempos`: `geral` para a Visão Geral e `parceira` para as telas de parceira. O valor entregue nesta versão é **15 segundos** para ambos. Uma chave específica `parceira:<nome>` pode sobrescrever somente uma parceira.
 
 A quantidade de parceiras não deve ser hardcoded.
 
@@ -496,7 +541,7 @@ fim do ciclo ME_EXEC-V1
 
 A quantidade de detalhamentos não deve ser hardcoded.
 
-Cada Subvisão permanece **15 segundos**.
+A duração é lida de `PAINEL_CONFIG.visoes[ME_EXEC-V1].tempos`: `geral` para a Visão Geral e `detalhe` para as telas de categoria. O valor entregue nesta versão é **15 segundos** para ambos. Uma chave exata `detalhe:<chave-da-categoria>` pode sobrescrever uma categoria específica.
 
 ### Gráfico
 
@@ -622,7 +667,7 @@ Portanto, ME_GER-V1 preserva:
 
 - Visão Geral somente com Categorias;
 - criação automática de uma Subvisão para cada Categoria que possua SubCategorias;
-- 15 segundos por Subvisão;
+- duração por Subvisão centralizada em `PAINEL_CONFIG.visoes[ME_GER-V1].tempos`, usando `geral` e `detalhe`; nesta versão ambos estão em 15 segundos;
 - cartão horizontal compacto `Nota Geral` em todas as telas;
 - cálculo da Nota Geral por `APURADO × PESO / 100`, considerando somente `NIVEL = CATEGORIA`;
 - escala de 0 a 15;
@@ -710,7 +755,7 @@ Regras da visualização:
 
 Em 07/10/2026, a COM-V1 tornou-se a primeira visão produtiva explicitamente migrada para a referência tipográfica calibrada da TV. A composição utiliza **22 px / peso 700** como piso para informação essencial, **24 px** para títulos de cards/seções compactas e **32 px** para valores secundários. Onde a composição anterior não comportava essa escala, a informação foi reorganizada sem reduzir a fonte: referências comparativas dos cartões dos *small multiples* passaram para a mesma linha do rótulo, textos redundantes de período foram removidos e a coluna lateral dos históricos foi redistribuída internamente.
 
-A COM-V1 possui **2 Subvisões internas de 15 segundos cada**. A Tela 1 é exibida por 15 segundos, depois a Tela 2 por mais 15 segundos; somente após a segunda tela o módulo devolve o controle ao player. No modo `?dev=1`, `→` e `←` navegam entre essas duas Subvisões seguindo as regras globais do PG-V2.
+A COM-V1 possui **2 Subvisões internas**. Suas durações são lidas de `PAINEL_CONFIG.visoes[COM-V1].tempos`: `resumo` controla a Tela 1 e `historico` controla a Tela 2. Nesta versão ambas permanecem em **15 segundos**, totalizando 30 segundos. Somente após a segunda tela o módulo devolve o controle ao player. No modo `?dev=1`, `→` e `←` navegam entre essas duas Subvisões seguindo as regras globais do PG-V2.
 
 ### Dados
 
@@ -725,7 +770,7 @@ O formato canônico de `dados/base_comissionamento.json` é uma lista direta de 
 - `COMS`;
 - `Faturado Comissionamento`.
 
-O JSON é carregado uma única vez na entrada da COM-V1, usando `no-store` e cache-buster, e é compartilhado pelas duas Subvisões. Não há temporizador próprio de atualização durante os **30 segundos do ciclo interno** (15 s por tela). Uma nova leitura ocorre naturalmente quando a COM-V1 for carregada novamente em um novo ciclo do painel. Falhas de gráfico são tratadas localmente e não devem interromper o player.
+O JSON é carregado uma única vez na entrada da COM-V1, usando `no-store` e cache-buster, e é compartilhado pelas duas Subvisões. Não há temporizador próprio de atualização durante o ciclo interno; a duração total é a soma de `tempos.resumo` + `tempos.historico` (30 segundos na configuração entregue). Uma nova leitura ocorre naturalmente quando a COM-V1 for carregada novamente em um novo ciclo do painel. Falhas de gráfico são tratadas localmente e não devem interromper o player.
 
 ---
 
@@ -752,7 +797,7 @@ Como o indicador representa atraso, **quanto menor o PLA, melhor**. O cálculo e
 
 ### Composição da visão
 
-A PLA-V1 possui **uma única tela de 15 segundos** e utiliza duas colunas principais. A coluna direita é subdividida verticalmente em dois frames: evolução regional acima e ranking das regionais abaixo.
+A PLA-V1 possui **uma única tela**, cuja duração é lida de `PAINEL_CONFIG.visoes[PLA-V1].tempos.principal`. O valor entregue nesta versão é **15 segundos**. A composição utiliza duas colunas principais; a coluna direita é subdividida verticalmente em dois frames: evolução regional acima e ranking das regionais abaixo.
 
 **Coluna esquerda — Metropolitana**
 
@@ -1194,3 +1239,5 @@ O player **não possui tela inicial de carregamento**. O `index.html` inicia com
 
 - COM-V1 Tela 1 (16/10/2026): os pictogramas dos cards/indicadores usam os SVGs fornecidos em `img/comissionamento/`: `1.svg` em COMS, Comissionado e Comissionamento; `2.svg` em Projeção de comissionamento/Proj. Comissionamento; `3.svg` em Faturado; `4.svg` em CONC; `5.svg` em PEND. A cor, o fundo circular, o tamanho e a posição seguem a regra visual vigente da COM-V1. As legendas dos gráficos permanecem com seus marcadores simples e não usam esses SVGs. Os arquivos originais recebidos são preservados em `img/comissionamento/originais/`; as cópias usadas pela interface foram normalizadas somente quanto à área útil do SVG para renderização consistente no navegador.
 - COM-V1 Tela 1 (16/10/2026): o pictograma `4.svg` no card superior **CONC** foi ampliado visualmente em 30%, preservando integralmente o tamanho do círculo externo, a cor e o posicionamento do card.
+
+- PG-V2 — tempos por tela (16/10/2026): a duração normal das telas/Subvisões foi centralizada em `js/painel-config.js`. Cada visão produtiva possui `tempos` próprios e o fallback global fica em `player.tempoPadraoSegundos`. `js/painel-base.js` expõe `obterTempoTela()` e os módulos DC-V1, ME_EXEC-V1, ME_GER-V1, COM-V1 e PLA-V1 passaram a consumir essa configuração para contador e barra de progresso. A resolução prioriza chave exata da tela, depois tipo, `tempos.padrao` e por fim o fallback global. Os valores iniciais foram mantidos em 15 segundos para não alterar o ciclo vigente.

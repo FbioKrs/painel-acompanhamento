@@ -4,8 +4,10 @@
    ================================================================ */
 
 const URL_DADOS = "./dados/base_comissionamento.json";
-const TEMPO_SUBVISAO = 15;
-const TOTAL_SUBVISOES = 2;
+const TEMPO_PADRAO_SUBVISAO =
+    Number(window.PAINEL_CONFIG?.player?.tempoPadraoSegundos) || 15;
+const CHAVES_SUBVISOES = Object.freeze(["resumo", "historico"]);
+const TOTAL_SUBVISOES = CHAVES_SUBVISOES.length;
 const ULTIMOS_MESES_RESUMO = 2;
 const ULTIMOS_MESES_HISTORICO = 6;
 
@@ -39,7 +41,8 @@ let dadosGlobais = [];
 let graficos = [];
 let temporizadorRotacao = null;
 let resolverCiclo = null;
-let segundosRestantes = TEMPO_SUBVISAO;
+let duracaoSubvisaoAtual = TEMPO_PADRAO_SUBVISAO;
+let segundosRestantes = duracaoSubvisaoAtual;
 let cicloAtivo = false;
 let pausado = false;
 let pluginDataLabelsDisponivel = false;
@@ -1186,6 +1189,25 @@ async function carregarDados() {
    CICLO DA VISÃO
    ================================================================ */
 
+function obterTempoSubvisao(indice = indiceSubvisao) {
+    const chave = CHAVES_SUBVISOES[indice] || "principal";
+
+    return (
+        window.PAINEL_BASE
+            ?.obterTempoTela?.(
+                "COM-V1",
+                chave,
+                "principal"
+            )
+        || TEMPO_PADRAO_SUBVISAO
+    );
+}
+
+function reiniciarContagemSubvisao() {
+    duracaoSubvisaoAtual = obterTempoSubvisao();
+    segundosRestantes = duracaoSubvisaoAtual;
+}
+
 function pararRotacao() {
     if (temporizadorRotacao) {
         clearInterval(temporizadorRotacao);
@@ -1217,12 +1239,12 @@ function atualizarContador() {
     if (!contador || !barra) return;
 
     contador.textContent = `${segundosRestantes}s`;
-    barra.style.width = `${Math.max(0, (segundosRestantes / TEMPO_SUBVISAO) * 100)}%`;
+    barra.style.width = `${Math.max(0, (segundosRestantes / duracaoSubvisaoAtual) * 100)}%`;
 }
 
 function irParaSubvisao(novoIndice) {
     indiceSubvisao = Math.max(0, Math.min(TOTAL_SUBVISOES - 1, novoIndice));
-    segundosRestantes = TEMPO_SUBVISAO;
+    reiniciarContagemSubvisao();
     renderizarSubvisaoAtual();
     atualizarContador();
 }
@@ -1239,7 +1261,7 @@ function avancarAutomaticamente() {
 function iniciarRotacao() {
     pararRotacao();
     cicloAtivo = true;
-    segundosRestantes = TEMPO_SUBVISAO;
+    reiniciarContagemSubvisao();
     atualizarContador();
 
     temporizadorRotacao = setInterval(() => {
@@ -1260,7 +1282,7 @@ function iniciarRotacao() {
 
 export async function iniciar() {
     indiceSubvisao = 0;
-    segundosRestantes = TEMPO_SUBVISAO;
+    reiniciarContagemSubvisao();
     cicloAtivo = true;
     pausado = false;
 
@@ -1294,7 +1316,7 @@ export function voltarSubvisao() {
         return;
     }
 
-    segundosRestantes = TEMPO_SUBVISAO;
+    reiniciarContagemSubvisao();
     atualizarContador();
 }
 
