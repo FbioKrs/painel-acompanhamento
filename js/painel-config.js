@@ -70,7 +70,7 @@ window.PAINEL_CONFIG = {
             css: "./css/metas-executiva.css",
             modulo: "./js/metas-executiva.js",
             tempos: {
-                geral: 15,
+                geral: 60,
                 detalhe: 15
             }
         },
@@ -84,7 +84,7 @@ window.PAINEL_CONFIG = {
             css: "./css/metas-gerencia.css",
             modulo: "./js/metas-gerencia.js",
             tempos: {
-                geral: 15,
+                geral: 60,
                 detalhe: 15
             }
         },
@@ -98,7 +98,7 @@ window.PAINEL_CONFIG = {
             css: "./css/comissionamento.css",
             modulo: "./js/comissionamento.js",
             tempos: {
-                resumo: 15,
+                resumo: 60,
                 historico: 15
             }
         },
@@ -112,7 +112,7 @@ window.PAINEL_CONFIG = {
             css: "./css/pla.css",
             modulo: "./js/pla.js",
             tempos: {
-                principal: 15
+                principal: 60
             }
         },
         {
