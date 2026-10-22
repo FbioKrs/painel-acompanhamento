@@ -1,0 +1,146 @@
+<main class="pagina visao-demandas">
+
+    <div id="erroDemandas" class="dem-erro" role="status" aria-live="polite"></div>
+
+    <div id="painelConteudo" class="conteudo demandas-conteudo">
+
+        <section id="demSubvisaoGeral" class="dem-subvisao dem-subvisao-geral ativa" aria-hidden="false">
+
+            <section class="dem-status-atual" aria-label="Resumo geral das demandas">
+                <article class="dem-status-card dem-status-card-vencidas">
+                    <span class="dem-status-icone" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v6"></path><path d="M12 17h.01"></path></svg>
+                    </span>
+                    <div class="dem-status-label">Vencidas</div>
+                    <strong id="demGeralVencidas" class="dem-status-valor">0</strong>
+                    <div id="demGeralVencidasInfo" class="dem-status-info">0 responsáveis</div>
+                </article>
+
+                <article class="dem-status-card dem-status-card-hoje">
+                    <span class="dem-status-icone" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"></rect><path d="M8 3v4M16 3v4M4 9h16"></path><path d="M12 12v3M12 17h.01"></path></svg>
+                    </span>
+                    <div class="dem-status-label">Vencem Hoje</div>
+                    <strong id="demGeralHoje" class="dem-status-valor">0</strong>
+                    <div id="demGeralHojeInfo" class="dem-status-info">0 responsáveis</div>
+                </article>
+
+                <article class="dem-status-card dem-status-card-amanha">
+                    <span class="dem-status-icone" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"></rect><path d="M8 3v4M16 3v4M4 9h16"></path><path d="M9 14h6M13 12l2 2-2 2"></path></svg>
+                    </span>
+                    <div class="dem-status-label">Vencem Amanhã</div>
+                    <strong id="demGeralAmanha" class="dem-status-valor">0</strong>
+                    <div id="demGeralAmanhaInfo" class="dem-status-info">0 responsáveis</div>
+                </article>
+
+                <article class="dem-status-card dem-status-card-prazo">
+                    <span class="dem-status-icone" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="m8 12 2.5 2.5L16 9"></path></svg>
+                    </span>
+                    <div class="dem-status-label">No Prazo</div>
+                    <strong id="demGeralPrazo" class="dem-status-valor">0</strong>
+                    <div id="demGeralPrazoInfo" class="dem-status-info">0 responsáveis</div>
+                </article>
+            </section>
+
+            <section id="demAlertaGeral" class="dem-alerta dem-alerta-hoje" aria-live="polite">
+                <div class="dem-alerta-icone" aria-hidden="true">!</div>
+                <div class="dem-alerta-texto">
+                    <strong id="demAlertaGeralTitulo">Nenhuma demanda vence hoje</strong>
+                    <span id="demAlertaGeralDetalhe">Sem alertas de vencimento para o dia atual.</span>
+                </div>
+                <span class="dem-alerta-tag">AÇÃO HOJE</span>
+            </section>
+
+            <article class="painel dem-painel-categorias">
+                <header class="dem-painel-cabecalho">
+                    <div class="dem-painel-titulo">Situação por categoria</div>
+                    <div id="demResumoTotal" class="dem-painel-meta">0 demandas no total</div>
+                </header>
+
+                <div id="demCategorias" class="dem-categorias"></div>
+            </article>
+
+        </section>
+
+        <section id="demSubvisaoDetalhe" class="dem-subvisao dem-subvisao-detalhe" aria-hidden="true">
+
+            <section class="dem-status-atual" aria-label="Resumo da categoria">
+                <article class="dem-status-card dem-status-card-vencidas">
+                    <span class="dem-status-icone" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v6"></path><path d="M12 17h.01"></path></svg>
+                    </span>
+                    <div class="dem-status-label">Vencidas</div>
+                    <strong id="demDetalheVencidas" class="dem-status-valor">0</strong>
+                    <div id="demDetalheVencidasInfo" class="dem-status-info">Tratamento prioritário</div>
+                </article>
+
+                <article class="dem-status-card dem-status-card-hoje">
+                    <span class="dem-status-icone" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"></rect><path d="M8 3v4M16 3v4M4 9h16"></path><path d="M12 12v3M12 17h.01"></path></svg>
+                    </span>
+                    <div class="dem-status-label">Vencem Hoje</div>
+                    <strong id="demDetalheHoje" class="dem-status-valor">0</strong>
+                    <div id="demDetalheHojeInfo" class="dem-status-info">0 responsáveis</div>
+                </article>
+
+                <article class="dem-status-card dem-status-card-amanha">
+                    <span class="dem-status-icone" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"></rect><path d="M8 3v4M16 3v4M4 9h16"></path><path d="M9 14h6M13 12l2 2-2 2"></path></svg>
+                    </span>
+                    <div class="dem-status-label">Vencem Amanhã</div>
+                    <strong id="demDetalheAmanha" class="dem-status-valor">0</strong>
+                    <div class="dem-status-info">Atenção preventiva</div>
+                </article>
+
+                <article class="dem-status-card dem-status-card-prazo">
+                    <span class="dem-status-icone" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="m8 12 2.5 2.5L16 9"></path></svg>
+                    </span>
+                    <div class="dem-status-label">No Prazo</div>
+                    <strong id="demDetalhePrazo" class="dem-status-valor">0</strong>
+                    <div id="demDetalhePrazoInfo" class="dem-status-info">0% da categoria</div>
+                </article>
+            </section>
+
+            <section id="demAlertaDetalhe" class="dem-alerta dem-alerta-hoje" aria-live="polite">
+                <div class="dem-alerta-icone" aria-hidden="true">!</div>
+                <div class="dem-alerta-texto">
+                    <strong id="demAlertaDetalheTitulo">Nenhuma demanda vence hoje</strong>
+                    <span id="demAlertaDetalheDetalhe">Sem alertas de vencimento para esta categoria.</span>
+                </div>
+                <span id="demAlertaDetalheTag" class="dem-alerta-tag">CATEGORIA</span>
+            </section>
+
+            <article class="painel dem-painel-tabela">
+                <header class="dem-painel-cabecalho dem-painel-cabecalho-tabela">
+                    <div>
+                        <div class="dem-painel-titulo">Demandas por responsável</div>
+                        <div id="demDetalhePaginacao" class="dem-painel-subtitulo">Todos os responsáveis</div>
+                    </div>
+                    <div class="dem-painel-meta">Ordenação por criticidade</div>
+                </header>
+
+                <div class="dem-tabela-wrap">
+                    <table class="dem-tabela">
+                        <thead>
+                            <tr>
+                                <th>Responsável</th>
+                                <th>Vencidas</th>
+                                <th>Hoje</th>
+                                <th>Amanhã</th>
+                                <th>No Prazo</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="demTabelaCorpo"></tbody>
+                    </table>
+                </div>
+            </article>
+
+        </section>
+
+    </div>
+
+</main>

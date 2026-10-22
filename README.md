@@ -53,6 +53,7 @@ Não utilizar `iframe` para a circulação das visões do PG-V2.
 | **ME_GER-V1** | Metas da Gerência | Em produção | `visoes/metas-gerencia.html` |
 | **COM-V1** | Comissionamento de Obras | Em produção | `visoes/comissionamento.html` |
 | **PLA-V1** | PLA — Percentual de Ligações Atrasadas | Em produção | `visoes/pla.html` |
+| **DEM-V1** | Tratamento de Demandas | Em produção | `visoes/tratamento-demandas.html` |
 | **CAL-TV** | Calibração tipográfica para TV | Técnica / fora da rotação | `visoes/calibracao-tv.html` |
 | **OA-V1** | Obras Ágeis | Convenção reservada | Pode não existir ainda |
 | **IND-V1** | Indicadores | Convenção reservada | Pode não existir ainda |
@@ -77,6 +78,7 @@ painel-acompanhamento/
 │   ├── metas-gerencia.html
 │   ├── comissionamento.html
 │   ├── pla.html
+│   ├── tratamento-demandas.html
 │   └── calibracao-tv.html
 │
 ├── css/
@@ -86,6 +88,7 @@ painel-acompanhamento/
 │   ├── metas-gerencia.css
 │   ├── comissionamento.css
 │   ├── pla.css
+│   ├── tratamento-demandas.css
 │   └── calibracao-tv.css
 │
 ├── js/
@@ -99,13 +102,15 @@ painel-acompanhamento/
 │   ├── metas-gerencia.js
 │   ├── comissionamento.js
 │   ├── pla.js
+│   ├── tratamento-demandas.js
 │   └── calibracao-tv.js
 │
 ├── dados/
 │   ├── metas-executiva.json
 │   ├── metas-gerencia.json
 │   ├── base_comissionamento.json
-│   └── pla.json
+│   ├── pla.json
+│   └── base_reclamacoes.json
 │
 ├── dados.json
 │
@@ -333,6 +338,7 @@ ME_EXEC-V1  → geral | detalhe | opcionalmente detalhe:<chave-da-categoria>
 ME_GER-V1   → geral | detalhe | opcionalmente detalhe:<chave-da-categoria>
 COM-V1      → resumo | historico
 PLA-V1      → principal
+DEM-V1      → geral | detalhe | opcionalmente detalhe:<categoria>:<página>
 ```
 
 Os valores entregues nesta versão permanecem em **15 segundos**, preservando o comportamento anterior. Para mudar apenas uma tela, alterar somente o número correspondente em `PAINEL_CONFIG.visoes`. A CAL-TV continua sem rotação automática quando aberta com `?cal=1`.
@@ -962,7 +968,74 @@ Regras de dados:
 
 ---
 
-## 11.2. CAL-TV — Referência tipográfica calibrada
+## 11.2. DEM-V1 — Tratamento de Demandas
+
+### Arquivos
+
+```text
+visoes/tratamento-demandas.html
+css/tratamento-demandas.css
+js/tratamento-demandas.js
+dados/base_reclamacoes.json
+```
+
+A **DEM-V1** acompanha demandas agrupadas por Categoria e Responsável, classificadas nos grupos **Vencidas**, **Hoje**, **Amanhã** e **No Prazo**. O objetivo é oferecer leitura executiva da carteira e identificação operacional de quem precisa atuar.
+
+### Composição das Subvisões
+
+A primeira Subvisão é a **Visão Geral**, com quatro KPIs de situação e o frame **Situação por categoria** ocupando toda a largura disponível abaixo do alerta de vencimentos do dia. O antigo conceito de quadro lateral de responsáveis na tela geral não é utilizado.
+
+Depois da Visão Geral, o módulo cria automaticamente Subvisões de detalhe para cada Categoria presente no JSON. Cada detalhe mostra os quatro KPIs da Categoria, alerta de demandas que vencem hoje e tabela por Responsável.
+
+Para preservar o piso TV22 e impedir scroll, o detalhe usa no máximo **7 responsáveis por Subvisão**. Quando uma Categoria possui mais registros, o módulo cria páginas adicionais automaticamente, por exemplo `RC • 1/2` e `RC • 2/2`. A quantidade de Categorias e páginas não deve ser hardcoded.
+
+Ordenação dos responsáveis no detalhe:
+
+```text
+Vencidas (desc) → Hoje (desc) → Amanhã (desc) → Total (desc) → Responsável
+```
+
+Os cartões superiores seguem a linguagem visual modernizada da **Tela 1 da COM-V1**: acento vertical, pictograma circular, superfície branca/tonalizada, borda clara e sombra discreta. O CSS permanece integralmente restrito à raiz `.visao-demandas`, sem alterar o shell global do PG-V2.
+
+A duração é lida de `PAINEL_CONFIG.visoes[DEM-V1].tempos`: `geral` controla a Visão Geral e `detalhe` controla cada página de Categoria. A configuração inicial é **60 segundos** para a Visão Geral e **15 segundos** para cada detalhe.
+
+### Dados
+
+O arquivo canônico é:
+
+```text
+dados/base_reclamacoes.json
+```
+
+O formato canônico é uma **lista direta de registros na raiz**:
+
+```json
+[
+  {
+    "Categoria": "RC",
+    "Responsável": "Antonio Marcos",
+    "Vencidas": "0",
+    "Hoje": "1",
+    "Amanhã": "2",
+    "No Prazo": "5"
+  }
+]
+```
+
+Campos utilizados:
+
+- `Categoria`;
+- `Responsável`;
+- `Vencidas`;
+- `Hoje`;
+- `Amanhã`;
+- `No Prazo`.
+
+Os quantitativos podem chegar como texto numérico ou número e são normalizados apenas para apresentação e agregação. O módulo não reclassifica datas nem deriva regras de vencimento: recebe do JSON os quatro grupos já consolidados. O JSON é carregado com `no-store` e cache-buster; durante uma permanência longa da visão, a atualização usa o intervalo global padrão de 60 segundos e preserva a última informação válida em caso de falha.
+
+---
+
+## 11.3. CAL-TV — Referência tipográfica calibrada
 
 ### Arquivos
 
@@ -1106,6 +1179,17 @@ js/pla.js
 dados/pla.json
 ```
 
+### DEM-V1
+
+Preferir:
+
+```text
+visoes/tratamento-demandas.html
+css/tratamento-demandas.css
+js/tratamento-demandas.js
+dados/base_reclamacoes.json
+```
+
 ### CAL-TV
 
 Preferir:
@@ -1194,8 +1278,8 @@ Nunca reconstruir arquivos vigentes com base apenas em versões históricas do c
 ---
 
 **Padrão vigente: PG-V2**  
-**Visões cadastradas: DC-V1, ME_EXEC-V1, ME_GER-V1, COM-V1, PLA-V1 e CAL-TV**  
-**Estado atual em `painel-config.js`: DC-V1 e CAL-TV desativadas na rotação; ME_EXEC-V1, ME_GER-V1, COM-V1 e PLA-V1 ativas. CAL-TV pode ser aberta isoladamente com `?cal=1`.**
+**Visões cadastradas: DC-V1, ME_EXEC-V1, ME_GER-V1, COM-V1, PLA-V1, DEM-V1 e CAL-TV**  
+**Estado atual em `painel-config.js`: DC-V1 e CAL-TV desativadas na rotação; ME_EXEC-V1, ME_GER-V1, COM-V1, PLA-V1 e DEM-V1 ativas. CAL-TV pode ser aberta isoladamente com `?cal=1`.**
 
 
 ### Inicialização visual do PG-V2
@@ -1241,3 +1325,6 @@ O player **não possui tela inicial de carregamento**. O `index.html` inicia com
 - COM-V1 Tela 1 (16/10/2026): o pictograma `4.svg` no card superior **CONC** foi ampliado visualmente em 30%, preservando integralmente o tamanho do círculo externo, a cor e o posicionamento do card.
 
 - PG-V2 — tempos por tela (16/10/2026): a duração normal das telas/Subvisões foi centralizada em `js/painel-config.js`. Cada visão produtiva possui `tempos` próprios e o fallback global fica em `player.tempoPadraoSegundos`. `js/painel-base.js` expõe `obterTempoTela()` e os módulos DC-V1, ME_EXEC-V1, ME_GER-V1, COM-V1 e PLA-V1 passaram a consumir essa configuração para contador e barra de progresso. A resolução prioriza chave exata da tela, depois tipo, `tempos.padrao` e por fim o fallback global. Os valores iniciais foram mantidos em 15 segundos para não alterar o ciclo vigente.
+
+
+- DEM-V1 (22/10/2026): criada a visão **Tratamento de Demandas**, alimentada por `dados/base_reclamacoes.json`. A visão possui Resumo Geral + detalhes automáticos por Categoria, usa os grupos Vencidas/Hoje/Amanhã/No Prazo, cartões superiores inspirados na modernização da COM-V1 e paginação automática de até 7 responsáveis por tela para preservar TV22 e ausência de scroll. O frame lateral “Responsáveis — vencem hoje” não faz parte da tela geral; o frame “Situação por categoria” ocupa toda a largura disponível.

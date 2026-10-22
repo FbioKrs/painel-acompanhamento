@@ -116,6 +116,20 @@ window.PAINEL_CONFIG = {
             }
         },
         {
+            id: "DEM-V1",
+            ativo: true,
+            nome: "Tratamento de Demandas",
+            titulo: "Tratamento de Demandas",
+            subtitulo: "Acompanhamento por categoria, prazo e responsável",
+            fragmento: "./visoes/tratamento-demandas.html",
+            css: "./css/tratamento-demandas.css",
+            modulo: "./js/tratamento-demandas.js",
+            tempos: {
+                geral: 60,
+                detalhe: 15
+            }
+        },
+        {
             id: "CAL-TV",
             ativo: false,
             nome: "Calibração TV",
