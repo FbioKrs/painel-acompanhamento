@@ -1328,3 +1328,5 @@ O player **não possui tela inicial de carregamento**. O `index.html` inicia com
 
 
 - DEM-V1 (22/10/2026): criada a visão **Tratamento de Demandas**, alimentada por `dados/base_reclamacoes.json`. A visão possui Resumo Geral + detalhes automáticos por Categoria, usa os grupos Vencidas/Hoje/Amanhã/No Prazo, cartões superiores inspirados na modernização da COM-V1 e paginação automática de até 7 responsáveis por tela para preservar TV22 e ausência de scroll. O frame lateral “Responsáveis — vencem hoje” não faz parte da tela geral; o frame “Situação por categoria” ocupa toda a largura disponível.
+
+- DEM-V1 (23/10/2026): na tela **Visão Geral**, os quatro grupos de cada card de categoria (`Vencidas`, `Hoje`, `Amanhã` e `No Prazo`) passaram a ser exibidos em uma única linha horizontal, reproduzindo o arranjo do protótipo visual aprovado. A alteração é específica do corpo da DEM-V1 e não modifica o shell PG-V2 nem as telas de detalhe.
