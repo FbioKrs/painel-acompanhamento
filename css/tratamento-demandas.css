@@ -49,6 +49,16 @@
     display: grid;
 }
 
+/*
+   A Visão Geral reproduz a proporção aprovada no protótipo visual:
+   a faixa dos KPIs ocupa aproximadamente 21% da área útil da página.
+   As telas de detalhe preservam a geometria compacta para comportar
+   até 7 responsáveis sem scroll.
+*/
+.visao-demandas .dem-subvisao-geral {
+    grid-template-rows: 200px 82px minmax(0, 1fr);
+}
+
 /* ================================================================
    KPIs superiores — linguagem visual da Tela 1 da COM-V1
    ================================================================ */
